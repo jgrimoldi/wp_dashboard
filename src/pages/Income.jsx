@@ -5,3 +5,5 @@ export const Income = () => {
     <div>Income</div>
   )
 }
+
+export default Income
