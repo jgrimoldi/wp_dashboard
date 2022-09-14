@@ -5,8 +5,10 @@ import { Header, Footer, Sidebar, ThemeSettings } from './components'
 import { Dashboard, Storage, Clients, Products, ProductType, Units, Providers, Category, Income, Expenses, Transfer, Stats, Reports, Register, Settings, Backup, Help } from './pages';
 import './App.css';
 
+import { useStateContext } from './contexts/ContextProvider';
+
 const App = () => {
-  const activeMenu = true;
+  const { activeMenu, setActiveMenu } = useStateContext();
 
   return (
     <div>
