@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import { Header, Footer, Sidebar, ThemeSettings } from './components'
+import { Header, Sidebar } from './components';
 import { Dashboard, Storage, Clients, Products, ProductType, Units, Providers, Category, Income, Expenses, Transfer, Stats, Reports, Register, Settings, Backup, Help } from './pages';
 import './App.css';
 

@@ -6,3 +6,5 @@ export { default as Sidebar } from './Sidebar';
 export { default as TableRow } from './TableRow';
 export { default as ThemeSettings } from './ThemeSettings';
 export { default as UserProfile } from './UserProfile';
+export { default as Add } from './Add';
+export { default as Delete } from './Delete';

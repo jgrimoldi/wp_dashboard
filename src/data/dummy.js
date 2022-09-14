@@ -1,6 +1,3 @@
-import React from 'react';
-import {} from 'react-icons/bs';
-
 export const sidebar = [
     {
         title: 'Dashboard',
