@@ -8,7 +8,7 @@ import './App.css';
 import { useStateContext } from './contexts/ContextProvider';
 
 const App = () => {
-  const { activeMenu, setActiveMenu } = useStateContext();
+  const { activeMenu } = useStateContext();
 
   return (
     <div>
@@ -28,38 +28,38 @@ const App = () => {
             <div className='fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full'>
               <Header />
             </div>
+            
+            <div>
+              <Routes>
+                {/* dashboard */}
+                <Route path='/' element={(<Dashboard />)} />
+                <Route path='/dashboard' element={(<Dashboard />)} />
+                <Route path='/almacen' element={<Storage />} />
+                <Route path='/clientes' element={<Clients />} />
+                {/* products */}
+                <Route path='/productos' element={<Products />} />
+                <Route path='/tipo-de-productos' element={<ProductType />} />
+                <Route path='/unidades-de-medida' element={<Units />} />
+                {/* suppliers */}
+                <Route path='/proveedores' element={<Providers />} />
+                <Route path='/categoria-de-proveedores' element={<Category />} />
+                {/* moves */}
+                <Route path='/ingresos' element={<Income />} />
+                <Route path='/egresos' element={<Expenses />} />
+                <Route path='/transferencia-entre-almacenes' element={<Transfer />} />
+                {/* reports */}
+                <Route path='/estadisticas' element={<Stats />} />
+                <Route path='/reportes' element={<Reports />} />
+                {/* management */}
+                <Route path='/registro' element={<Register />} />
+                <Route path='/perfil' element={<Settings />} />
+                <Route path='/restaurar' element={<Backup />} />
+
+                <Route path='/ayuda' element={<Help />} />
+              </Routes>
+            </div>
+
           </div>
-
-          <div>
-            <Routes>
-              {/* dashboard */}
-              <Route path='/' element={(<Dashboard />)} />
-              <Route path='/dashboard' element={(<Dashboard />)} />
-              <Route path='/almacen' element={<Storage />} />
-              <Route path='/clientes' element={<Clients />} />
-              {/* products */}
-              <Route path='/productos' element={<Products />} />
-              <Route path='/tipo-de-productos' element={<ProductType />} />
-              <Route path='/unidades-de-medida' element={<Units />} />
-              {/* suppliers */}
-              <Route path='/proveedores' element={<Providers />} />
-              <Route path='/categoria-de-proveedores' element={<Category />} />
-              {/* moves */}
-              <Route path='/ingresos' element={<Income />} />
-              <Route path='/egresos' element={<Expenses />} />
-              <Route path='/transferencia-entre-almacenes' element={<Transfer />} />
-              {/* reports */}
-              <Route path='/estadisticas' element={<Stats />} />
-              <Route path='/reportes' element={<Reports />} />
-              {/* management */}
-              <Route path='/registro' element={<Register />} />
-              <Route path='/perfil' element={<Settings />} />
-              <Route path='/restaurar' element={<Backup />} />
-
-              <Route path='/ayuda' element={<Help />} />
-            </Routes>
-          </div>
-
         </div>
       </BrowserRouter>
     </div>

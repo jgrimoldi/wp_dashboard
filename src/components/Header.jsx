@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { BsList, BsPlus, BsTrash } from 'react-icons/bs';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { Add, Delete } from '.';
 
@@ -24,7 +25,7 @@ const Header = () => {
     handleResize();
 
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  });
 
   useEffect(() => {
     if (screenSize <= 900) {
@@ -32,17 +33,17 @@ const Header = () => {
     } else {
       setActiveMenu(true);
     }
-  }, [screenSize]);
+  }, [screenSize, setActiveMenu]);
 
   return (
     <div className='flex justify-between p-2 md:mx-6 relative'>
-      <NavButton title="Menu" customFunction={() => setActiveMenu((prevActiveMenu) => !prevActiveMenu)} color="blue" ></NavButton>
+      <NavButton title="Menu" customFunction={() => setActiveMenu((prevActiveMenu) => !prevActiveMenu)} color="blue" icon={<BsList />} ></NavButton>
+      <div className='flex items-center gap-2 cursor-pointer p-1'>
+        <h1 className='text-xl font-extrabold'>Dashboard</h1>
+      </div>
       <div className='flex'>
-        <div className='flex items-center gap-2 cursor-pointer p-1'>
-          <h1 className='font-bold text-14'>Dashboard</h1>
-        </div>
-        <NavButton title="Agregar" customFunction={() => handleClick('add')} color="blue" ></NavButton>
-        <NavButton title="Eliminar" customFunction={() => handleClick('delete')} color="blue" ></NavButton>
+        <NavButton title="Agregar" customFunction={() => handleClick('add')} color="blue" icon={<BsPlus />}></NavButton>
+        <NavButton title="Eliminar" customFunction={() => handleClick('delete')} color="blue" icon={<BsTrash />}></NavButton>
         {isClicked.add && <Add />}
         {isClicked.delete && <Delete />}
       </div>

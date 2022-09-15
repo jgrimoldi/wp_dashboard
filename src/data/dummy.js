@@ -1,18 +1,42 @@
+import {
+    BsColumnsGap,
+    BsShop,
+    BsPeople,
+    BsBox,
+    BsBoxSeam,
+    BsRulers,
+    BsTruck,
+    BsTruckFlatbed,
+    BsPiggyBank,
+    BsWallet2,
+    BsArrowLeftRight,
+    BsBarChart,
+    BsFileBarGraph,
+    BsPersonPlus,
+    BsGear,
+    BsArrowRepeat,
+    BsQuestionCircle,
+    BsBoxArrowLeft
+} from 'react-icons/bs';
+
 export const sidebar = [
     {
         title: 'Dashboard',
-        links : [
+        links: [
             {
                 name: 'Dashboard',
-                icon: '',
+                url: 'dashboard',
+                icon: <BsColumnsGap />,
             },
             {
                 name: 'Almacén',
-                icon: '',
+                url: 'almacen',
+                icon: <BsShop />,
             },
             {
                 name: 'Clientes',
-                icon: '',
+                url: 'clientes',
+                icon: <BsPeople />,
             }
         ],
     },
@@ -22,15 +46,18 @@ export const sidebar = [
         links: [
             {
                 name: 'Productos',
-                icon: '',
+                url: 'productos',
+                icon: <BsBox />,
             },
             {
                 name: 'Tipo de productos',
-                icon: '',
+                url: 'tipo-de-productos',
+                icon: <BsBoxSeam />,
             },
             {
                 name: 'Unidad de medida',
-                icon: '',
+                url: 'unidades-de-medida',
+                icon: <BsRulers />,
             },
         ],
     },
@@ -40,11 +67,13 @@ export const sidebar = [
         links: [
             {
                 name: 'Proveedores',
-                icon: '',
+                url: 'proveedores',
+                icon: <BsTruck />,
             },
             {
                 name: 'Categoría',
-                icon: '',
+                url: 'categoria-de-proveedores',
+                icon: <BsTruckFlatbed />,
             },
         ],
     },
@@ -54,15 +83,18 @@ export const sidebar = [
         links: [
             {
                 name: 'Compra de productos',
-                icon: '',
+                url: 'ingresos',
+                icon: <BsPiggyBank />,
             },
             {
                 name: 'Egreso de productos',
-                icon: '',
+                url: 'egresos',
+                icon: <BsWallet2 />,
             },
             {
                 name: 'Transferencia entre almacenes',
-                icon: '',
+                url: 'transferencia-entre-almacenes',
+                icon: <BsArrowLeftRight />,
             },
         ],
     },
@@ -72,11 +104,13 @@ export const sidebar = [
         links: [
             {
                 name: 'Estadisticas',
-                icon: '',
+                url: 'estadisticas',
+                icon: <BsBarChart />,
             },
             {
                 name: 'Reportes',
-                icon: '',
+                url: 'reportes',
+                icon: <BsFileBarGraph />,
             },
         ],
     },
@@ -86,29 +120,28 @@ export const sidebar = [
         links: [
             {
                 name: 'Registro de usuarios',
-                icon: '',
+                url: 'registro',
+                icon: <BsPersonPlus />,
             },
             {
                 name: 'Configuración',
-                icon: '',
+                url: 'perfil',
+                icon: <BsGear />,
             },
             {
                 name: 'Backup',
-                icon: '',
+                url: 'restaurar',
+                icon: <BsArrowRepeat />,
             },
-        ],
-    },
-
-    {
-        title: '',
-        links: [
             {
                 name: 'Ayuda',
-                icon: '',
+                url: 'ayuda',
+                icon: <BsQuestionCircle />,
             },
             {
                 name: 'Cerrar Sesión',
-                icon: '',
+                url: 'logout',
+                icon: <BsBoxArrowLeft />,
             },
         ],
     },
