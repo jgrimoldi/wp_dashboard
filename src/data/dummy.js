@@ -146,3 +146,25 @@ export const sidebar = [
         ],
     },
 ]
+
+export const providersGrid = [
+    {
+        field: 'Code',
+        headerText: 'Código ID',
+        width: '120',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Name',
+        headerText: 'Nombre Insumo',
+        width: '150',
+        editType: 'dropdownedit',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Description',
+        headerText: 'Descripción',
+        width: '150',
+        textAlign: 'Center',
+    },
+];

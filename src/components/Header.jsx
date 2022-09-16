@@ -7,7 +7,7 @@ import { useStateContext } from '../contexts/ContextProvider';
 
 const NavButton = ({ title, customFunction, color, icon }) => (
   <TooltipComponent content={title} position="BottomCenter">
-    <button type='button' onClick={customFunction} style={{ color }} className='relative text-xl rounded-full p-3 hover:bg-light-gray'>
+    <button type='button' onClick={customFunction} style={{ color }} className='relative text-2xl rounded-full p-3 hover:bg-light-gray'>
       {icon}
     </button>
   </TooltipComponent>
@@ -39,7 +39,7 @@ const Header = () => {
     <div className='flex justify-between p-2 md:mx-6 relative'>
       <NavButton title="Menu" customFunction={() => setActiveMenu((prevActiveMenu) => !prevActiveMenu)} color="blue" icon={<BsList />} ></NavButton>
       <div className='flex items-center gap-2 cursor-pointer p-1'>
-        <h1 className='text-xl font-extrabold'>Dashboard</h1>
+        <h1 className='text-2xl font-extrabold'>AG Stock</h1>
       </div>
       <div className='flex'>
         <NavButton title="Agregar" customFunction={() => handleClick('add')} color="blue" icon={<BsPlus />}></NavButton>
