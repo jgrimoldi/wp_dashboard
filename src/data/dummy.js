@@ -147,11 +147,21 @@ export const sidebar = [
     },
 ]
 
-export const providersGrid = [
+export const gridOrderImage = (props) => (
+    <div>
+        <img
+            className="rounded-xl h-20 md:ml-3"
+            src={props.ProductImage}
+            alt="order-item"
+        />
+    </div>
+);
+
+export const categoryGrid = [
     {
         field: 'Code',
         headerText: 'Código ID',
-        width: '120',
+        width: '80',
         textAlign: 'Center',
     },
     {
@@ -165,6 +175,210 @@ export const providersGrid = [
         field: 'Description',
         headerText: 'Descripción',
         width: '150',
+        textAlign: 'Left',
+    },
+];
+
+export const providersGrid = [
+    {
+        field: 'Code',
+        headerText: 'Código ID',
+        width: '80',
         textAlign: 'Center',
+    },
+    {
+        field: 'Category',
+        headerText: 'Categoria',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Name',
+        headerText: 'Nombre',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Address',
+        headerText: 'Dirección',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Zip',
+        headerText: 'Código Postal',
+        width: '100',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Phone',
+        headerText: 'Teléfono',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Email',
+        headerText: 'Correo',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Description',
+        headerText: 'Observaciones',
+        width: '150',
+        textAlign: 'Left',
+    },
+];
+
+export const productsGrid = [
+    {
+        field: 'Code',
+        headerText: 'Código ID',
+        width: '80',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Type',
+        headerText: 'Tipo de Producto',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Unit',
+        headerText: 'Unidad',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Alicuota',
+        headerText: 'Alicuota',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Name',
+        headerText: 'Nombre',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Quantity',
+        headerText: 'Cantidad',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Min',
+        headerText: 'Stock Mínimo',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Max',
+        headerText: 'Stock Máximo',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        headerText: 'Imagen',
+        template: gridOrderImage,
+        textAlign: 'Center',
+        width: '120',
+    },
+    {
+        field: 'Description',
+        headerText: 'Descripción',
+        width: '150',
+        textAlign: 'Left',
+    },
+];
+
+export const productsTypeGrid = [
+    {
+        field: 'Code',
+        headerText: 'Código ID',
+        width: '80',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Name',
+        headerText: 'Nombre Insumo',
+        width: '150',
+        editType: 'dropdownedit',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Description',
+        headerText: 'Descripción',
+        width: '150',
+        textAlign: 'Left',
+    },
+];
+
+export const unitsGrid = [
+    {
+        field: 'Code',
+        headerText: 'Código ID',
+        width: '80',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Size',
+        headerText: 'Magnitud',
+        width: '150',
+        editType: 'dropdownedit',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Abbreviation',
+        headerText: 'Abreviatura',
+        width: '150',
+        textAlign: 'Center',
+    },
+];
+
+export const clientsGrid = [
+    { type: 'checkbox', width: '50' },
+    {
+        field: 'Code',
+        headerText: 'Código ID',
+        width: '80',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Name',
+        headerText: 'Nombre',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Address',
+        headerText: 'Dirección',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Zip',
+        headerText: 'Código Postal',
+        width: '100',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Phone',
+        headerText: 'Teléfono',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Email',
+        headerText: 'Correo',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Description',
+        headerText: 'Observaciones',
+        width: '150',
+        textAlign: 'Left',
     },
 ];

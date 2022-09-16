@@ -7,7 +7,7 @@ import { Title } from '../../components';
 const Providers = () => {
 
   // Se obtiene la data desde la API
-  const providersData = [{ Code: 1, Name: 'insumo', Description: 'Descripción del insumo' },{ Code: 3, Name: 'Mate', Description: 'Descripción del insumo' }];
+  const providersData = [{}];
 
   return (
     <div className='m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl'>
