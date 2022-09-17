@@ -145,7 +145,28 @@ export const sidebar = [
             },
         ],
     },
-]
+];
+
+export const themeColors = [
+    {
+        name: 'Tema Oscuro',
+        mode: 'dark',
+        hex: '#000000',
+        secondary: 'white',
+    },
+    {
+        name: 'Tema Claro',
+        mode: 'light',
+        hex: '#FFFFFF',
+        secondary: 'black',
+    },
+    {
+        name: 'Tema Azul',
+        mode: 'blue',
+        hex: '#001D64',
+        secondary: 'white',
+    },
+];
 
 export const gridOrderImage = (props) => (
     <div>

@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, NavLink } from 'react-router-dom';
 import { BsArrowLeftSquare } from 'react-icons/bs';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
+import { ThemeSettings } from '.';
 
 import avatar from '../data/avatar.png';
 import { sidebar } from '../data/dummy.js';
@@ -66,6 +67,7 @@ const Sidebar = () => {
               ))}
             </div>
           ))}
+          <ThemeSettings />
         </div>
       </>)}
     </div>
