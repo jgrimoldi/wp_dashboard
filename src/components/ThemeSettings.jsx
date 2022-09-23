@@ -16,7 +16,7 @@ const ThemeSettings = () => {
         {themeColors.map((item, index) => (
           <TooltipComponent key={index} content={item.name} position='BottomCenter'>
             <div>
-              <button type='button' className='border border-black dark:border-white h-10 w-10 rounded-full cursor-pointer' style={{ backgroundColor: item.hex }} onClick={() => { setMode(item.mode, item.hex) }}>
+              <button type='button' className='border border-black dark:border-white h-10 w-10 rounded-full cursor-pointer' style={{ backgroundColor: item.hex }} onClick={() => { setMode(item.mode, item.colors) }}>
                 <BsCheck className={`ml-2 text-2xl text-${item.secondary} ${currentColor === item.hex ? 'block' : 'hidden'}`} />
               </button>
             </div>

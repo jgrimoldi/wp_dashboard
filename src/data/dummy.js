@@ -151,20 +151,50 @@ export const themeColors = [
     {
         name: 'Tema Oscuro',
         mode: 'dark',
-        hex: '#000000',
+        hex: '#121212',
         secondary: 'white',
+        colors: {
+            background: '#121212',
+            primary: '#A2A5FA',
+            secondary: '#C4A2FA',
+            confirm: '#66BB6A',
+            error: '#F39791',
+            highEmphasis: 'rgba(255, 255, 255, 0.87)',
+            mediumEmphasis: 'rgba(255, 255, 255, 0.60)',
+            disabled: 'rgba(255, 255, 255, 0.38)',
+        },
     },
     {
         name: 'Tema Claro',
         mode: 'light',
         hex: '#FFFFFF',
         secondary: 'black',
+        colors: {
+            background: '#FFFFFF',
+            primary: '#161ECF',
+            secondary: '#571CDD',
+            confirm: '#224C24',
+            error: '#B00020',
+            highEmphasis: 'rgba(0, 0, 0, 0.87)',
+            mediumEmphasis: 'rgba(0, 0, 0, 0.60)',
+            disabled: 'rgba(0, 0, 0, 0.25)',
+        },
     },
     {
         name: 'Tema Azul',
         mode: 'blue',
         hex: '#001D64',
         secondary: 'white',
+        colors: {
+            background: '#121212',
+            primary: '#A2A5FA',
+            secondary: '#C4A2FA',
+            confirm: '#66BB6A',
+            error: '#F39791',
+            highEmphasis: 'rgba(255, 255, 255, 0.87)',
+            mediumEmphasis: 'rgba(255, 255, 255, 0.60)',
+            disabled: 'rgba(255, 255, 255, 0.38)',
+        }
     },
 ];
 
