@@ -403,3 +403,39 @@ export const clientsGrid = [
         textAlign: 'Left',
     },
 ];
+
+export const incomeGrid = [
+    {
+        field: 'Code',
+        headerText: 'Código ID',
+        width: '80',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Product',
+        headerText: 'Nombre del producto',
+        width: '150',
+        textAlign: 'Center',
+    },
+    {
+        field: 'Amount',
+        headerText: 'Cantidad',
+        width: '150',
+        textAlign: 'Center',
+        editType: 'numericedit',
+    },
+    {
+        field: 'Price',
+        headerText: 'Precio',
+        width: '100',
+        textAlign: 'Center',
+        editType: 'numericedit',
+    },
+    {
+        field: 'Partial',
+        headerText: 'Parcial',
+        width: '150',
+        textAlign: 'Center',
+        editType: 'numericedit',
+    },
+];
