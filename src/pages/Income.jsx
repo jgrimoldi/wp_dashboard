@@ -31,7 +31,7 @@ const Income = () => {
   }
 
   return (
-    <div className='m-2 mt-20 md:m-10 p-2 md:p-10 bg-white rounded-3xl'>
+    <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
       <Title category="Compra de" title="Productos" />
       <div className='flex flex-wrap items-center w-full gap-5 mb-10'>
         <Input id='provider' label='Proveedor' tooltip='Buscar proveedor' color='blue' icon={<BsSearch />} />

@@ -3,10 +3,10 @@ import { Autocomplete, FormControl, TextField } from '@mui/material';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups/index.js';
 
 
-const Dropdown = ({ id, label, handleChange, value, options, tooltip, customFunction, color, icon }) => {
+const Dropdown = ({ id, label, size, handleChange, value, options, tooltip, customFunction, color, icon, required }) => {
     return (
         <div className='flex gap-2'>
-            <FormControl fullWidth>
+            <FormControl required={required} fullWidth>
                 <Autocomplete
                     id={id} name={id}
                     onChange={handleChange}
@@ -15,7 +15,7 @@ const Dropdown = ({ id, label, handleChange, value, options, tooltip, customFunc
                     options={options}
                     getOptionLabel={(option) => option.label || ''}
                     isOptionEqualToValue={(option, value) => option.label === value.label}
-                    renderInput={(params) => <TextField {...params} label={label} placeholder={label} size='small' variant='outlined' />}
+                    renderInput={(params) => <TextField {...params} label={label} placeholder={label} size={size ? size : 'normal'} variant='outlined' />}
                 />
             </FormControl>
             {tooltip

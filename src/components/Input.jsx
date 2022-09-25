@@ -2,15 +2,16 @@ import React from 'react'
 import { TextField } from '@mui/material';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
-const Input = ({ id, type, value, label, tooltip, customFunction, color, icon, css }) => {
+const Input = ({ id, type, value, label, size, tooltip, customFunction, color, icon, css, required }) => {
     return (
         <div className={`flex gap-2 ${css}`}>
             <TextField
                 id={id} name={id}
                 type={type ? type : 'text'} defaultValue={value ? value : ''}
                 label={label} placeholder={label}
-                size='small'
+                size={size ? size : 'normal'}
                 variant='outlined'
+                required={required}
                 fullWidth
             />
             {tooltip ?

@@ -10,7 +10,7 @@ const Category = () => {
   const categoryData = [{ Code: 1, Name: 'insumo', Description: 'Descripción del insumo' }, { Code: 3, Name: 'Mate', Description: 'Descripción del insumo' }];
 
   return (
-    <div className='m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl'>
+    <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
       <Title category="Lista de" title="Insumos" />
       <GridComponent id='providerscomp' dataSource={categoryData} allowPaging allowSorting toolbar={['Search']} width='auto'>
         <ColumnsDirective>
