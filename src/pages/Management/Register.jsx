@@ -25,7 +25,7 @@ const Register = () => {
           <Password id='passwordVerify' label='Confirmar contraseña' required={true} />
         </div>
         <div className='w-full md:w-4/5 flex justify-end m-auto pt-5'>
-          <Button color='white' backgroundColor='blue' text='Registrar' />
+          <Button borderColor='blue' color='#FFFFFF' backgroundColor='blue' text='Continuar' />
         </div>
       </div>
     </>
