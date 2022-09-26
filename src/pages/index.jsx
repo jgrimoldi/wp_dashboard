@@ -1,3 +1,8 @@
+export { default as Login } from './Landing/Login';
+export { default as ForgotPassword } from './Landing/ForgotPassword';
+export { default as ResetPassword } from './Landing/ResetPassword';
+export { default as AccountValidation } from './Landing/AccountValidation';
+
 export { default as Dashboard } from './Dashboard';
 export { default as Storage } from './Storage';
 export { default as ProductType } from './Products/ProductType';
