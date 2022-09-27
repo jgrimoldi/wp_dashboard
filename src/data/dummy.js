@@ -138,11 +138,6 @@ export const sidebar = [
                 url: 'ayuda',
                 icon: <BsQuestionCircle />,
             },
-            {
-                name: 'Cerrar Sesión',
-                url: 'logout',
-                icon: <BsBoxArrowLeft />,
-            },
         ],
     },
 ];

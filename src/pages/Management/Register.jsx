@@ -8,7 +8,6 @@ const Register = () => {
   const roles = [];
   const companies = [];
 
-
   return (
     <>
       <Banner text='¡Registro exitoso!' />

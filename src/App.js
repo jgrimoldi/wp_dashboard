@@ -23,11 +23,10 @@ const App = () => {
         <Route path='/restauracion' element={<ResetPassword />} />
         <Route path='/validacion' element={<AccountValidation />} />
 
-        <Route element={<ProtectedRoutes isAllowed={!!auth.token} />}>
-          <Route element={(<HomeNavigation />)}>
+        <Route element={(<HomeNavigation />)}>
+          <Route element={<ProtectedRoutes isAllowed={!!auth.token} redirectTo='/inicio' />}>
             {/* dashboard */}
-            <Route path='/' element={(<Dashboard />)} />
-            <Route path='/dashboard' element={(<Dashboard />)} />
+            <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/almacen' element={<Storage />} />
             <Route path='/clientes' element={<Clients />} />
             {/* products */}
@@ -46,7 +45,7 @@ const App = () => {
             <Route path='/reportes' element={<Reports />} />
             {/* management */}
             <Route path='/registro' element={
-              <ProtectedRoutes isAllowed={!!auth.token && privateRoles.includes(auth.role)}>
+              <ProtectedRoutes isAllowed={!!auth.token && privateRoles.includes(auth.role)} redirectTo='/'>
                 <Register />
               </ProtectedRoutes>
             } />
