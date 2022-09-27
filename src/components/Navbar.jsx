@@ -11,7 +11,7 @@ const Navbar = () => {
                 <h1 className=' text-4xl uppercase'>Ag Stock</h1>
             </div>
             <div className='flex gap-2'>
-                <Input id='navEmail' label='Correo eléctronico' css='w-60' />
+                <Input id='navEmail' type='email' label='Correo electrónico' css='w-60' />
                 <Password id='navPassword' label='Contraseña' css='w-60' />
                 <Button borderColor='blue' color='white' backgroundColor='blue' text='Iniciar sesión' height={true} />
             </div>

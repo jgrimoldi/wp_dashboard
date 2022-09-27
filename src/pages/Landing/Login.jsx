@@ -1,5 +1,7 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+
+import { Form, Input, Password, Button } from '../../components';
 import { useAuthContext } from '../../contexts/ContextAuth';
 
 const Login = () => {
@@ -10,25 +12,23 @@ const Login = () => {
     const from = location.state?.from?.pathname || '/dashboard';
 
     const handleLogin = () => {
-
-        setAuth({
-            id: 1,
-            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjY0Mjk1NzkxLCJleHAiOjE2NjQzMDI5OTF9.3OTo0HADO6LGQvesOepRK9YFwD_MnWF-n0g_gwYRVf4",
-            email: 'email@example.com',
-            nombre: 'Juan',
-            apellido: 'Pérez',
-            role: 2,
-            fk_empresa: 112345678,
-            fk_theme: 1,
-        });
-
+        setAuth({});
         navigate(from, { replace: true });
     }
 
     return (
         <div>
             <h1>Login</h1>
-            <button type='submit' onClick={handleLogin}>Iniciar sesion</button>
+            <Form title='Inicia sesión en tu cuenta'>
+                <Input id='email' type='email' label='Correo electrónico' />
+                <Password id='password' label='Contraseña' />
+                <div className='flex flex-col gap-2'>
+                    <Button customFunction={handleLogin} borderColor='blue' color='white' backgroundColor='blue' text='Iniciar sesión' width='full' height={true} />
+                    <NavLink to='/recuperacion' key='forgotPassword'>
+                        <span style={{ color: 'blue' }} className='text-14'>¿Olvidaste tu contraseña?</span>
+                    </NavLink>
+                </div>
+            </Form>
         </div>
     )
 }
