@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { useStateContext } from '../contexts/ContextProvider';
-import { Navbar, NavbarMobile } from '.';
+import { Navbar, NavbarMobile, Footer } from '.';
 
 const HomeTemplate = () => {
     const { activeNavbar, setActiveNavbar, screenSize, setScreenSize, } = useStateContext();
@@ -37,10 +37,12 @@ const HomeTemplate = () => {
                             <NavbarMobile />
                     }
                 </div>
-                
+
                 <div>
                     <Outlet />
                 </div>
+
+                <Footer />
             </div>
         </div>
     )
