@@ -16,7 +16,6 @@ import {
     BsGear,
     BsArrowRepeat,
     BsQuestionCircle,
-    BsBoxArrowLeft,
 } from 'react-icons/bs';
 
 export const sidebar = [
