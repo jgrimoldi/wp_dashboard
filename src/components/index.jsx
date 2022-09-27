@@ -12,6 +12,7 @@ export { default as Footer } from './Footer';
 
 export { default as HomeTemplate } from './HomeTemplate';
 export { default as Navbar } from './Navbar';
+export { default as NavbarMobile } from './NavbarMobile';
 
 export { default as HomeNavigation } from './HomeNavigation';
 export { default as Sidebar } from './Sidebar';
