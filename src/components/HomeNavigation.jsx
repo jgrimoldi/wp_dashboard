@@ -28,7 +28,6 @@ const HomeNavigation = () => {
                 <div>
                     <Outlet />
                 </div>
-
             </div>
         </div>
     )

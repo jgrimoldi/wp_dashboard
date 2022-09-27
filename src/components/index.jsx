@@ -10,6 +10,9 @@ export { default as Header } from './Header';
 export { default as Title } from './Title';
 export { default as Footer } from './Footer';
 
+export { default as HomeTemplate } from './HomeTemplate';
+export { default as Navbar } from './Navbar';
+
 export { default as HomeNavigation } from './HomeNavigation';
 export { default as Sidebar } from './Sidebar';
 export { default as TableRow } from './TableRow';

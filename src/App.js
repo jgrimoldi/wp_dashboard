@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import { HomeNavigation, ProtectedRoutes } from './components';
+import { HomeNavigation, HomeTemplate, ProtectedRoutes } from './components';
 import { Dashboard, Storage, Clients, Products, ProductType, Units, Providers, Category, Income, Expenses, Transfer, Stats, Reports, Register, Settings, Backup, Help, Login, ForgotPassword, ResetPassword, AccountValidation } from './pages';
 import './App.css';
 
@@ -17,11 +17,13 @@ const App = () => {
       <Routes>
 
         {/* login */}
-        <Route path='/' element={(<Login />)} />
-        <Route path='/inicio' element={(<Login />)} />
-        <Route path='/recuperacion' element={<ForgotPassword />} />
-        <Route path='/restauracion' element={<ResetPassword />} />
-        <Route path='/validacion' element={<AccountValidation />} />
+        <Route element={(<HomeTemplate />)}>
+          <Route path='/' element={(<Login />)} />
+          <Route path='/inicio' element={(<Login />)} />
+          <Route path='/recuperacion' element={<ForgotPassword />} />
+          <Route path='/restauracion' element={<ResetPassword />} />
+          <Route path='/validacion' element={<AccountValidation />} />
+        </Route>
 
         <Route element={(<HomeNavigation />)}>
           <Route element={<ProtectedRoutes isAllowed={!!auth.token} redirectTo='/inicio' />}>
