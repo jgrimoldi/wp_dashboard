@@ -42,7 +42,7 @@ const HomeTemplate = () => {
                     <Outlet />
                 </div>
 
-                <div >
+                <div className='z-50'>
                     <Footer />
                 </div>
             </div>
