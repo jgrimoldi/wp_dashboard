@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Form, Button } from '../../components';
+import { useStateContext } from '../../contexts/ContextProvider';
 
 const AccountValidation = () => {
+    const { setLoginNavbar } = useStateContext();
     const { token } = useParams();
-    console.log(token);
+
+    useEffect(() => {
+        setLoginNavbar(true);
+    }, [setLoginNavbar]);
 
     const handleValidation = () => { }
 

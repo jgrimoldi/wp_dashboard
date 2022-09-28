@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Form, Input, Button } from '../../components';
+import { useStateContext } from '../../contexts/ContextProvider';
 
 const ForgotPassword = () => {
+    const { setLoginNavbar } = useStateContext();
+
+    useEffect(() => {
+        setLoginNavbar(true);
+    }, [setLoginNavbar]);
 
     const handleForgot = () => { }
 

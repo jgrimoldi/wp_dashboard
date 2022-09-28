@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import { Form, Input, Password, Button } from '../../components';
 import { useAuthContext } from '../../contexts/ContextAuth';
+import { useStateContext } from '../../contexts/ContextProvider';
 
 const Login = () => {
+    const { setLoginNavbar } = useStateContext();
     const { setAuth } = useAuthContext();
 
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || '/dashboard';
+
+    useEffect(() => {
+        setLoginNavbar(false);
+    }, [setLoginNavbar]);
 
     const handleLogin = () => {
         setAuth({});
