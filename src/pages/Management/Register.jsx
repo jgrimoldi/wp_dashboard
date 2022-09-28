@@ -20,8 +20,8 @@ const Register = () => {
           <Input id='email' label='Correo electrónico' required={true} />
           <Dropdown id='role' label='Roles' handleChange={() => { }} value='' options={roles} required={true} />
           <Dropdown id='company' label='Companía' handleChange={() => { }} value='' options={companies} required={true} />
-          <Password id='password' label='Contraseña' required={true} />
-          <Password id='passwordVerify' label='Confirmar contraseña' required={true} />
+          <Password id='password' label='Contraseña' color='purple' required={true} />
+          <Password id='passwordVerify' label='Confirmar contraseña' color='purple' required={true} />
         </div>
         <div className='w-full md:w-4/5 flex justify-end m-auto pt-5'>
           <Button borderColor='blue' color='#FFFFFF' backgroundColor='blue' text='Continuar' />

@@ -21,7 +21,8 @@ const Login = () => {
             <h1>Login</h1>
             <Form title='Inicia sesión en tu cuenta'>
                 <Input id='email' type='email' label='Correo electrónico' />
-                <Password id='password' label='Contraseña' />
+                <Password id='password' label='Contraseña' color='purple' />
+                TODO: Agregar reCaptcha
                 <div className='flex flex-col gap-2'>
                     <Button customFunction={handleLogin} borderColor='blue' color='white' backgroundColor='blue' text='Iniciar sesión' width='full' height={true} />
                     <NavLink to='/recuperacion' key='forgotPassword'>

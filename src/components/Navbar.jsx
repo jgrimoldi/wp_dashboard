@@ -12,7 +12,7 @@ const Navbar = () => {
             </div>
             <div className='flex gap-2'>
                 <Input id='navEmail' type='email' label='Correo electrónico' css='w-60' />
-                <Password id='navPassword' label='Contraseña' css='w-60' />
+                <Password id='navPassword' label='Contraseña' color='purple' css='w-60' />
                 <Button borderColor='blue' color='white' backgroundColor='blue' text='Iniciar sesión' height={true} />
             </div>
         </div>

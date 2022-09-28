@@ -27,7 +27,7 @@ const HomeTemplate = () => {
 
     return (
         <div className='flex relative dark:bg-main-dark-bg'>
-            <div className='dark:bg-main-bg bg-main-bg min-h-screen w-full flex-2'>
+            <div className='dark:bg-main-bg bg-main-bg min-h-screen w-full flex flex-col justify-between'>
                 <div className='fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full'>
                     {
                         activeNavbar
@@ -42,7 +42,9 @@ const HomeTemplate = () => {
                     <Outlet />
                 </div>
 
-                <Footer />
+                <div >
+                    <Footer />
+                </div>
             </div>
         </div>
     )
