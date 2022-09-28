@@ -15,7 +15,7 @@ const AccountValidation = () => {
     const handleValidation = () => { }
 
     return (
-        <div className='w-full flex justify-center items-center'>
+        <div className='w-full flex justify-center items-center mt-80 md:mt-0'>
             <Form title='Validar mi correo'>
                 <div className='text-left'>
                     Para completar su perfil y comenzar a utilizar AG Stock, tendrá que verificar su dirección de correo electrónico

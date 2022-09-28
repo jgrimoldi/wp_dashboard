@@ -13,10 +13,10 @@ const ForgotPassword = () => {
     const handleForgot = () => { }
 
     return (
-        <div className='w-full flex justify-center items-center'>
+        <div className='w-full flex justify-center items-center mt-60 md:mt-0'>
             <Form title='Recupera tu cuenta'>
                 <div className='text-left'>
-                    ¡NO TE PREOCUPES! SUELE OCURRIR. POR FAVOR INGRESA EL CORREO ASOCIADO CON TU CUENTA
+                    ¡No te preocupes! Suele ocurrir. Por favor ingresa el correo asociado con tu cuenta
                 </div>
                 <Input id='email' type='email' label='Correo electrónico' />
                 TODO: Agregar reCaptcha

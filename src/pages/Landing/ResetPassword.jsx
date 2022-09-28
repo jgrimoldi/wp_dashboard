@@ -15,7 +15,7 @@ const ResetPassword = () => {
     const handleReset = () => { }
 
     return (
-        <div className='w-full flex justify-center items-center'>
+        <div className='w-full flex justify-center items-center mt-60 md:mt-0'>
             <Form title='Restablece tu contraseña'>
                 <div className='text-left'>
                     Tu correo: johndoe@example.com
