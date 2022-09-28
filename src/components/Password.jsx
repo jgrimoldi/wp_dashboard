@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, FormHelperText } from '@mui/material';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 
-const Password = ({ id, label, css, color, required, customFunction, state, setState, regEx = '', helperText }) => {
+const Password = ({ id, label, css, color, required, customFunction, state = { value: '', error: null }, setState, regEx = '', helperText }) => {
 
     const [showPassword, setShowPassword] = useState(null);
 

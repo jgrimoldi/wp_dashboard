@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import heroImage from '../../data/heroImage.png';
@@ -10,8 +11,10 @@ import { useStateContext } from '../../contexts/ContextProvider';
 const Login = () => {
     const { setLoginNavbar } = useStateContext();
     const { setAuth } = useAuthContext();
+    const captcha = useRef(null);
     const [email, setEmail] = useState({ value: '', error: null });
     const [password, setPassword] = useState({ value: '', error: null });
+    const [validForm, setValidForm] = useState({ value: '', error: null });
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -22,8 +25,17 @@ const Login = () => {
     }, [setLoginNavbar]);
 
     const handleLogin = () => {
-        setAuth({});
-        navigate(from, { replace: true });
+        if (captcha.current.getValue()) {
+            if (email.error === false && password.error === false) {
+                setValidForm({ ...validForm, error: false });
+                setAuth({});
+                navigate(from, { replace: true });
+            } else {
+                setValidForm({ ...validForm, value: 'Correo o contraseña incorrectos. Intenta de nuevo.', error: true });
+            }
+        } else {
+            setValidForm({ ...validForm, value: 'Por favor complete el captcha antes de continuar.', error: true });
+        }
     }
 
     return (
@@ -35,9 +47,9 @@ const Login = () => {
                 <Form title='Inicia sesión en tu cuenta'>
                     <Input id='email' type='email' label='Correo electrónico' state={email} setState={setEmail} regEx={regEx.email} helperText='No es un correo válido' />
                     <Password id='password' label='Contraseña' color='purple' state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
-                    TODO: Agregar reCaptcha
+                    <ReCAPTCHA ref={captcha} sitekey='6LeBRkQhAAAAAE4WcBWP3GxOTlkTG7Ev5iTbXTOj' className='m-auto' />
                     <div className='flex flex-col gap-2'>
-                        <ErrorLabel color='red'>Correo o contraseña incorrectos. Intenta de nuevo.</ErrorLabel>
+                        {validForm.error === true && <ErrorLabel color='red'>{validForm.value}</ErrorLabel>}
                         <Button customFunction={handleLogin} borderColor='blue' color='white' backgroundColor='blue' text='Iniciar sesión' width='full' height={true} />
                         <NavLink to='/recuperacion' key='forgotPassword'>
                             <span style={{ color: 'blue' }} className='text-14'>¿Olvidaste tu contraseña?</span>

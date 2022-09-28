@@ -2,7 +2,7 @@ import React from 'react'
 import { TextField } from '@mui/material';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
-const Input = ({ id, type, label, size, tooltip, customFunction, color, icon, css, required, state, setState, regEx = '', helperText }) => {
+const Input = ({ id, type, label, size, tooltip, customFunction, color, icon, css, required, state = { value: '', error: null }, setState, regEx = '', helperText }) => {
 
     const handleChange = (event) => setState({ ...state, value: event.target.value });
 
