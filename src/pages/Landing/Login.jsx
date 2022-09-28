@@ -1,14 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import heroImage from '../../data/heroImage.png';
-import { Form, Input, Password, Button } from '../../components';
+import { regEx } from '../../data/dummy';
+import { Form, Input, Password, Button, ErrorLabel } from '../../components';
 import { useAuthContext } from '../../contexts/ContextAuth';
 import { useStateContext } from '../../contexts/ContextProvider';
 
 const Login = () => {
     const { setLoginNavbar } = useStateContext();
     const { setAuth } = useAuthContext();
+    const [email, setEmail] = useState({ value: '', error: null });
+    const [password, setPassword] = useState({ value: '', error: null });
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -30,10 +33,11 @@ const Login = () => {
             </div>
             <div className='relative w-full flex justify-center items-center lg:justify-end lg:px-72 z-50'>
                 <Form title='Inicia sesión en tu cuenta'>
-                    <Input id='email' type='email' label='Correo electrónico' />
-                    <Password id='password' label='Contraseña' color='purple' />
+                    <Input id='email' type='email' label='Correo electrónico' state={email} setState={setEmail} regEx={regEx.email} helperText='No es un correo válido' />
+                    <Password id='password' label='Contraseña' color='purple' state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
                     TODO: Agregar reCaptcha
                     <div className='flex flex-col gap-2'>
+                        <ErrorLabel color='red'>Correo o contraseña incorrectos. Intenta de nuevo.</ErrorLabel>
                         <Button customFunction={handleLogin} borderColor='blue' color='white' backgroundColor='blue' text='Iniciar sesión' width='full' height={true} />
                         <NavLink to='/recuperacion' key='forgotPassword'>
                             <span style={{ color: 'blue' }} className='text-14'>¿Olvidaste tu contraseña?</span>
