@@ -8,6 +8,16 @@ const Register = () => {
   const roles = [];
   const companies = [];
 
+  // const handleValidatePassword = () => {
+  //   if (password.value.length > 0) {
+  //     if (password.value !== passwordVerify.value) {
+  //       setPasswordVerify((prevState) => { return {...prevState, error: true}})
+  //     } else {
+  //       setPasswordVerify((prevState) => { return {...prevState, error: false}})
+  //     }
+  //   }
+  // }
+
   return (
     <>
       <Banner text='¡Registro exitoso!' />
