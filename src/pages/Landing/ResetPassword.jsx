@@ -18,29 +18,31 @@ const ResetPassword = () => {
     const [loading, setLoading] = useState(null);
     const [isMounted, setIsMounted] = useState(null);
 
+
     useEffect(() => {
         setLoginNavbar(true);
+
+        const getToken = async () => {
+            setLoading(true);
+            await resetPassword(token)
+                .then(response => {
+                    setEmail(response.data.email);
+                    setModal({ ...modal, error: false });
+                })
+                .catch(() => {
+                    setModal({ ...modal, error: true });
+                })
+                .finally(() => {
+                    setIsMounted(true);
+                    setLoading(false);
+                })
+        }
+
         if (isMounted === null) {
             getToken();
         }
-    }, [setLoginNavbar, isMounted]);
 
-    const getToken = async () => {
-        setLoading(true);
-        await resetPassword(token)
-            .then(response => {
-                console.log(response, 'En el then')
-                setEmail(response.data.email);
-                setModal({ ...modal, error: false });
-            })
-            .catch(error => {
-                setModal({ ...modal, error: true });
-            })
-            .finally(() => {
-                setIsMounted(true);
-                setLoading(false);
-            })
-    }
+    }, [setLoginNavbar, modal, token, isMounted]);
 
     const handleValidatePassword = () => {
         if (password.value.length > 0) {
