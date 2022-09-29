@@ -9,7 +9,7 @@ const AccountValidation = () => {
     const { setLoginNavbar } = useStateContext();
     const { token } = useParams();
     const [validForm, setValidForm] = useState({ value: '', error: null })
-    const [modal, setModal] = useState(null);
+    const [modal, setModal] = useState({ success: null, error: null });
 
     useEffect(() => {
         setLoginNavbar(true);
@@ -19,20 +19,22 @@ const AccountValidation = () => {
 
     return (
         <div className='w-full flex justify-center items-center mt-80 md:mt-0'>
-            {modal === null &&
+            {modal.success === true &&
                 <Modal
                     title='Cuenta activada'
                     text='Gracias, su correo electrónico ha sido verificado. Su cuenta está ahora activa. Utilice el siguiente enlace para acceder a su cuenta.'
                     color='purple' icon={<BsCheckCircle />}
                     setState={setModal}
+                    buttonText='Continuar'
                 />
             }
-            {modal === true &&
+            {modal.error === true &&
                 <Modal
                     title='Oops! Ocurrio un error'
                     text='El siguiente enlace ha caducado o no es correcto. Por favor vuelva a intentar o comuniquese con el soporte.'
                     color='red' icon={<BsXCircle />}
                     setState={setModal}
+                    buttonText='Volver al inicio'
                 />
             }
             <Form title='Validar mi correo'>

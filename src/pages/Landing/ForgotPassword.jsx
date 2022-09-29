@@ -37,6 +37,7 @@ const ForgotPassword = () => {
                     text='Se ha enviado un correo electrónico a la dirección de correo electrónico proporcionada. Siga las instrucciones del correo electrónico para restablecer su contraseña.'
                     color='purple' icon={<BsCheckCircle />}
                     setState={setModal}
+                    buttonText='Continuar'
                 />
             }
             <Form title='Recupera tu cuenta'>

@@ -12,7 +12,7 @@ const ResetPassword = () => {
     const [password, setPassword] = useState({ value: '', error: null });
     const [passwordVerify, setPasswordVerify] = useState({ value: '', error: null });
     const [validForm, setValidForm] = useState({ value: '', error: null })
-    const [modal, setModal] = useState(null);
+    const [modal, setModal] = useState({ success: null, error: null });
 
     useEffect(() => {
         setLoginNavbar(true);
@@ -38,20 +38,22 @@ const ResetPassword = () => {
 
     return (
         <div className='w-full flex justify-center items-center mt-60 md:mt-0'>
-            {modal === null &&
+            {modal.success === true &&
                 <Modal
                     title='Contraseña actualizada'
                     text='Has actualizado correctamente tu contraseña.'
                     color='purple' icon={<BsCheckCircle />}
                     setState={setModal}
+                    buttonText='Continuar'
                 />
             }
-            {modal === null &&
+            {modal.error === true &&
                 <Modal
                     title='Oops! Ocurrio un error'
                     text='El siguiente enlace ha caducado o no es correcto. Por favor vuelva a intentar o comuniquese con el soporte.'
                     color='red' icon={<BsXCircle />}
                     setState={setModal}
+                    buttonText='Volver al inicio'
                 />
             }
             <Form title='Restablece tu contraseña'>
