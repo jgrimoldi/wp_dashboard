@@ -22,8 +22,7 @@ const AccountValidation = () => {
             .then(() => {
                 setModal({ ...modal, success: true });
             })
-            .catch(error => {
-                console.log(error)
+            .catch(() => {
                 setModal({ ...modal, error: true });
             })
             .finally(() => {
