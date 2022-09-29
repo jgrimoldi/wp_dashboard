@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { BsCheckCircle } from 'react-icons/bs';
 
-import { Form, Input, Button, ErrorLabel } from '../../components';
+import { Form, Input, Button, ErrorLabel, Modal } from '../../components';
 import { regEx } from '../../data/dummy';
 import { useStateContext } from '../../contexts/ContextProvider';
 
@@ -10,6 +11,7 @@ const ForgotPassword = () => {
     const captcha = useRef(null);
     const [email, setEmail] = useState({ value: '', error: null });
     const [validForm, setValidForm] = useState({ value: '', error: null })
+    const [modal, setModal] = useState(null);
 
     useEffect(() => {
         setLoginNavbar(true);
@@ -29,6 +31,14 @@ const ForgotPassword = () => {
 
     return (
         <div className='w-full flex justify-center items-center mt-60 md:mt-0'>
+            {modal === true &&
+                <Modal
+                    title='Revisa tu correo'
+                    text='Se ha enviado un correo electrónico a la dirección de correo electrónico proporcionada. Siga las instrucciones del correo electrónico para restablecer su contraseña.'
+                    color='purple' icon={<BsCheckCircle />}
+                    setState={setModal}
+                />
+            }
             <Form title='Recupera tu cuenta'>
                 <div className='text-left'>
                     ¡No te preocupes! Suele ocurrir. Por favor ingresa el correo asociado con tu cuenta

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { BsCheckCircle, BsXCircle } from 'react-icons/bs';
 
-import { Form, Button, Password, ErrorLabel } from '../../components';
+import { Form, Button, Password, ErrorLabel, Modal } from '../../components';
 import { regEx } from '../../data/dummy';
 import { useStateContext } from '../../contexts/ContextProvider';
 
@@ -11,6 +12,7 @@ const ResetPassword = () => {
     const [password, setPassword] = useState({ value: '', error: null });
     const [passwordVerify, setPasswordVerify] = useState({ value: '', error: null });
     const [validForm, setValidForm] = useState({ value: '', error: null })
+    const [modal, setModal] = useState(null);
 
     useEffect(() => {
         setLoginNavbar(true);
@@ -36,6 +38,22 @@ const ResetPassword = () => {
 
     return (
         <div className='w-full flex justify-center items-center mt-60 md:mt-0'>
+            {modal === null &&
+                <Modal
+                    title='Contraseña actualizada'
+                    text='Has actualizado correctamente tu contraseña.'
+                    color='purple' icon={<BsCheckCircle />}
+                    setState={setModal}
+                />
+            }
+            {modal === null &&
+                <Modal
+                    title='Oops! Ocurrio un error'
+                    text='El siguiente enlace ha caducado o no es correcto. Por favor vuelva a intentar o comuniquese con el soporte.'
+                    color='red' icon={<BsXCircle />}
+                    setState={setModal}
+                />
+            }
             <Form title='Restablece tu contraseña'>
                 <div className='text-left'>
                     Tu correo: johndoe@example.com

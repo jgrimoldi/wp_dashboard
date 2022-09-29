@@ -3,27 +3,30 @@ import { BsX } from 'react-icons/bs';
 
 import { Button } from '.';
 
-const Modal = ({ color, icon }) => {
+const Modal = ({ title, text, color, icon, setState }) => {
+
+
+
     return (
-        <div className='flex bg-half-transparent w-screen h-screen fixed nav-item top-0 right-0'>
+        <div className='flex bg-half-transparent w-screen h-screen fixed nav-item top-0 right-0 px-2'>
             <div className=' w-760 flex flex-col justify-between m-auto bg-white rounded-lg'>
                 <span style={{ backgroundColor: color }} className='h-2 rounded-t-lg'></span>
-                <button type='button' onClick={() => { }} className='w-fit self-end text-xl p-4 hover:bg-light-gray'>
+                <button type='button' onClick={() => setState(false)} className='w-fit self-end text-xl p-4 hover:bg-light-gray'>
                     <BsX />
                 </button>
-                <div className='flex p-4 pt-0 gap-10 items-center'>
+                <div className='flex p-4 pt-0 gap-2 lg:gap-10 items-center'>
                     <div style={{ color }} className=' text-6xl'>
                         {icon}
                     </div>
                     <div>
-                        <p className='pb-3 font-medium text-lg '>Revisa tu correo</p>
-                        <p className='text-base font-extralight'>Se ha enviado un correo electrónico a la dirección de correo electrónico proporcionada. Siga las instrucciones del correo electrónico para restablecer su contraseña.</p>
+                        <p className='pb-3 font-medium text-lg '>{title}</p>
+                        <p className='text-base font-extralight'>{text}</p>
                     </div>
                 </div>
                 <span style={{ borderColor: color }} className='border'></span>
                 <div className='flex gap-3 justify-end p-4 rounded-b-lg'>
-                    <Button borderColor='#161616' color='#161616' backgroundColor='transparent' text='Cancelar' />
-                    <Button borderColor={color} color='#FFFFFF' backgroundColor={color} text='Continuar' />
+                    <Button customFunction={() => setState(false)} borderColor='#161616' color='#161616' backgroundColor='transparent' text='Cancelar' />
+                    <Button customFunction={() => setState(false)} borderColor={color} color='#FFFFFF' backgroundColor={color} text='Continuar' />
                 </div>
             </div>
         </div>

@@ -22,7 +22,7 @@ const Register = () => {
     <>
       <Banner text='¡Registro exitoso!' />
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
-        <Modal color='#B00020' icon={<BsXCircle />} />
+        <Modal color='red' icon={<BsXCircle />} />
         <Title category="Registro de" title="Empleados" />
         <div className='w-full md:w-4/5 flex flex-col gap-5 m-auto'>
           <Input id='name' label='Nombre' required={true} />
