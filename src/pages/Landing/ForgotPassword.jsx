@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { BsCheckCircle } from 'react-icons/bs';
 
-import { Form, Input, Button, ErrorLabel, Modal } from '../../components';
+import { Form, Input, Button, ErrorLabel, Modal, LoadingSpinner } from '../../components';
 import { regEx } from '../../data/dummy';
+import { forgotPassword } from '../../services/AuthService';
 import { useStateContext } from '../../contexts/ContextProvider';
 
 const ForgotPassword = () => {
@@ -12,17 +13,31 @@ const ForgotPassword = () => {
     const [email, setEmail] = useState({ value: '', error: null });
     const [validForm, setValidForm] = useState({ value: '', error: null })
     const [modal, setModal] = useState(null);
+    const [loading, setLoading] = useState(null);
 
     useEffect(() => {
         setLoginNavbar(true);
     }, [setLoginNavbar]);
 
-    const handleForgot = () => {
+    const handleForgot = async () => {
         if (captcha.current.getValue()) {
             if (email.error === false) {
-                setValidForm({ ...validForm, error: false });
+                setLoading(true);
+                await forgotPassword(email.value)
+                    .then(response => {
+                        console.log(response);
+                        setValidForm({ ...validForm, error: false });
+                        setModal(true);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        setValidForm({ ...validForm, value: 'Correo incorrecto. Intenta de nuevo.', error: true });
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    })
             } else {
-                setValidForm({ ...validForm, value: 'Correo incorrecto. Intenta de nuevo.', error: true });
+                setValidForm({ ...validForm, value: 'No es un correo válido. Intenta de nuevo.', error: true });
             }
         } else {
             setValidForm({ ...validForm, value: 'Por favor complete el captcha antes de continuar.', error: true });
@@ -31,6 +46,7 @@ const ForgotPassword = () => {
 
     return (
         <div className='w-full flex justify-center items-center mt-60 md:mt-0'>
+            {loading && <LoadingSpinner color='blue' />}
             {modal === true &&
                 <Modal
                     title='Revisa tu correo'
