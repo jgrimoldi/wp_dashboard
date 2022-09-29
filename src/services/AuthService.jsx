@@ -96,7 +96,7 @@ export const validateAccount = (token) => {
 
 export const updatePasswordByEmail = (email, password, token) => {
     return (
-        API.get(URL + 'updatePasswordviaEmail', { email, password, resetPasswordToken: token })
+        API.put(URL + 'updatePasswordviaEmail', { email: email, password: password, resetPasswordToken: token })
             .then(response => {
                 return response.data;
             })
@@ -105,7 +105,7 @@ export const updatePasswordByEmail = (email, password, token) => {
 
 export const updatePassword = (email, password, token) => {
     return (
-        API.get(URL + 'updatePassword', { email, password }, header(token))
+        API.put(URL + 'updatePassword', { email, password }, header(token))
             .then(response => {
                 return response.data;
             })
@@ -114,7 +114,7 @@ export const updatePassword = (email, password, token) => {
 
 export const restoreUser = (id, token) => {
     return (
-        API.get(URL + 'restore/' + id, header(token))
+        API.post(URL + 'restore/' + id, header(token))
             .then(response => {
                 return response.data;
             })
