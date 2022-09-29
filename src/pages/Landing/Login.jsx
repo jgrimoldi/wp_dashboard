@@ -4,7 +4,8 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import heroImage from '../../data/heroImage.png';
 import { regEx } from '../../data/dummy';
-import { Form, Input, Password, Button, ErrorLabel } from '../../components';
+import { Form, Input, Password, Button, ErrorLabel, LoadingSpinner } from '../../components';
+import { loginUser } from '../../services/AuthService';
 import { useAuthContext } from '../../contexts/ContextAuth';
 import { useStateContext } from '../../contexts/ContextProvider';
 
@@ -15,6 +16,7 @@ const Login = () => {
     const [email, setEmail] = useState({ value: '', error: null });
     const [password, setPassword] = useState({ value: '', error: null });
     const [validForm, setValidForm] = useState({ value: '', error: null });
+    const [loading, setLoading] = useState(null);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -24,14 +26,25 @@ const Login = () => {
         setLoginNavbar(false);
     }, [setLoginNavbar]);
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (captcha.current.getValue()) {
             if (email.error === false && password.error === false) {
-                setValidForm({ ...validForm, error: false });
-                setAuth({});
-                navigate(from, { replace: true });
+                setLoading(true);
+                await loginUser(email.value, password.value)
+                    .then(response => {
+                        setAuth(response.data);
+                        setValidForm({ ...validForm, error: false });
+                    })
+                    .catch(error => {
+                        console.error(error.response.data.error);
+                        setValidForm({ ...validForm, value: 'Correo o contraseña incorrectos. Intenta de nuevo.', error: true });
+                    })
+                    .finally(() => {
+                        navigate(from, { replace: true });
+                        setLoading(false);
+                    })
             } else {
-                setValidForm({ ...validForm, value: 'Correo o contraseña incorrectos. Intenta de nuevo.', error: true });
+                setValidForm({ ...validForm, value: 'Parece que el correo o contraseña no son válidos. Vuelve a intentar.', error: true });
             }
         } else {
             setValidForm({ ...validForm, value: 'Por favor complete el captcha antes de continuar.', error: true });
@@ -40,6 +53,7 @@ const Login = () => {
 
     return (
         <div className='mt-52 md:mt-0'>
+            {loading && <LoadingSpinner color='blue' />}
             <div className='hidden lg:block absolute w-2/3 h-fit m-auto top-0 bottom-0 z-0'>
                 <img className='w-full max-h-[863px] ' src={heroImage} alt='Trabajadores de reposición' />
             </div>

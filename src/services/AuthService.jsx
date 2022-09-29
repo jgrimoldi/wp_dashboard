@@ -32,71 +32,91 @@ export const updateUserById = (id, email, nombre, apellido, fk_perfil, fk_empres
 }
 
 export const deleteUserById = (id, token) => {
-    API.delete(URL + id, header(token))
-        .then(response => {
-            return response.data;
-        })
+    return (
+        API.delete(URL + id, header(token))
+            .then(response => {
+                return response.data;
+            })
+    )
 }
 
 export const getUserByEmail = (email, token) => {
-    API.get(URL + 'findUserEmail/' + email, header(token))
-        .then(response => {
-            return response.data;
-        })
+    return (
+        API.get(URL + 'findUserEmail/' + email, header(token))
+            .then(response => {
+                return response.data;
+            })
+    )
 }
 
 export const registerUser = (email, password, nombre, apellido, fk_perfil, fk_empresa, token) => {
-    API.post(URL + 'register', { email, password, nombre, apellido, fk_perfil, fk_empresa }, header(token))
-        .then(response => {
-            return response.data;
-        })
+    return (
+        API.post(URL + 'register', { email, password, nombre, apellido, fk_perfil, fk_empresa }, header(token))
+            .then(response => {
+                return response.data;
+            })
+    )
 }
 
 export const loginUser = (email, password) => {
-    API.post(URL + 'login', { email, password })
-        .then(response => {
-            return response.data;
-        })
+    return (
+        API.post(URL + 'login', { email, password })
+            .then(response => {
+                return response.data;
+            })
+    )
 }
 
 export const forgotPassword = (email) => {
-    API.post(URL + 'forgotPassword', { email })
-        .then(response => {
-            return response.data;
-        })
+    return (
+        API.post(URL + 'forgotPassword', { email })
+            .then(response => {
+                return response.data;
+            })
+    )
 }
 
 export const resetPassword = (token) => {
-    API.get(URL + 'reset/' + token)
-        .then(response => {
-            return response.data;
-        })
+    return (
+        API.get(URL + 'reset/' + token)
+            .then(response => {
+                return response.data;
+            })
+    )
 }
 
 export const validateAccount = (token) => {
-    API.get(URL + 'validateAccount/' + token)
-        .then(response => {
-            return response.data;
-        })
+    return (
+        API.get(URL + 'validateAccount/' + token)
+            .then(response => {
+                return response.data;
+            })
+    )
 }
 
 export const updatePasswordByEmail = (email, password, token) => {
-    API.get(URL + 'updatePasswordviaEmail', { email, password, resetPasswordToken: token })
-        .then(response => {
-            return response.data;
-        })
+    return (
+        API.get(URL + 'updatePasswordviaEmail', { email, password, resetPasswordToken: token })
+            .then(response => {
+                return response.data;
+            })
+    )
 }
 
 export const updatePassword = (email, password, token) => {
-    API.get(URL + 'updatePassword', { email, password }, header(token))
-        .then(response => {
-            return response.data;
-        })
+    return (
+        API.get(URL + 'updatePassword', { email, password }, header(token))
+            .then(response => {
+                return response.data;
+            })
+    )
 }
 
 export const restoreUser = (id, token) => {
-    API.get(URL + 'restore/' + id, header(token))
-        .then(response => {
-            return response.data;
-        })
+    return (
+        API.get(URL + 'restore/' + id, header(token))
+            .then(response => {
+                return response.data;
+            })
+    )
 }

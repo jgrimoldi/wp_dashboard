@@ -47,7 +47,7 @@ const App = () => {
             <Route path='/reportes' element={<Reports />} />
             {/* management */}
             <Route path='/registro' element={
-              <ProtectedRoutes isAllowed={!!auth.token && privateRoles.includes(auth.role)} redirectTo='/'>
+              <ProtectedRoutes isAllowed={!!auth.token && privateRoles.includes(auth.user.role)} redirectTo='/'>
                 <Register />
               </ProtectedRoutes>
             } />
