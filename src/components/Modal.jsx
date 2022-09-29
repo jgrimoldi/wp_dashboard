@@ -4,9 +4,6 @@ import { BsX } from 'react-icons/bs';
 import { Button } from '.';
 
 const Modal = ({ title, text, color, icon, setState }) => {
-
-
-
     return (
         <div className='flex bg-half-transparent w-screen h-screen fixed nav-item top-0 right-0 px-2'>
             <div className=' w-760 flex flex-col justify-between m-auto bg-white rounded-lg'>
