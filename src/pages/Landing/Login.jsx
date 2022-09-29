@@ -35,8 +35,7 @@ const Login = () => {
                         setAuth(response.data);
                         setValidForm({ ...validForm, error: false });
                     })
-                    .catch(error => {
-                        console.error(error.response.data.error);
+                    .catch(() => {
                         setValidForm({ ...validForm, value: 'Correo o contraseña incorrectos. Intenta de nuevo.', error: true });
                     })
                     .finally(() => {
@@ -53,7 +52,7 @@ const Login = () => {
 
     return (
         <div className='mt-52 md:mt-0'>
-            {loading && <LoadingSpinner color='blue' />}
+            {loading === true && <LoadingSpinner color='blue' />}
             <div className='hidden lg:block absolute w-2/3 h-fit m-auto top-0 bottom-0 z-0'>
                 <img className='w-full max-h-[863px] ' src={heroImage} alt='Trabajadores de reposición' />
             </div>

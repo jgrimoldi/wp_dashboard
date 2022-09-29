@@ -57,12 +57,11 @@ const ResetPassword = () => {
     const handleReset = async () => {
         if (password.error === false && passwordVerify.error === false && modal.error === false) {
             await updatePasswordByEmail(email, password.value, token)
-                .then(response => {
+                .then(() => {
                     setValidForm({ ...validForm, error: false });
                     setModal({ ...modal, success: true });
                 })
-                .catch(error => {
-                    console.log(error);
+                .catch(() => {
                     setValidForm({ ...validForm, value: 'Ocurrió un error al intentar cambiar la clave. Intenta de nuevo', error: true });
                 })
         } else {
@@ -72,13 +71,13 @@ const ResetPassword = () => {
 
     return (
         <div className='w-full flex justify-center items-center mt-60 md:mt-0'>
-            {loading && <LoadingSpinner color='blue' />}
+            {loading === true && <LoadingSpinner color='blue' />}
             {modal.success === true &&
                 <Modal
                     title='Contraseña actualizada'
                     text='Has actualizado correctamente tu contraseña.'
                     color='purple' icon={<BsCheckCircle />}
-                    setFunction={() => setModal(false)}
+                    setFunction={() => setModal({ ...modal, success: false })}
                     buttonText='Continuar'
                 />
             }

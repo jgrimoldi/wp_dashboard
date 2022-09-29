@@ -24,13 +24,11 @@ const ForgotPassword = () => {
             if (email.error === false) {
                 setLoading(true);
                 await forgotPassword(email.value)
-                    .then(response => {
-                        console.log(response);
+                    .then(() => {
                         setValidForm({ ...validForm, error: false });
                         setModal(true);
                     })
-                    .catch(error => {
-                        console.error(error);
+                    .catch(() => {
                         setValidForm({ ...validForm, value: 'Correo incorrecto. Intenta de nuevo.', error: true });
                     })
                     .finally(() => {
@@ -46,13 +44,13 @@ const ForgotPassword = () => {
 
     return (
         <div className='w-full flex justify-center items-center mt-60 md:mt-0'>
-            {loading && <LoadingSpinner color='blue' />}
+            {loading === true && <LoadingSpinner color='blue' />}
             {modal === true &&
                 <Modal
                     title='Revisa tu correo'
                     text='Se ha enviado un correo electrónico a la dirección de correo electrónico proporcionada. Siga las instrucciones del correo electrónico para restablecer su contraseña.'
                     color='purple' icon={<BsCheckCircle />}
-                    setState={setModal}
+                    setState={() => setModal(false)}
                     buttonText='Continuar'
                 />
             }
