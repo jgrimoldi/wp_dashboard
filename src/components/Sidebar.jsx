@@ -1,19 +1,40 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom';
 import { BsArrowLeftSquare, BsBoxArrowLeft } from 'react-icons/bs';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import { ThemeSettings } from '.';
 
+import { ThemeSettings } from '.';
 import avatar from '../data/avatar.png';
 import { sidebar } from '../data/dummy.js';
+import { getDataByIdFrom } from '../services/GdrService';
+import { URL_PROFILE, URL_COMPANY } from '../services/Api';
 import { useStateContext } from '../contexts/ContextProvider';
 import { useAuthContext } from '../contexts/ContextAuth';
 
 const Sidebar = () => {
 
   const { activeMenu, setActiveMenu, screenSize } = useStateContext();
-  const { setAuth } = useAuthContext();
-  const currentColor = 'blue';
+  const { auth, setAuth } = useAuthContext();
+  const userData = auth.user;
+  const [user, setUser] = useState({});
+  const [isMounted, setIsMounted] = useState(false);
+
+
+  useEffect(() => {
+
+    const fetchUser = async () => {
+      const name = userData.nombre + ' ' + userData.apellido;
+      const fetchProfile = await getDataByIdFrom(URL_PROFILE, userData.fk_perfil, auth.token);
+      const fetchCompany = await getDataByIdFrom(URL_COMPANY, userData.fk_empresa, auth.token);
+      setUser({ ...user, name: name, profile: fetchProfile, company: fetchCompany, lastLogin: userData.lastlogin });
+      setIsMounted(true);
+    }
+
+    if (isMounted === false) {
+      fetchUser();
+    }
+
+  })
 
   const handleCloseSidebar = () => {
     if (activeMenu && screenSize <= 900) {
@@ -25,6 +46,8 @@ const Sidebar = () => {
 
   const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-white text-md m-2';
   const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2';
+
+  console.log(user);
 
   return (
     <div className='ml-3 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10'>
@@ -62,7 +85,7 @@ const Sidebar = () => {
                   to={`/${link.url}`}
                   key={link.url}
                   onClick={handleCloseSidebar}
-                  style={({ isActive }) => ({ backgroundColor: isActive ? currentColor : '', })}
+                  style={({ isActive }) => ({ backgroundColor: isActive ? 'blue' : '', })}
                   className={({ isActive }) => (isActive ? activeLink : normalLink)}
                 >
                   {link.icon}
@@ -75,7 +98,7 @@ const Sidebar = () => {
             to='/inicio'
             key='logout'
             onClick={handleLogout}
-            style={({ isActive }) => ({ backgroundColor: isActive ? currentColor : '', })}
+            style={({ isActive }) => ({ backgroundColor: isActive ? 'blue' : '', })}
             className={({ isActive }) => (isActive ? activeLink : normalLink)}
           >
             <BsBoxArrowLeft />

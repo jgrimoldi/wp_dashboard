@@ -34,12 +34,12 @@ const Login = () => {
                     .then(response => {
                         setAuth(response.data);
                         setValidForm({ ...validForm, error: false });
+                        navigate(from, { replace: true });
                     })
                     .catch(() => {
                         setValidForm({ ...validForm, value: 'Correo o contraseña incorrectos. Intenta de nuevo.', error: true });
                     })
                     .finally(() => {
-                        navigate(from, { replace: true });
                         setLoading(false);
                     })
             } else {

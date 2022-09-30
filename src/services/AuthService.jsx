@@ -1,39 +1,8 @@
-import API from './Api';
-
-const URL = 'auth/';
-const header = (token) => ({ headers: { Authorization: `JWT ${token}` } });
-
-export const getUser = (token) => {
-    return (
-        API.get(URL, header(token))
-            .then(response => {
-                console.log(response.data)
-                return response.data;
-            })
-    )
-}
-
-export const getUserById = (id, token) => {
-    return (
-        API.get(URL + id, header(token))
-            .then(response => {
-                return response.data;
-            })
-    )
-}
+import API, { header, URL_AUTH } from './Api';
 
 export const updateUserById = (id, email, nombre, apellido, fk_perfil, fk_empresa, fk_theme, token) => {
     return (
-        API.put(URL + id, { email, nombre, apellido, fk_perfil, fk_empresa, fk_theme }, header(token))
-            .then(response => {
-                return response.data;
-            })
-    )
-}
-
-export const deleteUserById = (id, token) => {
-    return (
-        API.delete(URL + id, header(token))
+        API.put(URL_AUTH + id, { email, nombre, apellido, fk_perfil, fk_empresa, fk_theme }, header(token))
             .then(response => {
                 return response.data;
             })
@@ -42,7 +11,7 @@ export const deleteUserById = (id, token) => {
 
 export const getUserByEmail = (email, token) => {
     return (
-        API.get(URL + 'findUserEmail/' + email, header(token))
+        API.get(URL_AUTH + 'findUserEmail/' + email, header(token))
             .then(response => {
                 return response.data;
             })
@@ -51,7 +20,7 @@ export const getUserByEmail = (email, token) => {
 
 export const registerUser = (email, password, nombre, apellido, fk_perfil, fk_empresa, token) => {
     return (
-        API.post(URL + 'register', { email, password, nombre, apellido, fk_perfil, fk_empresa }, header(token))
+        API.post(URL_AUTH + 'register', { email, password, nombre, apellido, fk_perfil, fk_empresa }, header(token))
             .then(response => {
                 return response.data;
             })
@@ -60,7 +29,7 @@ export const registerUser = (email, password, nombre, apellido, fk_perfil, fk_em
 
 export const loginUser = (email, password) => {
     return (
-        API.post(URL + 'login', { email, password })
+        API.post(URL_AUTH + 'login', { email, password })
             .then(response => {
                 return response.data;
             })
@@ -69,7 +38,7 @@ export const loginUser = (email, password) => {
 
 export const forgotPassword = (email) => {
     return (
-        API.post(URL + 'forgotPassword', { email })
+        API.post(URL_AUTH + 'forgotPassword', { email })
             .then(response => {
                 return response.data;
             })
@@ -78,7 +47,7 @@ export const forgotPassword = (email) => {
 
 export const resetPassword = (token) => {
     return (
-        API.get(URL + 'reset/' + token)
+        API.get(URL_AUTH + 'reset/' + token)
             .then(response => {
                 return response.data;
             })
@@ -87,7 +56,7 @@ export const resetPassword = (token) => {
 
 export const validateAccount = (token) => {
     return (
-        API.get(URL + 'validateAccount/' + token)
+        API.get(URL_AUTH + 'validateAccount/' + token)
             .then(response => {
                 return response.data;
             })
@@ -96,7 +65,7 @@ export const validateAccount = (token) => {
 
 export const updatePasswordByEmail = (email, password, token) => {
     return (
-        API.put(URL + 'updatePasswordviaEmail', { email: email, password: password, resetPasswordToken: token })
+        API.put(URL_AUTH + 'updatePasswordviaEmail', { email, password, resetPasswordToken: token })
             .then(response => {
                 return response.data;
             })
@@ -105,16 +74,7 @@ export const updatePasswordByEmail = (email, password, token) => {
 
 export const updatePassword = (email, password, token) => {
     return (
-        API.put(URL + 'updatePassword', { email, password }, header(token))
-            .then(response => {
-                return response.data;
-            })
-    )
-}
-
-export const restoreUser = (id, token) => {
-    return (
-        API.post(URL + 'restore/' + id, header(token))
+        API.put(URL_AUTH + 'updatePassword', { email, password }, header(token))
             .then(response => {
                 return response.data;
             })
