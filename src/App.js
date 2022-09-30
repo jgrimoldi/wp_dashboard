@@ -1,8 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { HomeNavigation, HomeTemplate, ProtectedRoutes } from './components';
-import { Dashboard, Storage, Clients, Products, ProductType, Units, Providers, Category, Income, Expenses, Transfer, Stats, Reports, Register, Settings, Backup, Help, Login, ForgotPassword, ResetPassword, AccountValidation } from './pages';
+import { Dashboard, Storage, Clients, Products, ProductType, Units, Providers, Category, Income, Expenses, Transfer, Stats, Reports, Register, Settings, Backup, Help, Login, ForgotPassword, ResetPassword, AccountValidation, Unauthorized, NotFound } from './pages';
 import './App.css';
 
 import { useAuthContext } from './contexts/ContextAuth';
@@ -47,7 +47,7 @@ const App = () => {
             <Route path='/reportes' element={<Reports />} />
             {/* management */}
             <Route path='/registro' element={
-              <ProtectedRoutes isAllowed={!!auth.token && privateRoles.includes(auth.user.role)} redirectTo='/'>
+              <ProtectedRoutes isAllowed={!!auth.token && privateRoles.includes(auth.user.fk_perfil)} redirectTo='/401'>
                 <Register />
               </ProtectedRoutes>
             } />
@@ -55,8 +55,12 @@ const App = () => {
             <Route path='/restaurar' element={<Backup />} />
 
             <Route path='/ayuda' element={<Help />} />
+            <Route path='/401' element={<Unauthorized />} />
           </Route>
         </Route>
+
+        <Route path='/404' element={<NotFound />} />
+        <Route path='*' element={<Navigate to='/404' />} />
 
       </Routes>
     </BrowserRouter>

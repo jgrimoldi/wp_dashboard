@@ -26,7 +26,7 @@ const Sidebar = () => {
       const name = userData.nombre + ' ' + userData.apellido;
       const fetchProfile = await getDataByIdFrom(URL_PROFILE, userData.fk_perfil, auth.token);
       const fetchCompany = await getDataByIdFrom(URL_COMPANY, userData.fk_empresa, auth.token);
-      setUser({ ...user, name: name, profile: fetchProfile, company: fetchCompany, lastLogin: userData.lastlogin });
+      setUser({ ...user, name: name, profile: fetchProfile, company: fetchCompany });
       setIsMounted(true);
     }
 
@@ -58,11 +58,11 @@ const Sidebar = () => {
               <img className="rounded-full w-10 h-10" src={avatar} alt="user-profile" />
               <div>
                 <p>
-                  <span className="font-extrabold text-14">John Doe</span>{' - '}
-                  <span className="text-gray-400 text-14">Dev</span>
+                  <span className="font-extrabold text-14">{user.name}</span>{' - '}
+                  <span className="text-gray-400 text-14">{user.profile}</span>
                 </p>
                 <p className='text-gray-400 text-14'>
-                  Empresa test SA
+                  {user.company}
                 </p>
               </div>
             </div>

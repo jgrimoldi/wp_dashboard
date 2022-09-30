@@ -20,3 +20,6 @@ export { default as Help } from './Help';
 export { default as Register } from './Management/Register';
 export { default as Settings } from './Management/Settings';
 export { default as Backup } from './Management/Backup';
+export { default as Unauthorized } from './Unauthorized';
+
+export { default as NotFound } from './NotFound';
