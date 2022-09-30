@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Link, NavLink } from 'react-router-dom';
 import { BsArrowLeftSquare, BsBoxArrowLeft } from 'react-icons/bs';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
@@ -15,26 +15,31 @@ const Sidebar = () => {
 
   const { activeMenu, setActiveMenu, screenSize } = useStateContext();
   const { auth, setAuth } = useAuthContext();
-  const userData = auth.user;
-  const [user, setUser] = useState({});
+  const [profile, setProfile] = useState(null);
+  const [company, setCompany] = useState({ data: {}, user: {} });
   const [isMounted, setIsMounted] = useState(false);
 
+  const getDataById = useCallback(async (URL, ID, setState) => {
+    await getDataByIdFrom(URL, ID, auth.token)
+      .then(response => {
+        setState(response);
+      })
+      .catch(() => {
+        setState('Cargando...');
+      })
+  }, [auth.token]);
 
   useEffect(() => {
+    if (!auth.token && localStorage.getItem('_fUserData') !== null) {
+      setAuth(JSON.parse(localStorage.getItem('_fUserData')))
+    }
 
-    const fetchUser = async () => {
-      const name = userData.nombre + ' ' + userData.apellido;
-      const fetchProfile = await getDataByIdFrom(URL_PROFILE, userData.fk_perfil, auth.token);
-      const fetchCompany = await getDataByIdFrom(URL_COMPANY, userData.fk_empresa, auth.token);
-      setUser({ ...user, name: name, profile: fetchProfile, company: fetchCompany });
+    if (isMounted === false && !!auth.token) {
+      getDataById(URL_PROFILE, auth.user.fk_perfil, setProfile);
+      getDataById(URL_COMPANY, auth.user.fk_empresa, setCompany);
       setIsMounted(true);
     }
-
-    if (isMounted === false) {
-      fetchUser();
-    }
-
-  })
+  }, [auth.token, auth.user.fk_empresa, auth.user.fk_perfil, getDataById, isMounted, setAuth])
 
   const handleCloseSidebar = () => {
     if (activeMenu && screenSize <= 900) {
@@ -42,12 +47,13 @@ const Sidebar = () => {
     }
   }
 
-  const handleLogout = () => setAuth({});
+  const handleLogout = () => {
+    setAuth({});
+    localStorage.removeItem('_fDataUser');
+  }
 
   const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-white text-md m-2';
   const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2';
-
-  console.log(user);
 
   return (
     <div className='ml-3 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10'>
@@ -58,12 +64,10 @@ const Sidebar = () => {
               <img className="rounded-full w-10 h-10" src={avatar} alt="user-profile" />
               <div>
                 <p>
-                  <span className="font-extrabold text-14">{user.name}</span>{' - '}
-                  <span className="text-gray-400 text-14">{user.profile}</span>
+                  <span className="font-extrabold text-14">{auth.user.nombre + ' ' + auth.user.apellido}</span>{' - '}
+                  <span className="text-gray-400 text-14">{profile}</span>
                 </p>
-                <p className='text-gray-400 text-14'>
-                  {user.company}
-                </p>
+                <p className='text-gray-400 text-14'>{company.data.razonsocial}</p>
               </div>
             </div>
           </Link>

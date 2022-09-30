@@ -13,6 +13,7 @@ const Login = () => {
     const { setLoginNavbar } = useStateContext();
     const { setAuth } = useAuthContext();
     const captcha = useRef(null);
+    const [user, setUser] = useState(null);
     const [email, setEmail] = useState({ value: '', error: null });
     const [password, setPassword] = useState({ value: '', error: null });
     const [validForm, setValidForm] = useState({ value: '', error: null });
@@ -24,7 +25,12 @@ const Login = () => {
 
     useEffect(() => {
         setLoginNavbar(false);
-    }, [setLoginNavbar]);
+        setUser(JSON.parse(localStorage.getItem('_fDataUser')));
+        if (user !== null) {
+            setAuth(user);
+            navigate(from, { replace: true });
+        }
+    }, [setLoginNavbar, from, navigate, setAuth, user]);
 
     const handleLogin = async () => {
         if (captcha.current.getValue()) {
@@ -33,6 +39,7 @@ const Login = () => {
                 await loginUser(email.value, password.value)
                     .then(response => {
                         setAuth(response.data);
+                        localStorage.setItem('_fDataUser', JSON.stringify(response.data));
                         setValidForm({ ...validForm, error: false });
                         navigate(from, { replace: true });
                     })
