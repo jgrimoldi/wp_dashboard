@@ -12,10 +12,10 @@ import { useStateContext } from '../contexts/ContextProvider';
 import { useAuthContext } from '../contexts/ContextAuth';
 
 const Sidebar = () => {
-
   const { activeMenu, setActiveMenu, screenSize } = useStateContext();
   const { auth, setAuth } = useAuthContext();
-  const [profile, setProfile] = useState(null);
+  const [fullName, setFullName] = useState({ name: '', surname: '' });
+  const [profile, setProfile] = useState('');
   const [company, setCompany] = useState({ data: {}, user: {} });
   const [isMounted, setIsMounted] = useState(false);
 
@@ -30,19 +30,19 @@ const Sidebar = () => {
           localStorage.removeItem('_fDataUser');
         }
       })
-  }, [auth.token, setAuth]);
+  }, [auth, setAuth]);
 
   useEffect(() => {
     if (!auth.token && localStorage.getItem('_fUserData') !== null) {
-      setAuth(JSON.parse(localStorage.getItem('_fUserData')))
+      setAuth(JSON.parse(localStorage.getItem('_fUserData')));
     }
-
     if (isMounted === false && !!auth.token) {
       getDataById(URL_PROFILE, auth.user.fk_perfil, setProfile);
       getDataById(URL_COMPANY, auth.user.fk_empresa, setCompany);
+      setFullName((prevFullName) => { return { ...prevFullName, name: auth.user.nombre, surname: auth.user.apellido } })
       setIsMounted(true);
     }
-  }, [auth.token, auth.user.fk_empresa, auth.user.fk_perfil, getDataById, isMounted, setAuth])
+  }, [auth, setAuth, getDataById, isMounted])
 
   const handleCloseSidebar = () => {
     if (activeMenu && screenSize <= 900) {
@@ -67,7 +67,7 @@ const Sidebar = () => {
               <img className="rounded-full w-10 h-10" src={avatar} alt="user-profile" />
               <div>
                 <p>
-                  <span className="font-extrabold text-14">{auth.user.nombre + ' ' + auth.user.apellido}</span>{' - '}
+                  <span className="font-extrabold text-14">{fullName.name + ' ' + fullName.surname}</span>{' - '}
                   <span className="text-gray-400 text-14">{profile}</span>
                 </p>
                 <p className='text-gray-400 text-14'>{company.data.razonsocial}</p>
