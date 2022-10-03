@@ -1,8 +1,11 @@
-import React from 'react'
-
+import React from 'react';
+import { SEO } from '../../components';
 const Units = () => {
   return (
-    <div>Units</div>
+    <>
+      <SEO title='Unidades de medida' />
+      <div>Units</div>
+    </>
   )
 }
 

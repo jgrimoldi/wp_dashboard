@@ -1,8 +1,12 @@
-import React from 'react'
+import React from 'react';
+import { SEO } from '../../components';
 
 const ProductType = () => {
   return (
-    <div>ProductType</div>
+    <>
+      <SEO title='Tipo de productos' />
+      <div>ProductType</div>
+    </>
   )
 }
 

@@ -1,8 +1,12 @@
-import React from 'react'
+import React from 'react';
+import { SEO } from '../components';
 
 const NotFound = () => {
     return (
-        <div>NotFound</div>
+        <>
+            <SEO title='Página no encontrada' />
+            <div>NotFound</div>
+        </>
     )
 }
 

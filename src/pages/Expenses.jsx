@@ -1,8 +1,12 @@
-import React from 'react'
+import React from 'react';
+import { SEO } from '../components';
 
 const Expenses = () => {
   return (
-    <div>Expenses</div>
+    <>
+      <SEO title='Egreso de productos' />
+      <div>Expenses</div>
+    </>
   )
 }
 

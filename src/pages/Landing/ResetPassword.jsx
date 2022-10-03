@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { BsCheckCircle, BsXCircle } from 'react-icons/bs';
 
-import { Form, Button, Password, ErrorLabel, Modal, LoadingSpinner } from '../../components';
+import { Form, Button, Password, ErrorLabel, Modal, LoadingSpinner, SEO } from '../../components';
 import { regEx } from '../../data/dummy';
 import { resetPassword, updatePasswordByEmail } from '../../services/AuthService';
 import { useStateContext } from '../../contexts/ContextProvider';
@@ -70,41 +70,44 @@ const ResetPassword = () => {
     }
 
     return (
-        <div className='w-full flex justify-center items-center mt-60 md:mt-0'>
-            {loading === true && <LoadingSpinner color='blue' />}
-            {modal.success === true &&
-                <Modal
-                    title='Contraseña actualizada'
-                    text='Has actualizado correctamente tu contraseña.'
-                    color='purple' icon={<BsCheckCircle />}
-                    setFunction={() => setModal({ ...modal, success: false })}
-                    buttonText='Continuar'
-                />
-            }
-            {modal.error === true &&
-                <Modal
-                    title='Oops! Ocurrio un error'
-                    text='El siguiente enlace ha caducado o no es correcto. Por favor vuelva a intentar o comuniquese con el soporte.'
-                    color='red' icon={<BsXCircle />}
-                    setFunction={() => { }}
-                    buttonText='Volver al inicio'
-                />
-            }
-            <Form title='Restablece tu contraseña'>
-                <div className='text-left'>
-                    Tu correo: {email}
-                </div>
-                <Password id='password' label='Contraseña' color='purple' state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
-                <Password id='passwordVerify' label='Confirmar contraseña' color='purple' state={passwordVerify} setState={setPasswordVerify} customFunction={handleValidatePassword} helperText='Las contraseñas no coinciden' />
-                <div className='flex flex-col gap-2'>
-                    {validForm.error === true && <ErrorLabel color='red'>{validForm.value}</ErrorLabel>}
-                    <div className='flex gap-1'>
-                        <Button customFunction={() => { }} borderColor='black' color='black' backgroundColor='transparent' text='Cancelar' width='full' height={true} />
-                        <Button customFunction={handleReset} borderColor='blue' color='white' backgroundColor='blue' text='Confirmar' width='full' height={true} />
+        <>
+            <SEO title='Restablece tu contraseña' />
+            <div className='w-full flex justify-center items-center mt-60 md:mt-0'>
+                {loading === true && <LoadingSpinner color='blue' />}
+                {modal.success === true &&
+                    <Modal
+                        title='Contraseña actualizada'
+                        text='Has actualizado correctamente tu contraseña.'
+                        color='purple' icon={<BsCheckCircle />}
+                        setFunction={() => setModal({ ...modal, success: false })}
+                        buttonText='Continuar'
+                    />
+                }
+                {modal.error === true &&
+                    <Modal
+                        title='Oops! Ocurrio un error'
+                        text='El siguiente enlace ha caducado o no es correcto. Por favor vuelva a intentar o comuniquese con el soporte.'
+                        color='red' icon={<BsXCircle />}
+                        setFunction={() => { }}
+                        buttonText='Volver al inicio'
+                    />
+                }
+                <Form title='Restablece tu contraseña'>
+                    <div className='text-left'>
+                        Tu correo: {email}
                     </div>
-                </div>
-            </Form>
-        </div>
+                    <Password id='password' label='Contraseña' color='purple' state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
+                    <Password id='passwordVerify' label='Confirmar contraseña' color='purple' state={passwordVerify} setState={setPasswordVerify} customFunction={handleValidatePassword} helperText='Las contraseñas no coinciden' />
+                    <div className='flex flex-col gap-2'>
+                        {validForm.error === true && <ErrorLabel color='red'>{validForm.value}</ErrorLabel>}
+                        <div className='flex gap-1'>
+                            <Button customFunction={() => { }} borderColor='black' color='black' backgroundColor='transparent' text='Cancelar' width='full' height={true} />
+                            <Button customFunction={handleReset} borderColor='blue' color='white' backgroundColor='blue' text='Confirmar' width='full' height={true} />
+                        </div>
+                    </div>
+                </Form>
+            </div>
+        </>
     )
 }
 

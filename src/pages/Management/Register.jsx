@@ -1,7 +1,7 @@
 import React from 'react';
 import { BsXCircle } from 'react-icons/bs';
 
-import { Title, Input, Dropdown, Password, Button, Banner, Modal } from '../../components';
+import { Title, Input, Dropdown, Password, Button, Banner, Modal, SEO } from '../../components';
 
 const Register = () => {
 
@@ -20,6 +20,7 @@ const Register = () => {
 
   return (
     <>
+      <SEO title='Registro de usuarios' />
       <Banner text='¡Registro exitoso!' />
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
         {/* <Modal color='red' icon={<BsXCircle />} /> */}

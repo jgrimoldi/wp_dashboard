@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { HelmetProvider } from 'react-helmet-async';
 
 import './index.css';
 import App from './App';
@@ -8,11 +9,13 @@ import { ContextAuth } from './contexts/ContextAuth';
 
 ReactDOM.render(
     <React.StrictMode>
-        <ContextAuth>
-            <ContextProvider>
-                <App />
-            </ContextProvider>
-        </ContextAuth>
+        <HelmetProvider>
+            <ContextAuth>
+                <ContextProvider>
+                    <App />
+                </ContextProvider>
+            </ContextAuth>
+        </HelmetProvider>
     </React.StrictMode>,
     document.getElementById('root'),
 );

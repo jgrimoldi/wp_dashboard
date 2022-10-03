@@ -26,7 +26,7 @@ const App = () => {
         </Route>
 
         <Route element={(<HomeNavigation />)}>
-          <Route element={<ProtectedRoutes isAllowed={!!auth.token} redirectTo='/inicio' />}>
+          <Route element={<ProtectedRoutes isAllowed={!!auth.token && !!auth.user} redirectTo='/inicio' />}>
             {/* dashboard */}
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/almacen' element={<Storage />} />
@@ -47,7 +47,7 @@ const App = () => {
             <Route path='/reportes' element={<Reports />} />
             {/* management */}
             <Route path='/registro' element={
-              <ProtectedRoutes isAllowed={!!auth.token && privateRoles.includes(auth.user.fk_perfil)} redirectTo='/401'>
+              <ProtectedRoutes isAllowed={!!auth.token && !!auth.user && privateRoles.includes(auth.user.fk_perfil)} redirectTo='/401'>
                 <Register />
               </ProtectedRoutes>
             } />

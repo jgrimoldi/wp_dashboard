@@ -3,8 +3,7 @@ import { BsSearch, BsPlus } from 'react-icons/bs';
 import { GridComponent, ColumnsDirective, ColumnDirective, Page, Inject, Edit } from '@syncfusion/ej2-react-grids';
 
 import { incomeGrid } from '../data/dummy.js';
-import { Title, Input, Dropdown, Button } from '../components';
-
+import { Title, Input, Dropdown, Button, SEO } from '../components';
 
 const Income = () => {
 
@@ -33,34 +32,37 @@ const Income = () => {
   console.log(incomeData);
 
   return (
-    <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
-      <Title category="Compra de" title="Productos" />
-      <div className='flex flex-wrap items-center w-full gap-5 mb-10'>
-        <Input id='provider' label='Proveedor' size='small' tooltip='Buscar proveedor' color='blue' icon={<BsSearch />} />
-        <Input id='providerName' label='Nombre del proveedor' size='small' color='blue' css='w-full md:w-6/12' />
-        <Input id='storage' label='Almacén' size='small' tooltip='Buscar almacén' color='blue' icon={<BsSearch />} />
-        <Input id='date' type='date' value={currentDate} label='Fecha de compra' size='small' color='blue' />
-        <div className='w-5/6'>
-          <Dropdown id='product' label='Agregar producto' size='small' handleChange={(newValue) => setSelectedProduct(newValue)} value={selectedProduct} options={products} tooltip='Agregar producto' customFunction={() => handleIncome(selectedProduct)} color='blue' icon={<BsPlus />} />
+    <>
+      <SEO title='Compra de productos' />
+      <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
+        <Title category="Compra de" title="Productos" />
+        <div className='flex flex-wrap items-center w-full gap-5 mb-10'>
+          <Input id='provider' label='Proveedor' size='small' tooltip='Buscar proveedor' color='blue' icon={<BsSearch />} />
+          <Input id='providerName' label='Nombre del proveedor' size='small' color='blue' css='w-full md:w-6/12' />
+          <Input id='storage' label='Almacén' size='small' tooltip='Buscar almacén' color='blue' icon={<BsSearch />} />
+          <Input id='date' type='date' value={currentDate} label='Fecha de compra' size='small' color='blue' />
+          <div className='w-5/6'>
+            <Dropdown id='product' label='Agregar producto' size='small' handleChange={(newValue) => setSelectedProduct(newValue)} value={selectedProduct} options={products} tooltip='Agregar producto' customFunction={() => handleIncome(selectedProduct)} color='blue' icon={<BsPlus />} />
+          </div>
+        </div>
+        <GridComponent
+          dataSource={incomeData}
+          editSettings={{ allowEditing: true }}
+          width='auto'
+        >
+          <ColumnsDirective>
+            {incomeGrid.map((item, index) => (
+              <ColumnDirective key={index} {...item} />
+            ))}
+          </ColumnsDirective>
+          <Inject services={[Page, Edit]} />
+        </GridComponent>
+        <div className='flex gap-5 justify-end pt-5'>
+          <Button borderColor='#161616' color='#161616' backgroundColor='transparent' text='Cancelar' />
+          <Button borderColor='blue' color='#FFFFFF' backgroundColor='blue' text='Continuar' />
         </div>
       </div>
-      <GridComponent
-        dataSource={incomeData}
-        editSettings={{ allowEditing: true }}
-        width='auto'
-      >
-        <ColumnsDirective>
-          {incomeGrid.map((item, index) => (
-            <ColumnDirective key={index} {...item} />
-          ))}
-        </ColumnsDirective>
-        <Inject services={[Page, Edit]} />
-      </GridComponent>
-      <div className='flex gap-5 justify-end pt-5'>
-        <Button borderColor='#161616' color='#161616' backgroundColor='transparent' text='Cancelar' />
-        <Button borderColor='blue' color='#FFFFFF' backgroundColor='blue' text='Continuar' />
-      </div>
-    </div >
+    </>
   )
 }
 

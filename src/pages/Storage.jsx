@@ -1,8 +1,12 @@
-import React from 'react'
+import React from 'react';
+import { SEO } from '../components';
 
 const Storage = () => {
   return (
-    <div>Storage</div>
+    <>
+      <SEO title='Almacén' />
+      <div>Storage</div>
+    </>
   )
 }
 

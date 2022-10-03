@@ -1,8 +1,12 @@
-import React from 'react'
+import React from 'react';
+import { SEO } from '../components';
 
 const Unauthorized = () => {
   return (
-    <div>Unauthorized</div>
+    <>
+      <SEO title='Ups!' />
+      <div>Unauthorized</div>
+    </>
   )
 }
 

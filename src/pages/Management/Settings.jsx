@@ -1,8 +1,13 @@
-import React from 'react'
+import React from 'react';
+import { SEO } from '../../components';
 
 const Settings = () => {
   return (
-    <div>Settings</div>
+    <>
+      <SEO title='Mi perfil' />
+      <div>Settings</div>
+    </>
+
   )
 }
 

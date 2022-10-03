@@ -1,8 +1,12 @@
-import React from 'react'
+import React from 'react';
+import { SEO } from '../components';
 
 const Transfer = () => {
   return (
-    <div>Transfer</div>
+    <>
+      <SEO title='Transferir productos' />
+      <div>Transfer</div>
+    </>
   )
 }
 
