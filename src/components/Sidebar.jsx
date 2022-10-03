@@ -24,10 +24,13 @@ const Sidebar = () => {
       .then(response => {
         setState(response);
       })
-      .catch(() => {
-        setState('Cargando...');
+      .catch(error => {
+        if (error.response.data.error === 'NOT_PAYLOAD_DATA_JWT') {
+          setAuth({});
+          localStorage.removeItem('_fDataUser');
+        }
       })
-  }, [auth.token]);
+  }, [auth.token, setAuth]);
 
   useEffect(() => {
     if (!auth.token && localStorage.getItem('_fUserData') !== null) {

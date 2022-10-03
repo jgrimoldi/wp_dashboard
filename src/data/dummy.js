@@ -469,4 +469,12 @@ export const incomeGrid = [
         textAlign: 'Center',
         editType: 'numericedit',
     },
+    {
+        field: 'Partial',
+        headerText: 'Parcial',
+        width: '150',
+        textAlign: 'Center',
+        editType: 'numericedit',
+    },
+    // IVA, Unidad de medida, Abreviatura, SN, TotalIva, TotalCompra
 ];
