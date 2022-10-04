@@ -478,3 +478,26 @@ export const incomeGrid = [
     },
     // IVA, Unidad de medida, Abreviatura, SN, TotalIva, TotalCompra
 ];
+
+export const backupGrid = [
+    {
+        name: 'Id',
+        field: 'id',
+    },
+    {
+        name: 'Nombre',
+        field: 'nombre',
+    },
+    {
+        name: 'Creado',
+        field: 'createdBy',
+    },
+    {
+        name: 'Tamaño',
+        field: 'size',
+    },
+    {
+        name: 'Descargar',
+        field: '',
+    }
+]

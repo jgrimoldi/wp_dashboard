@@ -20,7 +20,8 @@ export { default as Footer } from './Footer';
 
 export { default as HomeNavigation } from './HomeNavigation';
 export { default as Sidebar } from './Sidebar';
-export { default as TableRow } from './TableRow';
+export { default as Table } from './Table';
+export { default as TableHead } from './TableHead';
 export { default as ThemeSettings } from './ThemeSettings';
 export { default as UserProfile } from './UserProfile';
 export { default as Add } from './Add';
