@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { BsCloudArrowDown, BsSearch } from 'react-icons/bs';
 
 import { Input, TableHead, Pagination } from '.';
+import noImage from '../data/imagen.jpg';
 import useTable from '../hooks/useTable';
 
 const Table = ({ header, data }) => {
@@ -50,7 +51,7 @@ const Table = ({ header, data }) => {
                 />
             </div>
             <div className='overflow-auto rounded-lg shadow hidden md:block'>
-                <table className='w-fit md:w-full table-auto'>
+                <table className='w-fit lg:w-full table-auto'>
                     <TableHead headSource={header} />
                     <tbody>
                         {data.length !== 0 ?
@@ -64,8 +65,10 @@ const Table = ({ header, data }) => {
                                                     <a href={data[id.field]} style={{ color: 'blue' }} className='flex items-center gap-1 font-bold hover:underline' target='_blank' rel="noreferrer" download='filename'>
                                                         Descargar <span className='text-2xl'><BsCloudArrowDown /></span>
                                                     </a>
-                                                    :
-                                                    data[id.field]
+                                                    : id.field === 'imagen' ?
+                                                        <img className='w-20 h-20' src={noImage} alt={`ID de producto: ${data.id}`} />
+                                                        :
+                                                        data[id.field]
                                                 }
                                             </td>
                                         )
@@ -85,7 +88,11 @@ const Table = ({ header, data }) => {
                             <div className='flex items-center space-x-2 text-sm'>
                                 {
                                     mobileData[0].map((id, index) => (
-                                        <div key={index}>{data[id.mobile]}</div>
+                                        <div key={index}>
+                                            {id.mobile === 'cantidad'
+                                                ? data[id.mobile] + ' Unidad'
+                                                : data[id.mobile]}
+                                        </div>
                                     ))
                                 }
                             </div>
@@ -99,8 +106,10 @@ const Table = ({ header, data }) => {
                                                     <a href={data[id.mobile]} style={{ color: 'blue' }} className='flex items-center gap-1 font-bold hover:underline' target='_blank' rel="noreferrer" download='filename'>
                                                         Descargar <span className='text-2xl'><BsCloudArrowDown /></span>
                                                     </a>
-                                                    :
-                                                    data[id.mobile]
+                                                    : id.mobile === 'imagen' ?
+                                                        <img className="rounded-full h-20" src={noImage} alt={`ID de producto: ${data.id}`} />
+                                                        :
+                                                        data[id.mobile]
                                             }</div>
                                         ))
                                     }

@@ -199,16 +199,6 @@ export const themeColors = [
     },
 ];
 
-export const gridOrderImage = (props) => (
-    <div>
-        <img
-            className="rounded-xl h-20 md:ml-3"
-            src={props.ProductImage}
-            alt="order-item"
-        />
-    </div>
-);
-
 export const incomeGrid = [
     {
         field: 'Code',
@@ -264,15 +254,15 @@ export const backupGrid = [
 export const productsGrid = [
     { name: 'ID', field: 'id', mobile: 'id', },
     { name: 'Código de Barra', field: 'codigodebarra', mobile: 'codigodebarra', },
-    { name: 'Imagen', field: 'imagen', mobile: 'imagen', },
+    { name: 'Imagen', field: 'imagen', mobile: 'cantidad', },
     { name: 'Producto', field: 'nombre', mobile: 'nombre', },
     { name: 'Tipo de Producto', field: 'tipoproducto', mobile: 'tipoproducto', },
     { name: 'Unidad', field: 'abreviatura', mobile: 'abreviatura', },
     { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
     { name: 'Alicuota', field: 'alicuota', mobile: 'alicuota', },
-    { name: 'Cantidad', field: 'cantidad', mobile: 'cantidad', },
-    { name: 'Stock Mínimo', field: 'stockmin', mobile: 'stockmin', },
-    { name: 'Stock Máximo', field: 'stockmax', mobile: 'stockmax', },
+    { name: 'Cantidad', field: 'cantidad', mobile: 'stockmin', },
+    { name: 'Stock Mínimo', field: 'stockmin', mobile: 'stockmax', },
+    { name: 'Stock Máximo', field: 'stockmax', mobile: 'imagen', },
 ];
 
 export const productsTypeGrid = [
