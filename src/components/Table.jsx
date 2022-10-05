@@ -12,6 +12,13 @@ const Table = ({ header, data }) => {
     const [mobileData, setMobileData] = useState([]);
     const [isMounted, setIsMounted] = useState(false);
 
+    const ifIncludes = (object) => {
+        if (object.nombre.includes(filteredValue.value))
+            return true;
+
+        return false;
+    }
+
     const sliceData = useCallback((data) => {
         let aux = [];
         let newData = [];
@@ -34,8 +41,6 @@ const Table = ({ header, data }) => {
         }
     }, [setMobileData, header, sliceData, isMounted]);
 
-    // filter(backup => backup.nombre.includes(filteredValue.value) || backup.createdBy.includes(filteredValue.value) || backup.size.includes(filteredValue.value))
-
     return (
         <>
             <div className='shadow flex justify-end p-2 bg-gray-50 border-b-2 border-gray-200'>
@@ -49,7 +54,7 @@ const Table = ({ header, data }) => {
                     <TableHead headSource={header} />
                     <tbody>
                         {data.length !== 0 ?
-                            slice.map((data, index) =>
+                            slice.filter(ifIncludes).map((data, index) =>
                                 <tr key={index} className='bg-white even:bg-gray-50'>
                                     {
                                         header.map((id, key) =>
