@@ -30,6 +30,7 @@ const Login = () => {
             setAuth(user);
             navigate(from, { replace: true });
         }
+        return () => { setLoginNavbar(null); setUser(null); };
     }, [setLoginNavbar, from, navigate, setAuth, user]);
 
     const handleLogin = async () => {

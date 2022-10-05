@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { SEO, Banner, Title, Table, Button } from '../../components';
+import { SEO, Banner, Title, Table } from '../../components';
 import { productsTypeGrid } from '../../data/dummy';
 import { URL_PRODUCTTYPE } from '../../services/Api';
 import { useAuthContext } from '../../contexts/ContextAuth';
@@ -12,8 +12,11 @@ const ProductType = () => {
   const [productTypesData, setProductsTypeData] = useState([]);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     const getProductsType = async () => {
-      await getDataFrom(URL_PRODUCTTYPE, auth.token)
+      await getDataFrom(URL_PRODUCTTYPE, signal, auth.token)
         .then(response => {
           setProductsTypeData(response.data);
         })
@@ -25,6 +28,7 @@ const ProductType = () => {
         })
     }
     getProductsType();
+    return () => { controller.abort(); };
   }, [auth, setAuth, productTypesData, setProductsTypeData])
 
   return (
@@ -35,9 +39,6 @@ const ProductType = () => {
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
         <Title category="Tipo de" title="Productos" />
         <Table header={productsTypeGrid} data={productTypesData} />
-        <div className='w-full flex justify-end py-8'>
-          <Button customFunction={() => { }} borderColor='blue' color='white' backgroundColor='blue' text='Nuevo backup' />
-        </div>
       </div>
     </>
   )

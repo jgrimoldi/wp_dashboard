@@ -14,8 +14,10 @@ const Backup = () => {
   const [backupData, setBackupData] = useState([]);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
     const getBackups = async () => {
-      await getDataFrom(URL_BACKUP, auth.token)
+      await getDataFrom(URL_BACKUP, signal, auth.token)
         .then(response => {
           setBackupData(response.data);
         })
@@ -27,6 +29,7 @@ const Backup = () => {
         })
     }
     getBackups();
+    return () => { controller.abort(); };
   }, [auth, setAuth, backupData, setBackupData])
 
   const handleBackup = async () => {

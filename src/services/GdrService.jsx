@@ -1,8 +1,8 @@
 import API, { header } from './Api';
 
-export const getDataFrom = (URL, token) => {
+export const getDataFrom = (URL, signal, token) => {
     return (
-        API.get(URL, header(token))
+        API.get(URL, header(token), { signal: signal })
             .then(response => {
                 return (response.data)
             })
