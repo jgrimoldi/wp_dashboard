@@ -483,21 +483,31 @@ export const backupGrid = [
     {
         name: 'Id',
         field: 'id',
+        mobile: 'id',
+
+    },
+    {
+        name: 'Creado por',
+        field: 'createdBy',
+        mobile: 'createdBy',
+
     },
     {
         name: 'Nombre',
         field: 'nombre',
-    },
-    {
-        name: 'Creado',
-        field: 'createdBy',
+        mobile: 'size',
+
     },
     {
         name: 'Tamaño',
         field: 'size',
+        mobile: 'nombre',
+
     },
     {
         name: 'Descargar',
-        field: '',
+        field: 'url',
+        mobile: 'url',
+
     }
 ]

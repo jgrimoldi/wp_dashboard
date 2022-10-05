@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-const Pagination = ({ range, setPage, page, slice, data }) => {
+const Pagination = ({ range, setPage, page, slice, data, pageRows, setRows }) => {
 
     useEffect(() => {
         if (slice.length < 1 && page !== 1) {
@@ -13,10 +13,19 @@ const Pagination = ({ range, setPage, page, slice, data }) => {
 
     return (
         <div className="flex flex-col justify-center pt-4 sm:flex-row sm:justify-between items-center">
+            <div className='flex gap-2 items-center'>
+                <select className='border border-black rounded-lg p-0.5' name='rowsPerPage' value={pageRows} onChange={(event) => setRows(event.target.value)}>
+                    <option value={1}>1</option>
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={100}>100</option>
+                    <option value={200}>200</option>
+                </select>
 
-            <span className="text-sm text-gray-700 dark:text-gray-400">
-                Mostrando <span className="font-semibold text-gray-900 dark:text-white">{page}</span> a <span className="font-semibold text-gray-900 dark:text-white">{range.slice(-1)}</span> de <span className="font-semibold text-gray-900 dark:text-white">{data.length}</span> Entradas
-            </span>
+                <span className="text-sm text-gray-700 dark:text-gray-400">
+                    Mostrando <span className="font-semibold text-gray-900 dark:text-white">{page}</span> a <span className="font-semibold text-gray-900 dark:text-white">{range.slice(-1)}</span> de <span className="font-semibold text-gray-900 dark:text-white">{data.length}</span> Entradas
+                </span>
+            </div>
 
             <div className="inline-flex mt-2 xs:mt-0 border rounded-r">
                 <button className="py-2 px-4 text-sm font-medium rounded-l hover:text-blue-700 hover:bg-blue-100 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
