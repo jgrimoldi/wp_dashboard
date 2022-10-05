@@ -1,54 +1,44 @@
-import React from 'react';
-import { GridComponent, ColumnsDirective, ColumnDirective, Page, Selection, Inject, Edit, Toolbar, Sort, Filter } from '@syncfusion/ej2-react-grids';
+import React, { useEffect, useState } from 'react';
 
-import { clientsGrid } from '../data/dummy.js';
-import { Title, SEO } from '../components';
+import { SEO, Banner, Title, Table } from '../components';
+import { clientsGrid } from '../data/dummy';
+import { URL_CLIENT } from '../services/Api';
+import { useAuthContext } from '../contexts/ContextAuth';
+import { getDataFrom } from '../services/GdrService';
 
 const Clients = () => {
+  const { auth, setAuth } = useAuthContext();
+  const [banner, setBanner] = useState({ valid: null, error: null });
+  const [clientsData, setClientsData] = useState([]);
 
-  const clientsData = [{
-    Code: 1,
-    Name: 'John',
-    Address: 'Street 2',
-    Zip: 6740,
-    Phone: 2352403934,
-    Email: 'johndoe@example.com',
-    Description: 'Es el johnnn doeee',
-  },
-  {
-    Code: 2,
-    Name: 'Mario',
-    Address: 'Street 5',
-    Zip: 6740,
-    Phone: 2352403934,
-    Email: 'johndoe@example.com',
-    Description: 'Es el Mariooo doeee',
-  },];
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
 
-  const selectionsettings = { persistSelection: true };
-  const toolbarOptions = ['Search'];
+    const getClientes = async () => {
+      await getDataFrom(URL_CLIENT, signal, auth.token)
+        .then(response => {
+          setClientsData(response.data);
+        })
+        .catch(error => {
+          if (error.response.data.error === 'NOT_PAYLOAD_DATA_JWT') {
+            setAuth({});
+            localStorage.removeItem('_fDataUser');
+          }
+        })
+    }
+    getClientes();
+    return () => { controller.abort(); };
+  }, [auth, setAuth, clientsData, setClientsData])
 
   return (
     <>
       <SEO title='Clientes' />
+      {banner.valid === true && <Banner text='¡Backup exitoso!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} />}
+      {banner.error === true && <Banner text='¡Ups! El backup no pudo realizarse' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
-        <Title category="Lista de" title="Clientes" />
-        <GridComponent
-          dataSource={clientsData}
-          allowPaging
-          pageSettings={{ pageCount: 5 }}
-          selectionSettings={selectionsettings}
-          toolbar={toolbarOptions}
-          allowSorting
-          width='auto'
-        >
-          <ColumnsDirective>
-            {clientsGrid.map((item, index) => (
-              <ColumnDirective key={index} {...item} />
-            ))}
-          </ColumnsDirective>
-          <Inject services={[Page, Toolbar, Selection, Edit, Sort, Filter]} />
-        </GridComponent>
+        <Title category="Mis" title="Clientes" />
+        <Table header={clientsGrid} data={clientsData} />
       </div>
     </>
   )

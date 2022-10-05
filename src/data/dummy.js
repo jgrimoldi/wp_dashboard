@@ -209,52 +209,6 @@ export const gridOrderImage = (props) => (
     </div>
 );
 
-export const clientsGrid = [
-    { type: 'checkbox', width: '50' },
-    {
-        field: 'Code',
-        headerText: 'Código ID',
-        width: '80',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Name',
-        headerText: 'Nombre',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Address',
-        headerText: 'Dirección',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Zip',
-        headerText: 'Código Postal',
-        width: '100',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Phone',
-        headerText: 'Teléfono',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Email',
-        headerText: 'Correo',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Description',
-        headerText: 'Observaciones',
-        width: '150',
-        textAlign: 'Left',
-    },
-];
-
 export const incomeGrid = [
     {
         field: 'Code',
@@ -300,199 +254,69 @@ export const incomeGrid = [
 ];
 
 export const backupGrid = [
-    {
-        name: 'ID',
-        field: 'id',
-        mobile: 'id',
-
-    },
-    {
-        name: 'Creado por',
-        field: 'createdBy',
-        mobile: 'createdBy',
-
-    },
-    {
-        name: 'Nombre',
-        field: 'nombre',
-        mobile: 'size',
-
-    },
-    {
-        name: 'Tamaño',
-        field: 'size',
-        mobile: 'nombre',
-
-    },
-    {
-        name: 'Descargar',
-        field: 'url',
-        mobile: 'url',
-
-    }
+    { name: 'ID', field: 'id', mobile: 'id', },
+    { name: 'Creado por', field: 'createdBy', mobile: 'createdBy', },
+    { name: 'Nombre', field: 'nombre', mobile: 'size', },
+    { name: 'Tamaño', field: 'size', mobile: 'nombre', },
+    { name: 'Descargar', field: 'url', mobile: 'url', },
 ];
 
 export const productsGrid = [
-    {
-        name: 'ID',
-        field: 'id',
-        mobile: 'id',
-    },
-    {
-        name: 'Código de Barra',
-        field: 'codigodebarra',
-        mobile: 'codigodebarra',
-    },
-    {
-        name: 'Imagen',
-        field: 'imagen',
-        mobile: 'imagen',
-    },
-    {
-        name: 'Producto',
-        field: 'nombre',
-        mobile: 'nombre',
-    },
-    {
-        name: 'Tipo de Producto',
-        field: 'tipoproducto',
-        mobile: 'tipoproducto',
-    },
-    {
-        name: 'Unidad',
-        field: 'abreviatura',
-        mobile: 'abreviatura',
-    },
-    {
-        name: 'Descripción',
-        field: 'descripcion',
-        mobile: 'descripcion',
-    },
-    {
-        name: 'Alicuota',
-        field: 'alicuota',
-        mobile: 'alicuota',
-    },
-    {
-        name: 'Cantidad',
-        field: 'cantidad',
-        mobile: 'cantidad',
-    },
-    {
-        name: 'Stock Mínimo',
-        field: 'stockmin',
-        mobile: 'stockmin',
-    },
-    {
-        name: 'Stock Máximo',
-        field: 'stockmax',
-        mobile: 'stockmax',
-    },
+    { name: 'ID', field: 'id', mobile: 'id', },
+    { name: 'Código de Barra', field: 'codigodebarra', mobile: 'codigodebarra', },
+    { name: 'Imagen', field: 'imagen', mobile: 'imagen', },
+    { name: 'Producto', field: 'nombre', mobile: 'nombre', },
+    { name: 'Tipo de Producto', field: 'tipoproducto', mobile: 'tipoproducto', },
+    { name: 'Unidad', field: 'abreviatura', mobile: 'abreviatura', },
+    { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
+    { name: 'Alicuota', field: 'alicuota', mobile: 'alicuota', },
+    { name: 'Cantidad', field: 'cantidad', mobile: 'cantidad', },
+    { name: 'Stock Mínimo', field: 'stockmin', mobile: 'stockmin', },
+    { name: 'Stock Máximo', field: 'stockmax', mobile: 'stockmax', },
 ];
 
 export const productsTypeGrid = [
-    {
-        name: 'ID',
-        field: 'id',
-        mobile: 'id',
-    },
-    {
-        name: 'Nombre Insumo',
-        field: 'nombre',
-        mobile: 'nombre',
-    },
-    {
-        name: 'Descripción',
-        field: 'descripcion',
-        mobile: '',
-    },
-    {
-        name: '',
-        field: '',
-        mobile: 'descripcion',
-    },
+    { name: 'ID', field: 'id', mobile: 'id', },
+    { name: 'Nombre Insumo', field: 'nombre', mobile: 'nombre', },
+    { name: 'Descripción', field: 'descripcion', mobile: '', },
+    { name: '', field: '', mobile: 'descripcion', },
 ];
 
 export const unitsGrid = [
-    {
-        name: 'ID',
-        field: 'id',
-        mobile: 'id',
-    },
-    {
-        name: 'Magnitud',
-        field: 'magnitud',
-        mobile: 'magnitud',
-    },
-    {
-        name: 'Abreviatura',
-        field: 'abreviatura',
-        mobile: 'abreviatura',
-    },
+    { name: 'ID', field: 'id', mobile: 'id', },
+    { name: 'Magnitud', field: 'magnitud', mobile: 'magnitud', },
+    { name: 'Abreviatura', field: 'abreviatura', mobile: 'abreviatura', },
 ];
 
 export const categoryGrid = [
-    {
-        name: 'ID',
-        field: 'id',
-        mobile: 'id',
-    },
-    {
-        name: 'Nombre Insumo',
-        field: 'nombre',
-        mobile: 'nombre',
-    },
-    {
-        name: 'Descripción',
-        field: 'descripcion',
-        mobile: '',
-    },
-    {
-        name: '',
-        field: '',
-        mobile: 'descripcion',
-    },
+    { name: 'ID', field: 'id', mobile: 'id', },
+    { name: 'Nombre Insumo', field: 'nombre', mobile: 'nombre', },
+    { name: 'Descripción', field: 'descripcion', mobile: '', },
+    { name: '', field: '', mobile: 'descripcion', },
 ];
 
 export const providersGrid = [
-    {
-        name: 'ID',
-        field: 'id',
-        mobile: 'id',
-    },
-    {
-        name: 'Categoria',
-        field: 'fk_categoria',
-        mobile: 'fk_categoria',
-    },
-    {
-        name: 'Proveedor',
-        field: 'nombre',
-        mobile: 'nombre',
-    },
-    {
-        name: 'Dirección',
-        field: 'direccion',
-        mobile: 'direccion',
-    },
-    {
-        name: 'Código Postal',
-        field: 'cp',
-        mobile: 'cp',
-    },
-    {
-        name: 'Teléfono',
-        field: 'tel',
-        mobile: 'tel',
-    },
-    {
-        name: 'Correo',
-        field: 'email',
-        mobile: 'email',
-    },
-    {
-        name: 'Observaciones',
-        field: 'observaciones',
-        mobile: 'observaciones',
-    }
+    { name: 'ID', field: 'id', mobile: 'id', },
+    { name: 'Categoria', field: 'fk_categoria', mobile: 'fk_categoria', },
+    { name: 'Proveedor', field: 'nombre', mobile: 'nombre', },
+    { name: 'Dirección', field: 'direccion', mobile: 'direccion', },
+    { name: 'Código Postal', field: 'cp', mobile: 'cp', },
+    { name: 'Teléfono', field: 'tel', mobile: 'tel', },
+    { name: 'Correo', field: 'email', mobile: 'email', },
+    { name: 'Observaciones', field: 'observaciones', mobile: 'observaciones', },
+];
+
+export const warehousesGrid = [
+    { name: 'ID', field: 'id', mobile: 'id' },
+    { name: 'Almacén', field: 'nombre', mobile: 'nombre' },
+    { name: 'Detalles', field: 'detalle', mobile: 'detalle' },
+]
+export const clientsGrid = [
+    { name: 'ID', field: 'id', mobile: 'id', },
+    { name: 'Cliente', field: 'nombre', mobile: 'nombre', },
+    { name: 'Dirección', field: 'direccion', mobile: 'direccion', },
+    { name: 'Código Postal', field: 'cp', mobile: 'cp', },
+    { name: 'Teléfono', field: 'tel', mobile: 'tel', },
+    { name: 'Correo', field: 'email', mobile: 'email', },
+    { name: 'Observaciones', field: 'observaciones', mobile: 'observaciones', },
 ];
