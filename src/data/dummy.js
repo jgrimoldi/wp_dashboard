@@ -209,79 +209,6 @@ export const gridOrderImage = (props) => (
     </div>
 );
 
-export const categoryGrid = [
-    {
-        field: 'Code',
-        headerText: 'Código ID',
-        width: '80',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Name',
-        headerText: 'Nombre Insumo',
-        width: '150',
-        editType: 'dropdownedit',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Description',
-        headerText: 'Descripción',
-        width: '150',
-        textAlign: 'Left',
-    },
-];
-
-export const providersGrid = [
-    {
-        field: 'Code',
-        headerText: 'Código ID',
-        width: '80',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Category',
-        headerText: 'Categoria',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Name',
-        headerText: 'Nombre',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Address',
-        headerText: 'Dirección',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Zip',
-        headerText: 'Código Postal',
-        width: '100',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Phone',
-        headerText: 'Teléfono',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Email',
-        headerText: 'Correo',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Description',
-        headerText: 'Observaciones',
-        width: '150',
-        textAlign: 'Left',
-    },
-];
-
 export const clientsGrid = [
     { type: 'checkbox', width: '50' },
     {
@@ -502,4 +429,70 @@ export const unitsGrid = [
         field: 'abreviatura',
         mobile: 'abreviatura',
     },
+];
+
+export const categoryGrid = [
+    {
+        name: 'ID',
+        field: 'id',
+        mobile: 'id',
+    },
+    {
+        name: 'Nombre Insumo',
+        field: 'nombre',
+        mobile: 'nombre',
+    },
+    {
+        name: 'Descripción',
+        field: 'descripcion',
+        mobile: '',
+    },
+    {
+        name: '',
+        field: '',
+        mobile: 'descripcion',
+    },
+];
+
+export const providersGrid = [
+    {
+        name: 'ID',
+        field: 'id',
+        mobile: 'id',
+    },
+    {
+        name: 'Categoria',
+        field: 'fk_categoria',
+        mobile: 'fk_categoria',
+    },
+    {
+        name: 'Proveedor',
+        field: 'nombre',
+        mobile: 'nombre',
+    },
+    {
+        name: 'Dirección',
+        field: 'direccion',
+        mobile: 'direccion',
+    },
+    {
+        name: 'Código Postal',
+        field: 'cp',
+        mobile: 'cp',
+    },
+    {
+        name: 'Teléfono',
+        field: 'tel',
+        mobile: 'tel',
+    },
+    {
+        name: 'Correo',
+        field: 'email',
+        mobile: 'email',
+    },
+    {
+        name: 'Observaciones',
+        field: 'observaciones',
+        mobile: 'observaciones',
+    }
 ];

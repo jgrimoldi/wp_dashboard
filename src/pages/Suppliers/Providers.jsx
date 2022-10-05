@@ -1,30 +1,47 @@
-import React from 'react';
-import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, ExcelExport, PdfExport, Edit, Inject, Toolbar } from '@syncfusion/ej2-react-grids';
+import React, { useEffect, useState } from 'react';
 
+import { SEO, Banner, Title, Table } from '../../components';
 import { providersGrid } from '../../data/dummy';
-import { SEO, Title } from '../../components';
+import { URL_SUPPLIER } from '../../services/Api';
+import { useAuthContext } from '../../contexts/ContextAuth';
+import { getDataFrom } from '../../services/GdrService';
 
-const Providers = () => {
+const Products = () => {
+  const { auth, setAuth } = useAuthContext();
+  const [banner, setBanner] = useState({ valid: null, error: null });
+  const [providersData, setProvidesData] = useState([]);
 
-  // Se obtiene la data desde la API
-  const providersData = [{}];
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    const getProviders = async () => {
+      await getDataFrom(URL_SUPPLIER, signal, auth.token)
+        .then(response => {
+          setProvidesData(response.data);
+        })
+        .catch(error => {
+          if (error.response.data.error === 'NOT_PAYLOAD_DATA_JWT') {
+            setAuth({});
+            localStorage.removeItem('_fDataUser');
+          }
+        })
+    }
+    getProviders();
+    return () => { controller.abort(); };
+  }, [auth, setAuth, providersData, setProvidesData])
 
   return (
     <>
       <SEO title='Proveedores' />
+      {banner.valid === true && <Banner text='¡Backup exitoso!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} />}
+      {banner.error === true && <Banner text='¡Ups! El backup no pudo realizarse' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
-        <Title category="Lista de" title="Insumos" />
-        <GridComponent id='providerscomp' dataSource={providersData} allowPaging allowSorting toolbar={['Search']} width='auto'>
-          <ColumnsDirective>
-            {providersGrid.map((item, index) => (
-              <ColumnDirective key={index} {...item} />
-            ))}
-          </ColumnsDirective>
-          <Inject services={[Resize, Sort, ContextMenu, Filter, Page, Search, Edit, ExcelExport, PdfExport, Toolbar]} />
-        </GridComponent>
+        <Title category="Lista de" title="Proveedores" />
+        <Table header={providersGrid} data={providersData} />
       </div>
     </>
   )
 }
 
-export default Providers
+export default Products
