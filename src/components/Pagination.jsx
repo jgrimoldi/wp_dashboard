@@ -28,7 +28,7 @@ const Pagination = ({ range, setPage, page, slice, data, pageRows, setRows }) =>
             </div>
 
             <div className="inline-flex mt-2 xs:mt-0 border rounded-r">
-                <button className="py-2 px-4 text-sm font-medium rounded-l hover:text-blue-700 hover:bg-blue-100 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
+                <button onClick={() => { setPage(Math.max(page - 1, 1)) }} className="py-2 px-4 text-sm font-medium rounded-l hover:text-blue-700 hover:bg-blue-100 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
                     Anterior
                 </button>
                 <div className='inline-flex -space-x-px'>
@@ -44,7 +44,7 @@ const Pagination = ({ range, setPage, page, slice, data, pageRows, setRows }) =>
                         </button>
                     ))}
                 </div>
-                <button className="py-2 px-4 text-sm font-medium rounded-l hover:text-blue-700 hover:bg-blue-100 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
+                <button onClick={() => { setPage(Math.min(page + 1, data.length)) }} className="py-2 px-4 text-sm font-medium rounded-l hover:text-blue-700 hover:bg-blue-100 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
                     Siguiente
                 </button>
             </div>
