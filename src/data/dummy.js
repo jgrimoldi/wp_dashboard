@@ -282,113 +282,6 @@ export const providersGrid = [
     },
 ];
 
-export const productsGrid = [
-    {
-        field: 'Code',
-        headerText: 'Código ID',
-        width: '80',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Type',
-        headerText: 'Tipo de Producto',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Unit',
-        headerText: 'Unidad',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Alicuota',
-        headerText: 'Alicuota',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Name',
-        headerText: 'Nombre',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Quantity',
-        headerText: 'Cantidad',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Min',
-        headerText: 'Stock Mínimo',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Max',
-        headerText: 'Stock Máximo',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        headerText: 'Imagen',
-        template: gridOrderImage,
-        textAlign: 'Center',
-        width: '120',
-    },
-    {
-        field: 'Description',
-        headerText: 'Descripción',
-        width: '150',
-        textAlign: 'Left',
-    },
-];
-
-export const productsTypeGrid = [
-    {
-        field: 'Code',
-        headerText: 'Código ID',
-        width: '80',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Name',
-        headerText: 'Nombre Insumo',
-        width: '150',
-        editType: 'dropdownedit',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Description',
-        headerText: 'Descripción',
-        width: '150',
-        textAlign: 'Left',
-    },
-];
-
-export const unitsGrid = [
-    {
-        field: 'Code',
-        headerText: 'Código ID',
-        width: '80',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Size',
-        headerText: 'Magnitud',
-        width: '150',
-        editType: 'dropdownedit',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Abbreviation',
-        headerText: 'Abreviatura',
-        width: '150',
-        textAlign: 'Center',
-    },
-];
-
 export const clientsGrid = [
     { type: 'checkbox', width: '50' },
     {
@@ -481,7 +374,7 @@ export const incomeGrid = [
 
 export const backupGrid = [
     {
-        name: 'Id',
+        name: 'ID',
         field: 'id',
         mobile: 'id',
 
@@ -510,4 +403,103 @@ export const backupGrid = [
         mobile: 'url',
 
     }
-]
+];
+
+export const productsGrid = [
+    {
+        name: 'ID',
+        field: 'id',
+        mobile: 'id',
+    },
+    {
+        name: 'Código de Barra',
+        field: 'codigodebarra',
+        mobile: 'codigodebarra',
+    },
+    {
+        name: 'Imagen',
+        field: 'imagen',
+        mobile: 'imagen',
+    },
+    {
+        name: 'Producto',
+        field: 'nombre',
+        mobile: 'nombre',
+    },
+    {
+        name: 'Tipo de Producto',
+        field: 'tipoproducto',
+        mobile: 'tipoproducto',
+    },
+    {
+        name: 'Unidad',
+        field: 'abreviatura',
+        mobile: 'abreviatura',
+    },
+    {
+        name: 'Descripción',
+        field: 'descripcion',
+        mobile: 'descripcion',
+    },
+    {
+        name: 'Alicuota',
+        field: 'alicuota',
+        mobile: 'alicuota',
+    },
+    {
+        name: 'Cantidad',
+        field: 'cantidad',
+        mobile: 'cantidad',
+    },
+    {
+        name: 'Stock Mínimo',
+        field: 'stockmin',
+        mobile: 'stockmin',
+    },
+    {
+        name: 'Stock Máximo',
+        field: 'stockmax',
+        mobile: 'stockmax',
+    },
+];
+
+export const productsTypeGrid = [
+    {
+        name: 'ID',
+        field: 'id',
+        mobile: 'id',
+    },
+    {
+        name: 'Nombre Insumo',
+        field: 'nombre',
+        mobile: 'nombre',
+    },
+    {
+        name: 'Descripción',
+        field: 'descripcion',
+        mobile: '',
+    },
+    {
+        name: '',
+        field: '',
+        mobile: 'descripcion',
+    },
+];
+
+export const unitsGrid = [
+    {
+        name: 'ID',
+        field: 'id',
+        mobile: 'id',
+    },
+    {
+        name: 'Magnitud',
+        field: 'magnitud',
+        mobile: 'magnitud',
+    },
+    {
+        name: 'Abreviatura',
+        field: 'abreviatura',
+        mobile: 'abreviatura',
+    },
+];

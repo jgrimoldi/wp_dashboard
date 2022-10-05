@@ -13,10 +13,10 @@ const Table = ({ header, data }) => {
     const [isMounted, setIsMounted] = useState(false);
 
     const ifIncludes = (object) => {
-        if (object.nombre.includes(filteredValue.value))
-            return true;
+        // if (object.nombre.includes(filteredValue.value))
+        //     return true;
 
-        return false;
+        return true;
     }
 
     const sliceData = useCallback((data) => {
@@ -50,7 +50,7 @@ const Table = ({ header, data }) => {
                 />
             </div>
             <div className='overflow-auto rounded-lg shadow hidden md:block'>
-                <table className='w-full table-auto'>
+                <table className='w-fit md:w-full table-auto'>
                     <TableHead headSource={header} />
                     <tbody>
                         {data.length !== 0 ?
@@ -58,7 +58,7 @@ const Table = ({ header, data }) => {
                                 <tr key={index} className='bg-white even:bg-gray-50'>
                                     {
                                         header.map((id, key) =>
-                                            <td key={key} className='p-3 text-sm text-gray-700 whitespace-nowrap'>
+                                            <td key={key} className='w-fit p-3 text-sm text-gray-700 whitespace-nowrap'>
                                                 {id.field === 'url'
                                                     ?
                                                     <a href={data[id.field]} style={{ color: 'blue' }} className='flex items-center gap-1 font-bold hover:underline' target='_blank' rel="noreferrer" download='filename'>
@@ -89,21 +89,23 @@ const Table = ({ header, data }) => {
                                     ))
                                 }
                             </div>
-                            <div className='flex flex-wrap gap-3'>
-                                {
-                                    mobileData[1].map((id, index) => (
-                                        <div key={index} className='whitespace-nowrap'>{
-                                            id.mobile === 'url'
-                                                ?
-                                                <a href={data[id.mobile]} style={{ color: 'blue' }} className='flex items-center gap-1 font-bold hover:underline' target='_blank' rel="noreferrer" download='filename'>
-                                                    Descargar <span className='text-2xl'><BsCloudArrowDown /></span>
-                                                </a>
-                                                :
-                                                data[id.mobile]
-                                        }</div>
-                                    ))
-                                }
-                            </div>
+                            {mobileData.slice(1).map((elements, index) => (
+                                <div key={index} className='flex flex-wrap gap-3'>
+                                    {
+                                        elements.map((id, index) => (
+                                            <div key={index} className='whitespace-nowrap'>{
+                                                id.mobile === 'url'
+                                                    ?
+                                                    <a href={data[id.mobile]} style={{ color: 'blue' }} className='flex items-center gap-1 font-bold hover:underline' target='_blank' rel="noreferrer" download='filename'>
+                                                        Descargar <span className='text-2xl'><BsCloudArrowDown /></span>
+                                                    </a>
+                                                    :
+                                                    data[id.mobile]
+                                            }</div>
+                                        ))
+                                    }
+                                </div>
+                            ))}
                         </div>
                     )
                     )
@@ -115,21 +117,5 @@ const Table = ({ header, data }) => {
         </>
     )
 }
-
-
-// <div className='flex items-center space-x-2 text-sm'>
-// <div style={{ backgroundColor: 'blue' }} className='flex items-center justify-center w-6 h-6 text-white rounded-full'>{item.id}</div>
-// <div>{item.createdBy}</div>
-// <div>{item.size}</div>
-// </div>
-
-// <div className='flex flex-wrap gap-3'>
-// <div className='whitespace-nowrap'>{item.nombre}</div>
-// <div className='whitespace-nowrap'>
-//     <a href={item.url} style={{ color: 'blue' }} className='flex items-center gap-1 font-boldhover:underline' target='_blank' rel="noreferrer" download='filename'>
-//         Descargar <span className='text-2xl'><BsCloudArrowDown /></span>
-//     </a>
-// </div>
-// </div>
 
 export default Table
