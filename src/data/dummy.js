@@ -244,8 +244,8 @@ export const incomeGrid = [
 ];
 
 export const backupGrid = [
-    { name: 'ID', field: 'id', mobile: 'id', },
-    { name: 'Creado por', field: 'createdBy', mobile: 'createdBy', },
+    { name: 'Creado por', field: 'Creado por', mobile: 'Creado por', },
+    { name: 'Fecha', field: 'Fecha Creación', mobile: 'Fecha Creación', },
     { name: 'Nombre', field: 'nombre', mobile: 'size', },
     { name: 'Tamaño', field: 'size', mobile: 'nombre', },
     { name: 'Descargar', field: 'url', mobile: 'url', },
@@ -300,7 +300,8 @@ export const warehousesGrid = [
     { name: 'ID', field: 'id', mobile: 'id' },
     { name: 'Almacén', field: 'nombre', mobile: 'nombre' },
     { name: 'Detalles', field: 'detalle', mobile: 'detalle' },
-]
+];
+
 export const clientsGrid = [
     { name: 'ID', field: 'id', mobile: 'id', },
     { name: 'Cliente', field: 'nombre', mobile: 'nombre', },

@@ -29,7 +29,7 @@ const Products = () => {
     }
     getProviders();
     return () => { controller.abort(); };
-  }, [auth, setAuth, providersData, setProvidesData])
+  }, [auth, setAuth])
 
   return (
     <>

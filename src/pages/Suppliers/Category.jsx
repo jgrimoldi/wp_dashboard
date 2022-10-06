@@ -29,7 +29,7 @@ const Products = () => {
     }
     getCategories();
     return () => { controller.abort(); };
-  }, [auth, setAuth, categoryData, setCategoryData])
+  }, [auth, setAuth])
 
   return (
     <>

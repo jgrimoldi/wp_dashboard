@@ -29,7 +29,7 @@ const Storage = () => {
     }
     getWarehouses();
     return () => { controller.abort(); };
-  }, [auth, setAuth, warehousesData, setWarehousesData])
+  }, [auth, setAuth])
 
   return (
     <>

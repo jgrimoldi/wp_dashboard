@@ -28,7 +28,7 @@ const Units = () => {
     }
     getUnits();
     return () => { controller.abort(); };
-  }, [auth, setAuth, units, setUnits])
+  }, [auth, setAuth])
 
   return (
     <>

@@ -22,7 +22,7 @@ const Sidebar = () => {
   const getDataById = useCallback(async (URL, ID, setState) => {
     await getDataByIdFrom(URL, ID, auth.token)
       .then(response => {
-        setState(response);
+        setState(response.data);
       })
       .catch(error => {
         if (error.response.data.error === 'NOT_PAYLOAD_DATA_JWT') {
@@ -68,9 +68,9 @@ const Sidebar = () => {
               <div>
                 <p>
                   <span className="font-extrabold text-14">{fullName.name + ' ' + fullName.surname}</span>{' - '}
-                  <span className="text-gray-400 text-14">{profile}</span>
+                  <span className="text-gray-400 text-14 capitalize">{profile.nom_perfil}</span>
                 </p>
-                <p className='text-gray-400 text-14'>{company.data.razonsocial}</p>
+                <p className='text-gray-400 text-14'>{company.razonsocial}</p>
               </div>
             </div>
           </Link>

@@ -29,7 +29,7 @@ const Clients = () => {
     }
     getClientes();
     return () => { controller.abort(); };
-  }, [auth, setAuth, clientsData, setClientsData])
+  }, [auth, setAuth])
 
   return (
     <>
