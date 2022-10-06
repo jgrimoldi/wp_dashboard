@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { BsSearch, BsPlus } from 'react-icons/bs';
+import React from 'react';
+import { BsSearch } from 'react-icons/bs';
 import { GridComponent, ColumnsDirective, ColumnDirective, Page, Inject, Edit } from '@syncfusion/ej2-react-grids';
 
 import { incomeGrid } from '../data/dummy.js';
-import { Title, Input, Dropdown, Button, SEO } from '../components';
+import { Title, Input, Button, SEO } from '../components';
 
 const Income = () => {
 
@@ -12,24 +12,22 @@ const Income = () => {
   const currentDate = `${year}-${month < 10 ? '0' + month : month}-${day}`
   // const initialValues = { provider: '', providerName: '', storage: '', date: '' };
   // const [headerData, setHeaderData] = useState(initialValues);
-  const [products, setProducts] = useState([{}]);
-  const [selectedProduct, setSelectedProduct] = useState('');
-  const [incomeData, setIncomeData] = useState([]);
+  // const [products, setProducts] = useState([{}]);
+  // const [selectedProduct, setSelectedProduct] = useState('');
+  // const [incomeData, setIncomeData] = useState([]);
 
-  const handleIncome = (newProduct) => {
+  // const handleIncome = (newProduct) => {
 
-    const newIncome = {
-      Code: 0,
-      Product: newProduct,
-      Amount: 0,
-      Price: 0,
-      Partial: 0,
-    };
+  //   const newIncome = {
+  //     Code: 0,
+  //     Product: newProduct,
+  //     Amount: 0,
+  //     Price: 0,
+  //     Partial: 0,
+  //   };
 
-    setIncomeData([...incomeData, newIncome]);
-  }
-
-  console.log(incomeData);
+  //   setIncomeData([...incomeData, newIncome]);
+  // }
 
   return (
     <>
@@ -41,12 +39,11 @@ const Income = () => {
           <Input id='providerName' label='Nombre del proveedor' size='small' color='blue' css='w-full md:w-6/12' />
           <Input id='storage' label='Almacén' size='small' tooltip='Buscar almacén' color='blue' icon={<BsSearch />} />
           <Input id='date' type='date' value={currentDate} label='Fecha de compra' size='small' color='blue' />
-          <div className='w-5/6'>
+          {/* <div className='w-5/6'>
             <Dropdown id='product' label='Agregar producto' size='small' handleChange={(newValue) => setSelectedProduct(newValue)} value={selectedProduct} options={products} tooltip='Agregar producto' customFunction={() => handleIncome(selectedProduct)} color='blue' icon={<BsPlus />} />
-          </div>
+          </div> */}
         </div>
         <GridComponent
-          dataSource={incomeData}
           editSettings={{ allowEditing: true }}
           width='auto'
         >

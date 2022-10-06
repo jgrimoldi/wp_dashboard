@@ -18,9 +18,9 @@ export const getUserByEmail = (email, token) => {
     )
 }
 
-export const registerUser = (email, password, nombre, apellido, fk_perfil, fk_empresa, token) => {
+export const registerUser = (email, password, nombre, apellido, fk_perfil, fk_empresa, fk_theme = 1, token) => {
     return (
-        API.post(URL_AUTH + 'register', { email, password, nombre, apellido, fk_perfil, fk_empresa }, header(token))
+        API.post(URL_AUTH + 'register', { email, password, nombre, apellido, fk_perfil, fk_empresa, fk_theme }, header(token))
             .then(response => {
                 return response.data;
             })
