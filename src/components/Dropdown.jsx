@@ -5,6 +5,12 @@ import { TooltipComponent } from '@syncfusion/ej2-react-popups/index.js';
 
 const Dropdown = ({ id, label, size, state, setState, options, getter, helperText, tooltip, customFunction, color, icon, required }) => {
 
+    const handleChange = (newValue) => {
+        if (!newValue)
+            return
+        setState(newValue);
+    }
+
     const handleValidation = (event) => {
         if (!event.target.value) {
             setState({ ...state, error: true });
@@ -19,7 +25,7 @@ const Dropdown = ({ id, label, size, state, setState, options, getter, helperTex
                 <Autocomplete
                     id={id} name={id}
                     value={state.value}
-                    onChange={(_, newValue) => setState(newValue)}
+                    onChange={(_, newValue) => handleChange(newValue)}
                     onBlur={handleValidation} onKeyUp={handleValidation}
                     options={options}
                     getOptionLabel={(option) => option[getter] || ''}
