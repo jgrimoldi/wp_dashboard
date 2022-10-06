@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { BsCheckCircle, BsXCircle } from 'react-icons/bs';
 
-import { Form, Button, Password, ErrorLabel, Modal, LoadingSpinner, SEO } from '../../components';
+import { Form, Button, Password, ErrorLabel, Modal, LoadingSpinner, SEO, GroupValidator } from '../../components';
 import { regEx } from '../../data/dummy';
 import { resetPassword, updatePasswordByEmail } from '../../services/AuthService';
 import { useStateContext } from '../../contexts/ContextProvider';
@@ -98,6 +98,7 @@ const ResetPassword = () => {
                     </div>
                     <Password id='password' label='Contraseña' color='purple' state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
                     <Password id='passwordVerify' label='Confirmar contraseña' color='purple' state={passwordVerify} setState={setPasswordVerify} customFunction={handleValidatePassword} helperText='Las contraseñas no coinciden' />
+                    {!!password.value && <GroupValidator password={password.value} />}
                     <div className='flex flex-col gap-2'>
                         {validForm.error === true && <ErrorLabel color='red'>{validForm.value}</ErrorLabel>}
                         <div className='flex gap-1'>

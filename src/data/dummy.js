@@ -22,7 +22,12 @@ export const regEx = {
     user: /^[a-zA-Z0-9_-]{4,16}$/,
     text: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
     email: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-    password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[+@$!%*?&_])[A-Za-z\d@$!%*?+&_]{8,}$/,
+    password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#?!@$%^&*+-])[A-Za-z\d#?!@$%^&*+-]{8,}$/,
+    uppercaseRegExp: /(?=.*?[A-Z])/,
+    lowercaseRegExp: /(?=.*?[a-z])/,
+    digitsRegExp: /(?=.*?[0-9])/,
+    specialCharRegExp: /(?=.*?[#?!@$%^&*+-])/,
+    minLengthRegExp: /.{8,}/,
 };
 
 export const sidebar = [
