@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom';
 import { BsArrowLeftSquare, BsBoxArrowLeft } from 'react-icons/bs';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
@@ -19,30 +19,32 @@ const Sidebar = () => {
   const [company, setCompany] = useState({ data: {}, user: {} });
   const [isMounted, setIsMounted] = useState(false);
 
-  const getDataById = useCallback(async (URL, ID, setState) => {
-    await getDataByIdFrom(URL, ID, auth.token)
-      .then(response => {
-        setState(response.data);
-      })
-      .catch(error => {
-        if (error.response.data.error === 'NOT_PAYLOAD_DATA_JWT') {
-          setAuth({});
-          localStorage.removeItem('_fDataUser');
-        }
-      })
-  }, [auth, setAuth]);
 
   useEffect(() => {
     if (!auth.token && localStorage.getItem('_fUserData') !== null) {
       setAuth(JSON.parse(localStorage.getItem('_fUserData')));
     }
+
+    const getDataById = async (URL, ID, setState) => {
+      await getDataByIdFrom(URL, ID, auth.token)
+        .then(response => {
+          setState(response.data);
+        })
+        .catch(error => {
+          if (error.response.data.error === 'NOT_PAYLOAD_DATA_JWT') {
+            setAuth({});
+            localStorage.removeItem('_fDataUser');
+          }
+        })
+    };
+
     if (isMounted === false && !!auth.token) {
       getDataById(URL_PROFILE, auth.user.fk_perfil, setProfile);
       getDataById(URL_COMPANY, auth.user.fk_empresa, setCompany);
       setFullName((prevFullName) => { return { ...prevFullName, name: auth.user.nombre, surname: auth.user.apellido } })
       setIsMounted(true);
     }
-  }, [auth, setAuth, getDataById, isMounted])
+  }, [auth, setAuth, isMounted])
 
   const handleCloseSidebar = () => {
     if (activeMenu && screenSize <= 900) {
