@@ -38,7 +38,7 @@ const ProductType = () => {
       {banner.error === true && <Banner text='¡Ups! El backup no pudo realizarse' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
         <Title category="Tipo de" title="Productos" />
-        <Table header={productsTypeGrid} data={productTypesData} checkbox={false} />
+        <Table header={productsTypeGrid} data={productTypesData} filterTitle='Tipo de Productos' checkbox={false} />
       </div>
     </>
   )

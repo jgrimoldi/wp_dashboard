@@ -38,7 +38,7 @@ const Storage = () => {
       {banner.error === true && <Banner text='¡Ups! El backup no pudo realizarse' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
         <Title category="Mis" title="Almacenes" />
-        <Table header={warehousesGrid} data={warehousesData} />
+        <Table header={warehousesGrid} data={warehousesData} filterTitle='Mis Almacenes' />
       </div>
     </>
   )

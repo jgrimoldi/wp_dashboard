@@ -82,7 +82,7 @@ const FormatMobile = ({ data, property }) => {
     return (<>{data[property.mobile]}</>);
 }
 
-const Table = ({ header, data, checkbox }) => {
+const Table = ({ header, data, filterTitle, checkbox }) => {
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const { slice, range } = useTable(data, page, rowsPerPage);
@@ -127,9 +127,9 @@ const Table = ({ header, data, checkbox }) => {
     return (
         <>
             <div className='shadow flex justify-end p-2 bg-gray-50 border-b-2 border-gray-200'>
-                <Input id='filter' label='Buscar en Mis Backups' size='small' css='w-full sm:w-1/2'
+                <Input id='filter' label={`Buscar en ${filterTitle}`} size='small' css='w-full sm:w-1/2'
                     state={filteredValue} setState={setFilteredValue}
-                    tooltip='Filtrar Mis Backups' color='blue' icon={<BsSearch />}
+                    tooltip={`Filtrar ${filterTitle}`} color='blue' icon={<BsSearch />}
                 />
             </div>
             <div className='overflow-auto rounded-lg shadow hidden md:block'>

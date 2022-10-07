@@ -38,7 +38,7 @@ const Clients = () => {
       {banner.error === true && <Banner text='¡Ups! El backup no pudo realizarse' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
         <Title category="Mis" title="Clientes" />
-        <Table header={clientsGrid} data={clientsData} />
+        <Table header={clientsGrid} data={clientsData} filterTitle='Mis Clientes' />
       </div>
     </>
   )
