@@ -14,7 +14,7 @@ const HomeNavigation = () => {
         const formatDate = (date) => date < 10 ? `0${date}` : date
 
         const year = formatDate(fullDate.getFullYear());
-        const month = months[fullDate.get()];
+        const month = months[fullDate.getMonth()];
         const date = formatDate(fullDate.getDate());
         const hours = formatDate(fullDate.getHours());
         const seconds = formatDate(fullDate.getMinutes());
