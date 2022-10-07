@@ -6,14 +6,81 @@ import noImage from '../data/imagen.jpg';
 import useTable from '../hooks/useTable';
 
 const Dates = ({ date }) => {
-    let formatDate = new Date(date);
+    const fullDate = new Date(date);
+
+    const formatDate = (date) => date < 10 ? `0${date}` : date
+
+    const year = formatDate(fullDate.getFullYear());
+    const month = formatDate(fullDate.getMonth() + 1);
+    const day = formatDate(fullDate.getDate());
+    const hours = formatDate(fullDate.getHours());
+    const seconds = formatDate(fullDate.getMinutes());
 
     return (
         <>
-            {formatDate.getFullYear()}-{formatDate.getMonth() + 1}-{formatDate.getDate()}
+            {year}-{month}-{day} {hours}:{seconds}
         </>
     )
 };
+
+const Radio = ({ data }) => {
+    const [isClicked, setIsClicked] = useState('');
+
+    const handleChange = (event) => {
+        setIsClicked(event.target.value);
+    }
+
+    return (
+        <input
+            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+            value={data.id}
+            onClick={handleChange} onChange={handleChange}
+            type='radio' name='table'
+            checked={Number(isClicked) === data.id}
+        />
+    )
+};
+
+const FormatDesktop = ({ data, property }) => {
+
+    if (property.field === 'url') {
+        return (
+            <a href={data[property.field]} style={{ color: 'blue' }}
+                className='flex items-center gap-1 font-bold hover:underline'
+                target='_blank' rel="noreferrer" download='filename' >
+                Descargar <span className='text-2xl'><BsCloudArrowDown /></span>
+            </a>
+        );
+    }
+
+    if (property.field === 'imagen') {
+        return (<img className='w-20 h-20' src={noImage} alt={`ID de producto: ${data.id}`} />);
+    }
+
+    if (property.field === 'Fecha Creación') {
+        return (<Dates date={data[property.field]} />);
+    }
+
+    return (<>{data[property.field]}</>);
+}
+
+const FormatMobile = ({ data, property }) => {
+    if (property.mobile === 'cantidad') {
+        return (data[property.mobile] + ' Unidad/es');
+    }
+
+    if (property.mobile === 'url') {
+        return (<a href={data[property.mobile]} style={{ color: 'blue' }} className='flex items-center gap-1 font-bold hover:underline' target='_blank' rel="noreferrer" download='filename'>
+            Descargar <span className='text-2xl'><BsCloudArrowDown /></span>
+        </a>);
+    }
+
+    if (property.mobile === 'imagen') {
+        return (<img className="rounded-full h-20" src={noImage} alt={`ID de producto: ${data.id}`} />);
+    }
+
+    return (<>{data[property.mobile]}</>);
+}
 
 const Table = ({ header, data, checkbox }) => {
     const [page, setPage] = useState(1);
@@ -22,11 +89,6 @@ const Table = ({ header, data, checkbox }) => {
     const [filteredValue, setFilteredValue] = useState({ value: '', error: null });
     const [mobileData, setMobileData] = useState([]);
     const [isMounted, setIsMounted] = useState(false);
-    const [isClicked, setIsClicked] = useState('');
-
-    const handleCheck = (event) => {
-        setIsClicked(event.target.value);
-    }
 
     const ifIncludes = (object) => {
         for (const key in object) {
@@ -77,30 +139,12 @@ const Table = ({ header, data, checkbox }) => {
                         {data.length !== 0 ?
                             slice.filter(ifIncludes).map((data, index) =>
                                 <tr key={index} className='bg-white even:bg-gray-50'>
-                                    {checkbox && <td className='w-fit p-3 text-sm text-gray-700 whitespace-nowrap'>
-                                        <input value={data.id} onChange={handleCheck}
-                                            type='radio' name='table'
-                                            checked={Number(isClicked) === data.id}
-                                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
-                                    </td>}
-                                    {
-                                        header.map((id, key) =>
-                                            <td role='button' key={key} className='w-fit p-3 text-sm text-gray-700 whitespace-nowrap'>
-                                                {id.field === 'url'
-                                                    ?
-                                                    <a href={data[id.field]} style={{ color: 'blue' }} className='flex items-center gap-1 font-bold hover:underline' target='_blank' rel="noreferrer" download='filename'>
-                                                        Descargar <span className='text-2xl'><BsCloudArrowDown /></span>
-                                                    </a>
-                                                    : id.field === 'imagen' ?
-                                                        <img className='w-20 h-20' src={noImage} alt={`ID de producto: ${data.id}`} />
-                                                        : id.field === 'Fecha Creación' ?
-                                                            <Dates date={data[id.field]} />
-                                                            :
-                                                            data[id.field]
-                                                }
-                                            </td>
-                                        )
-                                    }
+                                    {checkbox && <td className='w-fit p-3 text-sm text-gray-700 whitespace-nowrap'><Radio data={data} /></td>}
+                                    {header.map((property, key) =>
+                                        <td key={key} className='w-fit p-3 text-sm text-gray-700 whitespace-nowrap'>
+                                            <FormatDesktop data={data} property={property} />
+                                        </td>
+                                    )}
                                 </tr>
                             )
                             : <tr className='text-center bg-white even:bg-gray-50'><td className='p-3 text-sm text-gray-700 whitespace-nowrap'>No hay entradas para mostrar</td></tr>
@@ -114,36 +158,16 @@ const Table = ({ header, data, checkbox }) => {
                     slice.map((data, index) => (
                         <div key={index} className='bg-white space-y-3 p-4 rounded-lg shadow'>
                             <div className='flex items-center space-x-2 text-sm'>
-                                <input value={data.id} type='radio' className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' />
-                                {
-                                    mobileData[0].map((id, index) => (
-                                        <div key={index}>
-                                            {
-                                                id.mobile === 'cantidad'
-                                                    ? data[id.mobile] + ' Unidad'
-                                                    : data[id.mobile]
-                                            }
-                                        </div>
-                                    ))
-                                }
+                                {checkbox && <Radio data={data} />}
+                                {mobileData[0].map((property, index) => (
+                                    <div key={index}><FormatMobile data={data} property={property} /></div>
+                                ))}
                             </div>
                             {mobileData.slice(1).map((elements, index) => (
                                 <div key={index} className='flex flex-wrap gap-3'>
-                                    {
-                                        elements.map((id, index) => (
-                                            <div key={index} className='whitespace-nowrap'>{
-                                                id.mobile === 'url'
-                                                    ?
-                                                    <a href={data[id.mobile]} style={{ color: 'blue' }} className='flex items-center gap-1 font-bold hover:underline' target='_blank' rel="noreferrer" download='filename'>
-                                                        Descargar <span className='text-2xl'><BsCloudArrowDown /></span>
-                                                    </a>
-                                                    : id.mobile === 'imagen' ?
-                                                        <img className="rounded-full h-20" src={noImage} alt={`ID de producto: ${data.id}`} />
-                                                        :
-                                                        data[id.mobile]
-                                            }</div>
-                                        ))
-                                    }
+                                    {elements.map((property, index) => (
+                                        <div key={index} className='whitespace-nowrap'><FormatMobile data={data} property={property} /></div>
+                                    ))}
                                 </div>
                             ))}
                         </div>
