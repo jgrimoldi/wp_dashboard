@@ -19,10 +19,10 @@ const HomeNavigation = () => {
         const hours = formatDate(fullDate.getHours());
         const seconds = formatDate(fullDate.getMinutes());
 
-        return (<>{date} de {month}, {year} - {hours}:{seconds}h</>);
+        return (<>{date} de {month} de {year} - {hours}:{seconds} h</>);
     };
 
-    const lastLogin = auth.user.lastlogin === null ? 'Nunca' : formatDate(auth.user.lastlogin)
+    const lastLogin = !!auth.user.lastlogin ? formatDate(auth.user.lastlogin) : 'Nunca'
 
     return (
         <div className='flex relative dark:bg-main-dark-bg'>
@@ -46,8 +46,8 @@ const HomeNavigation = () => {
                 </div>
 
                 <div>
-                    <div className='flex justify-end p-2 md:mx-6 relative'>
-                        <span className='font-bold mr-2'>Último inicio:</span>{lastLogin}
+                    <div className='flex justify-end p-2 md:mx-6 relative text-gray-400'>
+                        <span className='mr-2'>Último inicio:</span>{lastLogin}
                     </div>
                 </div>
             </div>

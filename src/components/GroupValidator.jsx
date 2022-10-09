@@ -28,7 +28,7 @@ const GroupValidator = ({ password }) => {
                 </div>
                 <div className='flex flex-col gap-1'>
                     <span style={{ color: specialCharPassword ? 'green' : 'red' }} className='flex gap-2 items-center text-md whitespace-nowrap'>
-                        {specialCharPassword ? <BsCheck /> : <BsX />}1 Símbolo (#?!@$%^&*+-)
+                        {specialCharPassword ? <BsCheck /> : <BsX />}1 Símbolo (#?!@$%^&*+.-)
                     </span>
                     <span style={{ color: minLengthPassword ? 'green' : 'red' }} className='flex gap-2 items-center text-md whitespace-nowrap'>
                         {minLengthPassword ? <BsCheck /> : <BsX />}8 Caracteres
