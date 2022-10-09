@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import { BsList, BsPlus, BsTrash } from 'react-icons/bs';
+import { BsList } from 'react-icons/bs';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import { Add, Delete } from '.';
 
 import { useStateContext } from '../contexts/ContextProvider';
 
@@ -15,7 +14,7 @@ const NavButton = ({ title, customFunction, color, icon }) => (
 
 const Header = () => {
 
-  const { setActiveMenu, isClicked, screenSize, setScreenSize, handleClick } = useStateContext();
+  const { setActiveMenu, screenSize, setScreenSize } = useStateContext();
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
@@ -42,10 +41,6 @@ const Header = () => {
         <h1 className='text-2xl font-extrabold'>AG Stock</h1>
       </div>
       <div className='flex'>
-        <NavButton title="Agregar" customFunction={() => handleClick('add')} color="blue" icon={<BsPlus />}></NavButton>
-        <NavButton title="Eliminar" customFunction={() => handleClick('delete')} color="blue" icon={<BsTrash />}></NavButton>
-        {isClicked.add && <Add />}
-        {isClicked.delete && <Delete />}
       </div>
     </div>
   )

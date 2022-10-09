@@ -2,18 +2,11 @@ import React, { createContext, useContext, useState } from 'react';
 
 const StateContext = createContext();
 
-const initialState = {
-    add: false,
-    delete: false,
-}
-
 export const ContextProvider = ({ children }) => {
     const [activeMenu, setActiveMenu] = useState(true);
     const [activeNavbar, setActiveNavbar] = useState(true);
     const [loginNavbar, setLoginNavbar] = useState(false);
-    const [isClicked, setIsClicked] = useState(initialState);
     const [screenSize, setScreenSize] = useState(undefined);
-
     const [currentColor, setCurrentColor] = useState('#FFFFFF');
     const [themeColors, setThemeColors] = useState({});
     const [currentMode, setCurrentMode] = useState('dark');
@@ -27,10 +20,8 @@ export const ContextProvider = ({ children }) => {
         localStorage.setItem('themeMode', mode);
     }
 
-    const handleClick = (clicked) => setIsClicked({ ...initialState, [clicked]: true });
-
     return (
-        <StateContext.Provider value={{ activeMenu, setActiveMenu, isClicked, setIsClicked, screenSize, setScreenSize, handleClick, currentMode, currentColor, themeColors, setMode, activeNavbar, setActiveNavbar, loginNavbar, setLoginNavbar }}>
+        <StateContext.Provider value={{ activeMenu, setActiveMenu, screenSize, setScreenSize, currentMode, currentColor, themeColors, setMode, activeNavbar, setActiveNavbar, loginNavbar, setLoginNavbar }}>
             {children}
         </StateContext.Provider>
     )

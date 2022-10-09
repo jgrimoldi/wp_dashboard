@@ -28,6 +28,7 @@ export const regEx = {
     digitsRegExp: /(?=.*?[0-9])/,
     specialCharRegExp: /(?=.*?[#?!@$%^&*+.-])/,
     minLengthRegExp: /.{8,}/,
+    notEmpty: /(.|\s)*\S(.|\s)*/,
 };
 
 export const sidebar = [

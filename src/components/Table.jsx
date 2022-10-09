@@ -23,20 +23,17 @@ const Dates = ({ date }) => {
     )
 };
 
-const Radio = ({ data }) => {
-    const [isClicked, setIsClicked] = useState('');
+const Radio = ({ data, state, setState }) => {
 
-    const handleChange = (event) => {
-        setIsClicked(event.target.value);
-    }
+    const handleChange = (event) => setState(event.target.value);
 
     return (
         <input
             className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
-            value={data.id}
-            onClick={handleChange} onChange={handleChange}
-            type='radio' name='table'
-            checked={Number(isClicked) === data.id}
+            defaultValue={data.id}
+            onChange={handleChange}
+            type='checkbox' name='table'
+            checked={Number(state) === data.id}
         />
     )
 };
@@ -82,7 +79,7 @@ const FormatMobile = ({ data, property }) => {
     return (<>{data[property.mobile]}</>);
 }
 
-const Table = ({ header, data, filterTitle, checkbox }) => {
+const Table = ({ header, data, filterTitle, checkbox, stateCheckbox, setStateCheckbox }) => {
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const { slice, range } = useTable(data, page, rowsPerPage);
@@ -133,13 +130,13 @@ const Table = ({ header, data, filterTitle, checkbox }) => {
                 />
             </div>
             <div className='overflow-auto rounded-lg shadow hidden md:block'>
-                <table className='w-fit lg:w-full table-auto'>
+                <table className='w-full table-auto'>
                     <TableHead headSource={header} checkbox={checkbox} />
                     <tbody>
                         {data.length !== 0 ?
                             slice.filter(ifIncludes).map((data, index) =>
                                 <tr key={index} className='bg-white even:bg-gray-50'>
-                                    {checkbox && <td className='w-fit p-3 text-sm text-gray-700 whitespace-nowrap'><Radio data={data} /></td>}
+                                    {checkbox && <td className='w-fit p-3 text-sm text-gray-700 whitespace-nowrap'><Radio data={data} state={stateCheckbox} setState={setStateCheckbox} /></td>}
                                     {header.map((property, key) =>
                                         <td key={key} className='w-fit p-3 text-sm text-gray-700 whitespace-nowrap'>
                                             <FormatDesktop data={data} property={property} />
@@ -153,12 +150,12 @@ const Table = ({ header, data, filterTitle, checkbox }) => {
                 </table>
             </div>
 
-            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden mt-4'>
                 {data.length !== 0 ?
                     slice.map((data, index) => (
                         <div key={index} className='bg-white space-y-3 p-4 rounded-lg shadow'>
                             <div className='flex items-center space-x-2 text-sm'>
-                                {checkbox && <Radio data={data} />}
+                                {checkbox && <Radio data={data} state={stateCheckbox} setState={setStateCheckbox} />}
                                 {mobileData[0].map((property, index) => (
                                     <div key={index}><FormatMobile data={data} property={property} /></div>
                                 ))}

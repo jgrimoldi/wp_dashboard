@@ -26,5 +26,3 @@ export { default as Table } from './Table';
 export { default as Pagination } from './Pagination';
 export { default as ThemeSettings } from './ThemeSettings';
 export { default as UserProfile } from './UserProfile';
-export { default as Add } from './Add';
-export { default as Delete } from './Delete';
