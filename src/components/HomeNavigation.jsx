@@ -3,27 +3,8 @@ import { Outlet } from 'react-router-dom';
 import { Header, Sidebar } from '../components';
 
 import { useStateContext } from '../contexts/ContextProvider';
-import { useAuthContext } from '../contexts/ContextAuth';
 const HomeNavigation = () => {
-    const { auth } = useAuthContext();
     const { activeMenu } = useStateContext();
-
-    const formatDate = (dateToFormat) => {
-        const fullDate = new Date(dateToFormat);
-        const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-        const formatDate = (date) => date < 10 ? `0${date}` : date
-
-        const year = formatDate(fullDate.getFullYear());
-        const month = months[fullDate.getMonth()];
-        const date = formatDate(fullDate.getDate());
-        const hours = formatDate(fullDate.getHours());
-        const seconds = formatDate(fullDate.getMinutes());
-
-        return (<>{date} de {month} de {year} - {hours}:{seconds} h</>);
-    };
-
-    const lastLogin = !!auth.user.lastlogin ? formatDate(auth.user.lastlogin) : 'Nunca'
-
     return (
         <div className='flex relative dark:bg-main-dark-bg'>
             {activeMenu ? (
@@ -45,11 +26,6 @@ const HomeNavigation = () => {
                     <Outlet />
                 </div>
 
-                <div>
-                    <div className='flex justify-end p-2 md:mx-6 relative text-gray-400'>
-                        <span className='mr-2'>Último inicio:</span>{lastLogin}
-                    </div>
-                </div>
             </div>
         </div>
     )
