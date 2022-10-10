@@ -3,7 +3,7 @@ import { BsBell } from 'react-icons/bs';
 
 const NewNotification = ({ backgroundColor }) => {
   return (
-    <div className='relative bg-gray-50 rounded-3xl p-5 mt-4'>
+    <div className='relative bg-gray-50 rounded-3xl p-5 mt-4 shadow-md'>
       <span style={{ backgroundColor }} className='absolute inline-flex rounded-full h-2.5 w-2.5 -left-1 -top-1'></span>
       <p className='text-lg text-gray-500 tracking-tight'>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
