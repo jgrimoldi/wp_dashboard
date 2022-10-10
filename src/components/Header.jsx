@@ -27,7 +27,7 @@ const Header = () => {
   }, [setScreenSize]);
 
   useEffect(() => {
-    if (screenSize <= 900) {
+    if (screenSize <= 1000) {
       setActiveMenu(false);
     } else {
       setActiveMenu(true);

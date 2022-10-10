@@ -47,7 +47,7 @@ const Sidebar = () => {
   }, [auth, setAuth, isMounted])
 
   const handleCloseSidebar = () => {
-    if (activeMenu && screenSize <= 900) {
+    if (activeMenu && screenSize <= 1000) {
       setActiveMenu(false);
     }
   }

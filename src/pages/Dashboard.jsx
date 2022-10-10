@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { SEO, LastLogin, Title, Clock, Calendar, Tiles, LineChart, Table } from '../components';
+import { SEO, LastLogin, Title, Notifications, Clock, Calendar, Tiles, LineChart, Table } from '../components';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { usersGrid } from '../data/dummy';
-import { URL_AUTH } from '../services/Api';
+import { URL_AUTH, URL_PRODUCT, URL_SUPPLIER } from '../services/Api';
 import { getDataFrom } from '../services/GdrService';
 
 const Dashboard = () => {
@@ -34,35 +34,31 @@ const Dashboard = () => {
   return (
     <>
       <SEO title='Dashboard' />
-      <div className='m-2 md:m-10 mt-24 p-2 md:p-10 rounded-3xl'>
-        <div className='h-20 px-4 py-2 bg-white rounded-3xl'>
-          <Title category='Hola,' title={fullName} />
-        </div>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-12 items-center pt-4'>
-
-          <div className='w-full inline-flex flex-wrap gap-2'>
-            <Clock />
-            <Calendar />
-            <Tiles />
-            <Tiles />
-          </div>
-
-          <div>
-            <Table header={usersGrid} data={users.filter(user => user.id !== auth.user.id)} filterTitle='Empleados' />
-          </div>
-
-          <div className='bg-white p-2 rounded-lg'>
-            <div className='mb-2'>
-              <p className='text-xl font-semibold'>Resumen de ventas</p>
+      <div className='m-2 md:m-10 mt-24 p-2 md:p-10'>
+        <Title category='Hola,' title={fullName} />
+        <div className='overflow-hidden relative'>
+          <div className='float-left w-full sm:w-2/3 grid grid-cols-1 gap-8 items-center rounded-3xl p-4 '>
+            <div className='w-full inline-flex flex-wrap gap-2'>
+              <Clock /> <Calendar />
+              <Tiles title='Proveedores' text='proveedor' url={URL_SUPPLIER} token={auth.token} to='/proveedores' />
+              <Tiles title='Productos' text='producto' url={URL_PRODUCT} token={auth.token} to='/productos' />
             </div>
-            <div className='md:w-full overflow-auto'>
-              <LineChart />
+            <div className='w-full bg-white p-5 rounded-lg shadow-xl'>
+              <div className='mb-2'>
+                <p className='text-xl font-semibold'>Stock valorizado</p>
+              </div>
+              <div className='md:w-full overflow-auto'>
+                <LineChart />
+              </div>
+            </div>
+            <div className='bg-white p-5 rounded-lg shadow-xl'>
+              <Table header={usersGrid} data={users.filter(user => user.id !== auth.user.id)} filterTitle='Empleados' />
             </div>
           </div>
-
+          <Notifications />
         </div>
+        <LastLogin lastLogin={lastLogin} />
       </div>
-      <LastLogin lastLogin={lastLogin} />
     </>
   )
 }

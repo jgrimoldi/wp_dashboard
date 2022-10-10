@@ -19,7 +19,7 @@ const LastLogin = ({ lastLogin }) => {
     const date = !!lastLogin ? formatDate(lastLogin) : 'Nunca'
 
     return (
-        <div className=' w-full fixed bottom-0 right-0'>
+        <div className=' w-full relative sm:fixed sm:bottom-0 sm:right-0'>
             <div className='flex justify-center sm:justify-end p-2 md:mx-6 relative text-gray-400 text-sm sm:text-base'>
                 <span className='mr-2'>Último inicio:</span>{date}
             </div>
