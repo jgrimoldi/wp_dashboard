@@ -34,9 +34,11 @@ const Dashboard = () => {
   return (
     <>
       <SEO title='Dashboard' />
-      <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
-        <Title category='Hola,' title={fullName} />
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-12 items-center'>
+      <div className='m-2 md:m-10 mt-24 p-2 md:p-10 rounded-3xl'>
+        <div className='h-20 px-4 py-2 bg-white rounded-3xl'>
+          <Title category='Hola,' title={fullName} />
+        </div>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-12 items-center pt-4'>
 
           <div className='w-full inline-flex flex-wrap gap-2'>
             <Clock />
@@ -49,11 +51,11 @@ const Dashboard = () => {
             <Table header={usersGrid} data={users.filter(user => user.id !== auth.user.id)} filterTitle='Empleados' />
           </div>
 
-          <div className="border p-2 rounded-lg">
-            <div className="mb-2">
-              <p className="text-xl font-semibold">Resumen de ventas</p>
+          <div className='bg-white p-2 rounded-lg'>
+            <div className='mb-2'>
+              <p className='text-xl font-semibold'>Resumen de ventas</p>
             </div>
-            <div className="md:w-full overflow-auto">
+            <div className='md:w-full overflow-auto'>
               <LineChart />
             </div>
           </div>
