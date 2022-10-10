@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SEO, LastLogin, Title, Clock, Calendar, Tiles } from '../components';
+import { SEO, LastLogin, Title, Clock, Calendar, Tiles, LineChart } from '../components';
 import { useAuthContext } from '../contexts/ContextAuth';
 
 const Dashboard = () => {
@@ -13,18 +13,28 @@ const Dashboard = () => {
       <SEO title='Dashboard' />
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
         <Title category='Hola,' title={fullName} />
-        <div className='w-full flex flex-wrap justify-center gap-5'>
-          <Clock />
-          <Calendar />
-          <Tiles />
-        </div>
-        <div className='w-full flex flex-wrap'>
-          <div className='w-2/4'>
-            <p></p>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 items-center'>
+
+          <div className='w-full inline-flex flex-wrap gap-2'>
+            <Clock />
+            <Calendar />
+            <Tiles />
+            <Tiles />
           </div>
-          <div className='w-2/4'>
-            <p></p>
+
+          <div className="border p-2 rounded-lg">
+            <div className="mb-2">
+              <p className="text-xl font-semibold">Resumen de ventas</p>
+            </div>
+            <div className="md:w-full overflow-auto">
+              <LineChart />
+            </div>
           </div>
+
+          <div>
+
+          </div>
+
         </div>
       </div>
       <LastLogin lastLogin={lastLogin} />

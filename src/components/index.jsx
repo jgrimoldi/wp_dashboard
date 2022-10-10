@@ -28,5 +28,6 @@ export { default as LastLogin } from './LastLogin';
 export { default as Clock } from './Clock';
 export { default as Calendar } from './Calendar';
 export { default as Tiles } from './Tiles';
+export { default as LineChart } from './LineChart';
 export { default as ThemeSettings } from './ThemeSettings';
 export { default as UserProfile } from './UserProfile';

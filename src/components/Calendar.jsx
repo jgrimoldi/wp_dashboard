@@ -9,11 +9,11 @@ const Calendar = () => {
     const month = months[today.getMonth()];
 
     return (
-        <div className='flex flex-col items-center justify-between gap-2 rounded-lg py-5 px-4 bg-gradient-to-br from-[#161ECF] to-[#571CDD] text-white group-hover:hidden'>
-            <span className='text-xs'>Fecha de hoy</span>
+        <div className='min-w-fit w-full flex-1 sm:w-1/3 h-36 flex flex-col items-center justify-between gap-2 rounded-lg py-5 px-4 bg-gradient-to-br from-[#161ECF] to-[#571CDD] text-white group-hover:hidden'>
+            <p className='text-xs'>Fecha de hoy</p>
             <div className='flex flex-col'>
-                <span className='text-6xl'>{date}</span>
-                <span className='text-xl'>{month}</span>
+                <p className='text-6xl'>{date}</p>
+                <p className='text-xl'>{month}</p>
             </div>
         </div>
     )
