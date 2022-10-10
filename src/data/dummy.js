@@ -259,6 +259,7 @@ export const lineCustomSeries = [
         name: 'Ventas por mes',
         width: '2',
         marker: { visible: true, width: 10, height: 10 },
+        fill: 'purple',
         type: 'Line'
     },
 
@@ -375,4 +376,13 @@ export const clientsGrid = [
     { name: 'Teléfono', field: 'tel', mobile: 'tel', },
     { name: 'Correo', field: 'email', mobile: 'email', },
     { name: 'Observaciones', field: 'observaciones', mobile: 'observaciones', },
+];
+
+export const usersGrid = [
+    { name: 'ID', field: 'id', mobile: 'id', },
+    { name: 'Nombre', field: 'nombre', mobile: 'nombre', },
+    { name: 'Apellido', field: 'apellido', mobile: 'apellido', },
+    { name: 'Correo', field: 'email', mobile: 'email', },
+    { name: 'Cuenta validada', field: 'validateAccount', mobile: 'validateAccount', },
+    { name: 'Último inicio', field: 'lastlogin', mobile: 'lastlogin', },
 ];

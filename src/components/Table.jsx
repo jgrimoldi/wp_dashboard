@@ -54,8 +54,15 @@ const FormatDesktop = ({ data, property }) => {
         return (<img className='w-20 h-20' src={noImage} alt={`ID de producto: ${data.id}`} />);
     }
 
-    if (property.field === 'Fecha Creación') {
+    if (property.field === 'Fecha Creación' || property.field === 'lastlogin') {
         return (<Dates date={data[property.field]} />);
+    }
+
+    if (property.field === 'validateAccount') {
+        if (data[property.field] === null || data[property.field] === false)
+            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>Sin validar</span>);
+
+        return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50'>Validado</span>);
     }
 
     return (<>{data[property.field]}</>);
@@ -74,6 +81,17 @@ const FormatMobile = ({ data, property }) => {
 
     if (property.mobile === 'imagen') {
         return (<img className="rounded-full h-20" src={noImage} alt={`ID de producto: ${data.id}`} />);
+    }
+
+    if (property.mobile === 'Fecha Creación' || property.mobile === 'lastlogin') {
+        return (<Dates date={data[property.mobile]} />);
+    }
+
+    if (property.mobile === 'validateAccount') {
+        if (data[property.mobile] === null || data[property.mobile] === false)
+            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>Sin validar</span>);
+
+        return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50'>Validado</span>);
     }
 
     return (<>{data[property.mobile]}</>);

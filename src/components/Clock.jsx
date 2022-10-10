@@ -16,7 +16,7 @@ const Clock = () => {
     const mins = format(today.getMinutes());
     const secs = format(today.getSeconds());
 
-    const wish = `${(hour < 12 && 'Buen día') || (hour < 19 && 'Buenas tardes') || 'Buenas noches'}`;
+    const wish = `${(hour > 5 && hour < 12 && 'Buen día') || (hour > 12 && hour < 19 && 'Buenas tardes') || 'Buenas noches'}`;
 
     return (
         <div className='min-w-fit w-full flex-1 sm:w-1/3 h-36 flex flex-col gap-2 items-center justify-center rounded-lg py-5 px-4 bg-gradient-to-br from-[#161ECF] to-[#571CDD] text-white group-hover:hidden'>
