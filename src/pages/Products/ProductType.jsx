@@ -89,7 +89,7 @@ const ProductType = () => {
         />
       }
       {banner.deleted === true && <Banner text='¡Registro eliminado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, deleted: false })} />}
-      {banner.valid === true && <Banner text='¡Nuevo almacén agregado!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} />}
+      {banner.valid === true && <Banner text='¡Nuevo tipo de producto agregado!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} />}
       {banner.error === true && <Banner text='¡Ups! No se pudo realizar la acción.' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
         <Title category="Tipo de" title="Productos" />

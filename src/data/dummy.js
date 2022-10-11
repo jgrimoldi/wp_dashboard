@@ -17,7 +17,7 @@ import {
     BsArrowRepeat,
     BsQuestionCircle,
 } from 'react-icons/bs';
-import { URL_PRODUCTTYPE, URL_UNIT, URL_VAT } from '../services/Api';
+import { URL_CATEGORY, URL_PRODUCTTYPE, URL_UNIT, URL_VAT } from '../services/Api';
 
 export const regEx = {
     user: /^[a-zA-Z0-9_-]{4,16}$/,
@@ -344,7 +344,8 @@ export const productsTypeSearcherGrid = [
     [
         { name: 'Nombre Insumo', field: 'nombre', mobile: 'nombre', },
         { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
-    ]];
+    ]
+];
 
 export const unitsGrid = [
     { name: 'ID', field: 'id', mobile: 'id', },
@@ -375,9 +376,17 @@ export const categoryGrid = [
     { name: '', field: '', mobile: 'descripcion', },
 ];
 
+export const categorySearcherGrid = [
+    [URL_CATEGORY],
+    [
+        { name: 'Nombre Insumo', field: 'nombre', mobile: 'nombre', },
+        { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
+    ]
+];
+
 export const providersGrid = [
     { name: 'ID', field: 'id', mobile: 'id', },
-    { name: 'Categoria', field: 'fk_categoria', mobile: 'fk_categoria', },
+    { name: 'Categoria', field: 'categoria', mobile: 'categoria', },
     { name: 'Proveedor', field: 'nombre', mobile: 'nombre', },
     { name: 'Dirección', field: 'direccion', mobile: 'direccion', },
     { name: 'Código Postal', field: 'cp', mobile: 'cp', },

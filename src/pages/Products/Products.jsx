@@ -103,7 +103,7 @@ const Products = () => {
         />
       }
       {banner.deleted === true && <Banner text='¡Registro eliminado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, deleted: false })} />}
-      {banner.valid === true && <Banner text='¡Nuevo cliente agregado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} />}
+      {banner.valid === true && <Banner text='¡Nuevo producto agregado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} />}
       {banner.error === true && <Banner text='¡Ups! No se pudo realizar la acción.' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
       {showProductType === true && <Searcher header={productsTypeSearcherGrid} filter='Tipo de producto' setValue={setNewProductType} setShowModal={setShowProductType} />}
       {showUnit === true && <Searcher header={unitsSearcherGrid} filter='Unidad de medida' setValue={setNewUnit} setShowModal={setShowUnit} />}
