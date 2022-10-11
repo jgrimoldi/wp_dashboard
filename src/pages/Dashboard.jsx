@@ -36,7 +36,7 @@ const Dashboard = () => {
       <SEO title='Dashboard' />
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10'>
         <Title category='Hola,' title={fullName} />
-        <div className='overflow-hidden relative'>
+        <div className='overflow-hidden relative p-2'>
           <div className='float-left w-full sm:w-2/3 grid grid-cols-1 gap-8 items-center rounded-3xl p-4 '>
             <div className='w-full inline-flex flex-wrap gap-2'>
               <Clock /> <Calendar />
@@ -52,7 +52,7 @@ const Dashboard = () => {
               </div>
             </div>
             <div className='bg-white p-5 rounded-lg shadow-xl'>
-              <Table header={usersGrid} data={users.filter(user => user.id !== auth.user.id)} filterTitle='Empleados' />
+              <Table header={usersGrid} data={users.filter(user => user.id !== auth.user.id && user.fk_perfil !== 3)} filterTitle='Empleados' />
             </div>
           </div>
           <Notifications />

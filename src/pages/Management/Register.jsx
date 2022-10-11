@@ -20,7 +20,6 @@ const Register = () => {
   const [companiesValue, setCompaniesValue] = useState({ value: optionsCompanies[0], error: null });
   const [errorForm, setErrorForm] = useState({ value: '', error: null });
 
-
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -81,6 +80,7 @@ const Register = () => {
       setErrorForm({ ...errorForm, value: 'Revise si los campos son correctos.', error: true });
     }
   }
+  const profiles = !!auth.user && auth.user.fk_perfil !== 3 ? optionsProfile.filter(option => option.nom_perfil !== 'dev') : optionsProfile
 
   return (
     <>
@@ -93,7 +93,7 @@ const Register = () => {
           <Input id='name' label='Nombre' state={name} setState={setName} regEx={regEx.text} helperText='No es un nombre válido' required={true} />
           <Input id='surname' label='Apellido' state={surname} setState={setSurname} regEx={regEx.text} helperText='No es un apellido válido' required={true} />
           <Input id='email' label='Correo electrónico' state={email} setState={setEmail} regEx={regEx.email} helperText='No es un correo válido' required={true} />
-          <Dropdown id='role' label='Perfil' state={profileValue} setState={setProfileValue} options={optionsProfile} getter='nom_perfil' helperText='Elija un perfil' required={true} />
+          <Dropdown id='role' label='Perfil' state={profileValue} setState={setProfileValue} options={profiles} getter='nom_perfil' helperText='Elija un perfil' required={true} />
           <Dropdown id='company' label='Empresa' state={companiesValue} setState={setCompaniesValue} options={optionsCompanies} getter='nombre' helperText='Elija una empresa' required={true} />
           <Password id='password' label='Contraseña' color='purple' state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
           {!!password.value && <GroupValidator password={password.value} />}

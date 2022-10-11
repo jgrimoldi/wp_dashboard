@@ -41,7 +41,8 @@ const Storage = () => {
   const addWarehouse = async () => {
     if (newWarehouse.error === false && details.error === false) {
       await insertWarehouses(newWarehouse.value, details.value, auth.token)
-        .then(() => {
+        .then(response => {
+          setWarehousesData(prevState => [...prevState, response.data]);
           setBanner({ ...banner, valid: true, error: false });
         })
         .catch(error => {
@@ -66,6 +67,7 @@ const Storage = () => {
   const deleteDataById = async () => {
     await deleteDataByIdFrom(URL_STORAGE, openModal.value, auth.token)
       .then(() => {
+        setWarehousesData(current => current.filter(warehouse => warehouse.id !== Number(openModal.value)));
         setBanner({ ...banner, deleted: true });
       })
       .catch(() => {
