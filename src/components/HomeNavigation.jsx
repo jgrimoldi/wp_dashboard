@@ -8,7 +8,7 @@ const HomeNavigation = () => {
     return (
         <div className='flex relative dark:bg-main-dark-bg'>
             {activeMenu ? (
-                <div className='w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white z-20'>
+                <div className='w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white z-10'>
                     <Sidebar />
                 </div>
             ) : (
@@ -22,7 +22,7 @@ const HomeNavigation = () => {
                     <Header />
                 </div>
 
-                <div>
+                <div className='z-30'>
                     <Outlet />
                 </div>
 

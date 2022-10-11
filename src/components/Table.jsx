@@ -99,7 +99,7 @@ const FormatMobile = ({ data, property }) => {
 
 const Table = ({ header, data, filterTitle, checkbox, stateCheckbox, setStateCheckbox }) => {
     const [page, setPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const { slice, range } = useTable(data, page, rowsPerPage);
     const [filteredValue, setFilteredValue] = useState({ value: '', error: null });
     const [mobileData, setMobileData] = useState([]);

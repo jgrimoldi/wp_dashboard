@@ -38,7 +38,7 @@ export const restoreDataByIdFrom = (URL, id, token) => {
 
 export const getDataByName = (URL, nombre, token) => {
     return (
-        API.put(URL + 'q/nombre/' + nombre, header(token))
+        API.get(URL + 'q/nombre/' + nombre, header(token))
             .then(response => {
                 return response.data;
             })

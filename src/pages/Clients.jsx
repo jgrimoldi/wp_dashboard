@@ -13,7 +13,7 @@ const Clients = () => {
   const [banner, setBanner] = useState({ valid: null, error: null, deleted: null });
   const [clientsData, setClientsData] = useState([]);
 
-  const [id, setId] = useState({ value: '', error: null });
+  const [newId, setNewId] = useState({ value: '', error: null });
   const [newClient, setNewClient] = useState({ value: '', error: null });
   const [newAddress, setNewAddress] = useState({ value: '', error: null });
   const [newZip, setNewZip] = useState({ value: '', error: null });
@@ -45,8 +45,8 @@ const Clients = () => {
   }, [auth, setAuth])
 
   const addClient = async () => {
-    if (id.error === false && newClient.error === false && newAddress.error === false && newZip.error === false && newPhone.error === false && newEmail.error === false && newComments.error === false) {
-      await insertClient(Number(id.value), newClient.value, newAddress.value, newZip.value, newPhone.value, newEmail.value, newComments.value, auth.token)
+    if (newId.error === false && newClient.error === false && newAddress.error === false && newZip.error === false && newPhone.error === false && newEmail.error === false && newComments.error === false) {
+      await insertClient(Number(newId.value), newClient.value, newAddress.value, newZip.value, newPhone.value, newEmail.value, newComments.value, auth.token)
         .then(response => {
           setClientsData(prevState => [...prevState, response.data]);
           setBanner({ ...banner, valid: true, error: false });
@@ -102,7 +102,7 @@ const Clients = () => {
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
         <Title category="Mis" title="Clientes" />
         <div className='w-full flex justify-center flex-wrap gap-2 pb-5'>
-          <Input id='id' type='number' label='ID cliente' size='small' required={true} state={id} setState={setId} regEx={regEx.notEmpty} />
+          <Input id='id' type='number' label='ID cliente' size='small' required={true} state={newId} setState={setNewId} regEx={regEx.notEmpty} />
           <Input id='client' label='Nuevo cliente' size='small' css='w-1/3' required={true} state={newClient} setState={setNewClient} regEx={regEx.notEmpty} />
           <Input id='address' label='Dirección' size='small' css='w-1/3' required={true} state={newAddress} setState={setNewAddress} regEx={regEx.notEmpty} />
           <Input id='zip' label='Ciudad/Código postal' size='small' required={true} state={newZip} setState={setNewZip} regEx={regEx.notEmpty} />

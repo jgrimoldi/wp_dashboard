@@ -17,6 +17,7 @@ import {
     BsArrowRepeat,
     BsQuestionCircle,
 } from 'react-icons/bs';
+import { URL_PRODUCTTYPE, URL_UNIT, URL_VAT } from '../services/Api';
 
 export const regEx = {
     user: /^[a-zA-Z0-9_-]{4,16}$/,
@@ -338,10 +339,33 @@ export const productsTypeGrid = [
     { name: '', field: '', mobile: 'descripcion', },
 ];
 
+export const productsTypeSearcherGrid = [
+    [URL_PRODUCTTYPE],
+    [
+        { name: 'Nombre Insumo', field: 'nombre', mobile: 'nombre', },
+        { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
+    ]];
+
 export const unitsGrid = [
     { name: 'ID', field: 'id', mobile: 'id', },
     { name: 'Magnitud', field: 'magnitud', mobile: 'magnitud', },
     { name: 'Abreviatura', field: 'abreviatura', mobile: 'abreviatura', },
+];
+
+export const unitsSearcherGrid = [
+    [URL_UNIT],
+    [
+        { name: 'Magnitud', field: 'magnitud', mobile: 'magnitud', },
+        { name: 'Abreviatura', field: 'abreviatura', mobile: 'abreviatura', },
+    ]
+];
+
+export const vatGrid = [
+    [URL_VAT],
+    [
+        { name: 'ID', field: 'id', mobile: 'id', },
+        { name: 'Alicuota', field: 'alicuota', mobile: 'alicuota', },
+    ]
 ];
 
 export const categoryGrid = [
