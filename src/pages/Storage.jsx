@@ -12,6 +12,7 @@ const Storage = () => {
   const { auth, setAuth } = useAuthContext();
   const [banner, setBanner] = useState({ valid: null, error: null, deleted: null });
   const [warehousesData, setWarehousesData] = useState([]);
+  
   const [newWarehouse, setNewWarehouse] = useState({ value: '', error: null });
   const [details, setDetails] = useState({ value: '', error: null });
   const [idSelected, setIdSelected] = useState('');
@@ -93,11 +94,11 @@ const Storage = () => {
       {banner.error === true && <Banner text='¡Ups! No se pudo realizar la acción.' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
         <Title category="Mis" title="Almacenes" />
-        <form className='w-full flex flex-wrap justify-center gap-5 pb-5'>
+        <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
           <Input id='warehouses' label='Nuevo almacén' size='small' css='w-2/5' required={true} state={newWarehouse} setState={setNewWarehouse} regEx={regEx.notEmpty} />
           <Input id='details' label='Detalles del almacén' size='small' css='w-2/5' required={true} state={details} setState={setDetails} regEx={regEx.notEmpty} />
           <Button customFunction={addWarehouse} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Agregar almacén' />
-        </form>
+        </div>
         <Table header={warehousesGrid} data={warehousesData} filterTitle='Mis Almacenes' checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected} />
         {!!idSelected &&
           <div className='flex gap-2 justify-end pt-5'>

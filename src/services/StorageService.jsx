@@ -17,12 +17,3 @@ export const updateWarehousesById = (id, nombre, detalle, token) => {
             })
     )
 }
-
-export const getWarehouseByName = (nombre, token) => {
-    return (
-        API.put(URL_STORAGE + 'qnombre/' + nombre, header(token))
-            .then(response => {
-                return response.data;
-            })
-    )
-}
