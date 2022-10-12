@@ -1,32 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { BsXCircle, BsTrash, BsSearch } from 'react-icons/bs';
+import React, { useEffect, useState, useRef } from 'react';
+import { BsXCircle, BsTrash, BsSearch, BsPencil } from 'react-icons/bs';
 
 import { SEO, Banner, Title, Table, Input, Button, Modal, Searcher } from '../../components';
 import { productsGrid, productsTypeSearcherGrid, regEx, unitsSearcherGrid, vatGrid } from '../../data/dummy';
 import { URL_PRODUCT } from '../../services/Api';
 import { useAuthContext } from '../../contexts/ContextAuth';
-import { deleteDataByIdFrom, getDataFrom } from '../../services/GdrService';
-import { insertProduct } from '../../services/ProductService';
+import { deleteDataByIdFrom, getDataFrom, getDataByIdFrom } from '../../services/GdrService';
+import { insertProduct, updateProductById } from '../../services/ProductService';
 
 const Products = () => {
   const { auth, setAuth } = useAuthContext();
-  const [banner, setBanner] = useState({ valid: null, error: null });
+  const refFocus = useRef(null);
+  const initialState = { value: '', error: null };
+  const [banner, setBanner] = useState({ valid: null, error: null, deleted: null, edit: null });
   const [productsData, setProductsData] = useState([]);
-
-  const [newProductType, setNewProductType] = useState({ value: '', error: null });
-  const [newUnit, setNewUnit] = useState({ value: '', error: null });
-  const [newAlicuota, setNewAlicuota] = useState({ value: '', error: null });
-  const [newProduct, setNewProduct] = useState({ value: '', error: null });
-  const [newQuantity, setNewQuantity] = useState({ value: '', error: null });
-  const [newMin, setNewMin] = useState({ value: '', error: null });
-  const [newMax, setNewMax] = useState({ value: '', error: null });
-  const [newComment, setNewComment] = useState({ value: '', error: null });
+  const [newProductType, setNewProductType] = useState(initialState);
+  const [newUnit, setNewUnit] = useState(initialState);
+  const [newAlicuota, setNewAlicuota] = useState(initialState);
+  const [newProduct, setNewProduct] = useState(initialState);
+  const [newQuantity, setNewQuantity] = useState(initialState);
+  const [newMin, setNewMin] = useState(initialState);
+  const [newMax, setNewMax] = useState(initialState);
+  const [newComment, setNewComment] = useState(initialState);
   const [showProductType, setShowProductType] = useState(null)
   const [showUnit, setShowUnit] = useState(null)
   const [showAlicuota, setShowAlicuota] = useState(null)
-
   const [idSelected, setIdSelected] = useState('');
   const [openModal, setOpenModal] = useState({ value: '', open: null });
+  const [edit, setEdit] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -48,6 +49,17 @@ const Products = () => {
     return () => { controller.abort(); };
   }, [auth, setAuth])
 
+  const clearInputs = () => {
+    setNewProductType(initialState);
+    setNewUnit(initialState);
+    setNewAlicuota(initialState);
+    setNewProduct(initialState);
+    setNewQuantity(initialState);
+    setNewMin(initialState);
+    setNewMax(initialState);
+    setNewComment(initialState);
+  }
+
   const addProduct = async () => {
     if (newProductType.error === false && newUnit.error === false && newAlicuota.error === false && newProduct.error === false && newQuantity.error === false && newMin.error === false && newMax.error === false && newComment.error === false) {
       await insertProduct(Number(newProductType.value), Number(newUnit.value), Number(newAlicuota.value), newProduct.value, newQuantity.value, newMin.value, newMax.value, newComment.value, auth.token)
@@ -62,6 +74,10 @@ const Products = () => {
             return;
           }
           setBanner({ ...banner, valid: false, error: true });
+        })
+        .finally(() => {
+          clearInputs();
+          refFocus.current.focus();
         })
     } else {
       console.log('aca')
@@ -89,6 +105,56 @@ const Products = () => {
       })
   }
 
+  const editInputs = async () => {
+    await getDataByIdFrom(URL_PRODUCT, idSelected, auth.token)
+      .then(response => {
+        setNewProductType({ ...newProductType, value: response.data[0].fk_tipoproducto });
+        setNewUnit({ ...newUnit, value: response.data[0].fk_unidad });
+        setNewAlicuota({ ...newAlicuota, value: response.data[0].fk_alicuota });
+        setNewProduct({ ...newProduct, value: response.data[0].nombre });
+        setNewQuantity({ ...newQuantity, value: response.data[0].cantidad });
+        setNewMin({ ...newMin, value: response.data[0].stockmin });
+        setNewMax({ ...newMax, value: response.data[0].stockmax });
+        setNewComment({ ...newComment, value: response.data[0].descripcion });
+      })
+      .catch(() => {
+        setNewProductType({ ...newProductType, value: '' });
+        setNewUnit({ ...newUnit, value: '' });
+        setNewAlicuota({ ...newAlicuota, value: '' });
+        setNewProduct({ ...newProduct, value: '' });
+        setNewQuantity({ ...newQuantity, value: '' });
+        setNewMin({ ...newMin, value: '' });
+        setNewMax({ ...newMax, value: '' });
+        setNewComment({ ...newComment, value: '' });
+
+      })
+      .finally(() => {
+        setEdit(true);
+        refFocus.current.focus();
+      })
+  }
+
+  const editProduct = async () => {
+    await updateProductById(idSelected, newProductType.value, newUnit.value, newAlicuota.value, newProduct.value, newQuantity.value, newMin.value, newMax.value, newComment.value, auth.token)
+      .then(() => {
+        const selected = productsData.find(product => product.id === Number(idSelected));
+        selected.nombre = newProduct.value;
+        selected.cantidad = newQuantity.value;
+        selected.stockmin = newMin.value;
+        selected.stockmax = newMax.value;
+        selected.descripcion = newComment.value;
+        setBanner({ ...banner, edit: true });
+      })
+      .catch(() => {
+        setBanner({ ...banner, error: true });
+      })
+      .finally(() => {
+        clearInputs();
+        setIdSelected('');
+        setEdit(false);
+      })
+  }
+
   return (
     <>
       <SEO title='Productos' />
@@ -99,6 +165,7 @@ const Products = () => {
           redirect='' customFunction={deleteDataById}
         />
       }
+      {banner.edit === true && <Banner text='¡Registro editado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, edit: false })} />}
       {banner.deleted === true && <Banner text='¡Registro eliminado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, deleted: false })} />}
       {banner.valid === true && <Banner text='¡Nuevo producto agregado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} />}
       {banner.error === true && <Banner text='¡Ups! No se pudo realizar la acción.' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
@@ -109,7 +176,7 @@ const Products = () => {
         <Title category="Mis" title="Productos" />
         <div className='w-full flex justify-center flex-wrap gap-2 pb-5'>
           <Input
-            id='type' type='number' label='Tipo de producto' size='small' required={true}
+            id='type' useRef={refFocus} type='number' label='Tipo de producto' size='small' required={true}
             state={newProductType} setState={setNewProductType} regEx={regEx.digitsRegExp}
             tooltip='Buscar en tipos de productos' customFunction={() => setShowProductType(true)} color='blue' icon={<BsSearch />}
           />
@@ -143,12 +210,14 @@ const Products = () => {
             id='comments' label='Observaciones' size='small' required={true} css='w-1/3'
             state={newComment} setState={setNewComment} regEx={regEx.notEmpty}
           />
-          <Button customFunction={addProduct} borderColor='blue' color='white' backgroundColor='blue' width='1/4' text='Agregar producto' />
+          {edit === true ? <Button customFunction={editProduct} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Editar producto' />
+            : <Button customFunction={addProduct} borderColor='blue' color='white' backgroundColor='blue' width='1/4' text='Agregar producto' />}
         </div>
         <Table header={productsGrid} data={productsData} filterTitle='Mis Productos' checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected} />
         {!!idSelected &&
           <div className='flex gap-2 justify-end pt-5'>
-            <Button customFunction={() => setIdSelected('')} borderColor='black' color='black' backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
+            <Button customFunction={() => { setIdSelected(''); clearInputs() }} borderColor='black' color='black' backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
+            <Button customFunction={editInputs} borderColor='blue' color='white' backgroundColor='blue' width='12/6' height='normal' text='Editar registro' icon={<BsPencil />} />
             <Button customFunction={confirmDelete} borderColor='blue' color='white' backgroundColor='blue' width='12/6' height='normal' text='Eliminar registro' icon={<BsTrash />} />
           </div>}
       </div>

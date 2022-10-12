@@ -45,7 +45,7 @@ export const insertProductType = (nombre, descripcion, token) => {
     )
 }
 
-export const updateProductType = (id, nombre, descripcion, token) => {
+export const updateProductTypeById = (id, nombre, descripcion, token) => {
     return (
         API.put(URL_PRODUCTTYPE + id, { nombre, descripcion }, header(token))
             .then(response => {
@@ -63,7 +63,7 @@ export const insertUnit = (magnitud, abreviatura, token) => {
     )
 }
 
-export const updateUnit = (id, magnitud, abreviatura, token) => {
+export const updateUnitById = (id, magnitud, abreviatura, token) => {
     return (
         API.put(URL_UNIT + id, { magnitud, abreviatura }, header(token))
             .then(response => {
