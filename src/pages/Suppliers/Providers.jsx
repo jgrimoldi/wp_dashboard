@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { BsXCircle, BsTrash, BsSearch, BsPencil } from 'react-icons/bs';
+import { BsXCircle, BsTrash, BsPencil } from 'react-icons/bs';
 
 import { SEO, Banner, Title, Table, Input, Button, Modal, Searcher } from '../../components';
 import { providersGrid, categorySearcherGrid, regEx } from '../../data/dummy';
@@ -15,15 +15,14 @@ const Products = () => {
   const initialState = { value: '', error: null };
   const [banner, setBanner] = useState({ valid: null, error: null, deleted: null });
   const [providersData, setProvidersData] = useState([]);
-  const [newId, setNewId] = useState({ value: '', error: null });
-  const [newCategory, setNewCategory] = useState({ value: '', error: null });
-  const [newSupplier, setNewSupplier] = useState({ value: '', error: null });
-  const [newAddress, setNewAddress] = useState({ value: '', error: null });
-  const [newZip, setNewZip] = useState({ value: '', error: null });
-  const [newPhone, setNewPhone] = useState({ value: '', error: null });
-  const [newEmail, setNewEmail] = useState({ value: '', error: null });
-  const [newComment, setNewComment] = useState({ value: '', error: null });
-  const [showCategory, setShowCategory] = useState(null)
+  const [newId, setNewId] = useState(initialState);
+  const [newCategory, setNewCategory] = useState('');
+  const [newSupplier, setNewSupplier] = useState(initialState);
+  const [newAddress, setNewAddress] = useState(initialState);
+  const [newZip, setNewZip] = useState(initialState);
+  const [newPhone, setNewPhone] = useState(initialState);
+  const [newEmail, setNewEmail] = useState(initialState);
+  const [newComment, setNewComment] = useState(initialState);
   const [idSelected, setIdSelected] = useState('');
   const [openModal, setOpenModal] = useState({ value: '', open: null });
   const [edit, setEdit] = useState(null);
@@ -49,7 +48,6 @@ const Products = () => {
 
   const clearInputs = () => {
     setNewId(initialState);
-    setNewCategory(initialState);
     setNewSupplier(initialState);
     setNewAddress(initialState);
     setNewZip(initialState);
@@ -59,8 +57,8 @@ const Products = () => {
   }
 
   const addSupplier = async () => {
-    if (newId.error === false && newCategory.error === false && newSupplier.error === false && newAddress.error === false && newZip.error === false && newPhone.error === false && newEmail.error === false && newComment.error === false) {
-      await insertSupplier(Number(newId.value), Number(newCategory.value), newSupplier.value, newAddress.value, newZip.value, newPhone.value, newEmail.value, newComment.value, auth.token)
+    if (newId.error === false && !!newCategory && newSupplier.error === false && newAddress.error === false && newZip.error === false && newPhone.error === false && newEmail.error === false && newComment.error === false) {
+      await insertSupplier(Number(newId.value), Number(newCategory.id), newSupplier.value, newAddress.value, newZip.value, newPhone.value, newEmail.value, newComment.value, auth.token)
         .then(response => {
           setProvidersData(prevState => [...prevState, response.data]);
           setBanner({ ...banner, valid: true, error: false });
@@ -106,7 +104,6 @@ const Products = () => {
     await getDataByIdFrom(URL_SUPPLIER, idSelected, auth.token)
       .then(response => {
         setNewId({ ...newId, value: response.data[0].id });
-        setNewCategory({ ...newCategory, value: response.data[0].fk_categoria });
         setNewSupplier({ ...newSupplier, value: response.data[0].nombre });
         setNewAddress({ ...newAddress, value: response.data[0].direccion });
         setNewZip({ ...newZip, value: response.data[0].cp });
@@ -116,7 +113,6 @@ const Products = () => {
       })
       .catch(() => {
         setNewId({ ...newId, value: '' });
-        setNewCategory({ ...newCategory, value: '' });
         setNewSupplier({ ...newSupplier, value: '' });
         setNewAddress({ ...newAddress, value: '' });
         setNewZip({ ...newZip, value: '' });
@@ -131,10 +127,10 @@ const Products = () => {
   }
 
   const editClient = async () => {
-    await updateSupplierById(idSelected, newCategory.value, newSupplier.value, newAddress.value, newZip.value, newPhone.value, newEmail.value, newComment.value, auth.token)
+    await updateSupplierById(idSelected, newCategory.id, newSupplier.value, newAddress.value, newZip.value, newPhone.value, newEmail.value, newComment.value, auth.token)
       .then(() => {
         const selected = providersData.find(provider => provider.id === Number(idSelected));
-        selected.fk_categoria = newCategory.value;
+        selected.fk_categoria = newCategory.id;
         selected.nombre = newSupplier.value;
         selected.direccion = newAddress.value;
         selected.cp = newZip.value;
@@ -167,7 +163,6 @@ const Products = () => {
       {banner.deleted === true && <Banner text='¡Registro eliminado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, deleted: false })} />}
       {banner.valid === true && <Banner text='¡Nuevo proveedor agregado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} />}
       {banner.error === true && <Banner text='¡Ups! No se pudo realizar la acción.' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
-      {showCategory === true && <Searcher header={categorySearcherGrid} filter='Categorías' setValue={setNewCategory} setShowModal={setShowCategory} />}
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
         <Title category="Lista de" title="Proveedores" />
         <div className='w-full flex justify-center flex-wrap gap-2 pb-5'>
@@ -175,13 +170,9 @@ const Products = () => {
             id='id' type='number' useRef={addFocus} label='ID proveedor' size='small' required={true} disabled={edit} css='w-1/4 sm:w-1/5'
             state={newId} setState={setNewId} regEx={regEx.notEmpty}
           />
+          <Searcher id='category' label='Categoría proveedor' url={categorySearcherGrid[0][0]} state={newCategory} setState={setNewCategory} edit={edit} select={idSelected} />
           <Input
-            id='category' type='number' useRef={editFocus} label='Categoría proveedor' size='small' required={true} css='w-1/4 sm:w-1/5'
-            state={newCategory} setState={setNewCategory} regEx={regEx.digitsRegExp}
-            tooltip='Buscar en categoría de proveedores' customFunction={() => setShowCategory(true)} color='blue' icon={<BsSearch />}
-          />
-          <Input
-            id='supplier' label='Nuevo proveedor' size='small' required={true} css='w-1/4 sm:w-1/2'
+            id='supplier' useRef={editFocus} label='Nuevo proveedor' size='small' required={true} css='w-1/4 sm:w-1/2'
             state={newSupplier} setState={setNewSupplier} regEx={regEx.notEmpty}
           />
           <Input
@@ -198,7 +189,7 @@ const Products = () => {
           />
           <Input
             id='email' label='Correo eléctronico' size='small' required={true} css='w-1/4 sm:w-1/2'
-            state={newEmail} setState={setNewEmail} regEx={regEx.notEmpty}
+            state={newEmail} setState={setNewEmail} regEx={regEx.email}
           />
           <Input
             id='comments' label='Observaciones' size='small' required={true} css='w-1/4 sm:w-2/5'

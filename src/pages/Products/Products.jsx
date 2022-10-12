@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { BsXCircle, BsTrash, BsSearch, BsPencil } from 'react-icons/bs';
+import { BsXCircle, BsTrash, BsPencil } from 'react-icons/bs';
 
 import { SEO, Banner, Title, Table, Input, Button, Modal, Searcher } from '../../components';
 import { productsGrid, productsTypeSearcherGrid, regEx, unitsSearcherGrid, vatGrid } from '../../data/dummy';
@@ -14,17 +14,14 @@ const Products = () => {
   const initialState = { value: '', error: null };
   const [banner, setBanner] = useState({ valid: null, error: null, deleted: null, edit: null });
   const [productsData, setProductsData] = useState([]);
-  const [newProductType, setNewProductType] = useState(initialState);
-  const [newUnit, setNewUnit] = useState(initialState);
-  const [newAlicuota, setNewAlicuota] = useState(initialState);
+  const [newProductType, setNewProductType] = useState('');
+  const [newUnit, setNewUnit] = useState('');
+  const [newAlicuota, setNewAlicuota] = useState('');
   const [newProduct, setNewProduct] = useState(initialState);
   const [newQuantity, setNewQuantity] = useState(initialState);
   const [newMin, setNewMin] = useState(initialState);
   const [newMax, setNewMax] = useState(initialState);
   const [newComment, setNewComment] = useState(initialState);
-  const [showProductType, setShowProductType] = useState(null)
-  const [showUnit, setShowUnit] = useState(null)
-  const [showAlicuota, setShowAlicuota] = useState(null)
   const [idSelected, setIdSelected] = useState('');
   const [openModal, setOpenModal] = useState({ value: '', open: null });
   const [edit, setEdit] = useState(null);
@@ -50,9 +47,6 @@ const Products = () => {
   }, [auth, setAuth])
 
   const clearInputs = () => {
-    setNewProductType(initialState);
-    setNewUnit(initialState);
-    setNewAlicuota(initialState);
     setNewProduct(initialState);
     setNewQuantity(initialState);
     setNewMin(initialState);
@@ -61,8 +55,8 @@ const Products = () => {
   }
 
   const addProduct = async () => {
-    if (newProductType.error === false && newUnit.error === false && newAlicuota.error === false && newProduct.error === false && newQuantity.error === false && newMin.error === false && newMax.error === false && newComment.error === false) {
-      await insertProduct(Number(newProductType.value), Number(newUnit.value), Number(newAlicuota.value), newProduct.value, newQuantity.value, newMin.value, newMax.value, newComment.value, auth.token)
+    if (!!newProductType && !!newUnit && !!newAlicuota && newProduct.error === false && newQuantity.error === false && newMin.error === false && newMax.error === false && newComment.error === false) {
+      await insertProduct(Number(newProductType.id), Number(newUnit.id), Number(newAlicuota.id), newProduct.value, newQuantity.value, newMin.value, newMax.value, newComment.value, auth.token)
         .then(response => {
           setProductsData(prevState => [...prevState, response.data]);
           setBanner({ ...banner, valid: true, error: false });
@@ -108,9 +102,6 @@ const Products = () => {
   const editInputs = async () => {
     await getDataByIdFrom(URL_PRODUCT, idSelected, auth.token)
       .then(response => {
-        setNewProductType({ ...newProductType, value: response.data[0].fk_tipoproducto });
-        setNewUnit({ ...newUnit, value: response.data[0].fk_unidad });
-        setNewAlicuota({ ...newAlicuota, value: response.data[0].fk_alicuota });
         setNewProduct({ ...newProduct, value: response.data[0].nombre });
         setNewQuantity({ ...newQuantity, value: response.data[0].cantidad });
         setNewMin({ ...newMin, value: response.data[0].stockmin });
@@ -135,7 +126,7 @@ const Products = () => {
   }
 
   const editProduct = async () => {
-    await updateProductById(idSelected, newProductType.value, newUnit.value, newAlicuota.value, newProduct.value, newQuantity.value, newMin.value, newMax.value, newComment.value, auth.token)
+    await updateProductById(idSelected, newProductType.id, newUnit.id, newAlicuota.id, newProduct.value, newQuantity.value, newMin.value, newMax.value, newComment.value, auth.token)
       .then(() => {
         const selected = productsData.find(product => product.id === Number(idSelected));
         selected.nombre = newProduct.value;
@@ -169,29 +160,14 @@ const Products = () => {
       {banner.deleted === true && <Banner text='¡Registro eliminado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, deleted: false })} />}
       {banner.valid === true && <Banner text='¡Nuevo producto agregado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} />}
       {banner.error === true && <Banner text='¡Ups! No se pudo realizar la acción.' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
-      {showProductType === true && <Searcher header={productsTypeSearcherGrid} filter='Tipo de producto' setValue={setNewProductType} setShowModal={setShowProductType} />}
-      {showUnit === true && <Searcher header={unitsSearcherGrid} filter='Unidad de medida' setValue={setNewUnit} setShowModal={setShowUnit} />}
-      {showAlicuota === true && <Searcher header={vatGrid} filter='Alicuota' setValue={setNewAlicuota} setShowModal={setShowAlicuota} />}
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
         <Title category="Mis" title="Productos" />
         <div className='w-full flex justify-center flex-wrap gap-2 pb-5'>
+          <Searcher id='type' label='Tipo de producto' url={productsTypeSearcherGrid[0][0]} state={newProductType} setState={setNewProductType} />
+          <Searcher id='unit' label='Unidad de medida' url={unitsSearcherGrid[0][0]} state={newUnit} setState={setNewUnit} getter='magnitud' />
+          <Searcher id='alicuota' label='Alicuota' url={vatGrid[0][0]} state={newAlicuota} setState={setNewAlicuota} getter='alicuota' />
           <Input
-            id='type' useRef={refFocus} type='number' label='Tipo de producto' size='small' required={true}
-            state={newProductType} setState={setNewProductType} regEx={regEx.digitsRegExp}
-            tooltip='Buscar en tipos de productos' customFunction={() => setShowProductType(true)} color='blue' icon={<BsSearch />}
-          />
-          <Input
-            id='unit' type='number' label='Unidad de medida' size='small' required={true}
-            state={newUnit} setState={setNewUnit} regEx={regEx.digitsRegExp}
-            tooltip='Bucar en unidad de medida' customFunction={() => setShowUnit(true)} color='blue' icon={<BsSearch />}
-          />
-          <Input
-            id='alicuota' type='number' label='Alicuota' size='small' required={true}
-            state={newAlicuota} setState={setNewAlicuota} regEx={regEx.digitsRegExp}
-            tooltip='Buscar en alicuota' customFunction={() => setShowAlicuota(true)} color='blue' icon={<BsSearch />}
-          />
-          <Input
-            id='product' label='Nuevo producto' size='small' required={true} css='w-1/2'
+            id='product' useRef={refFocus} label='Nuevo producto' size='small' required={true} css='w-1/3'
             state={newProduct} setState={setNewProduct} regEx={regEx.notEmpty}
           />
           <Input
