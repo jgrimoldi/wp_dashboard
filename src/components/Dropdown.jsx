@@ -23,6 +23,7 @@ const Dropdown = ({ id, label, size, state, setState, options, getter, helperTex
         <div className='flex gap-2'>
             <FormControl fullWidth required={required}>
                 <Autocomplete
+                    sx={{ '& input': { textTransform: 'capitalize' } }}
                     id={id} name={id}
                     value={state.value}
                     onChange={(_, newValue) => handleChange(newValue)}

@@ -14,7 +14,7 @@ const Searcher = ({ id, label, url, state, setState, getter = 'nombre' }) => {
         const getData = async () => {
             await getDataFrom(url, signal, auth.token)
                 .then(response => {
-                    setData(response.data);
+                    setData(response.data.sort((info, anotherInfo) => info[getter].localeCompare(anotherInfo[getter])));
                 })
                 .catch(() => {
                     setData([]);
@@ -22,10 +22,10 @@ const Searcher = ({ id, label, url, state, setState, getter = 'nombre' }) => {
         }
         getData();
         return () => { controller.abort(); };
-    }, [auth, url])
+    }, [auth, url, getter])
 
     return (
-        <div className='w-1/5'>
+        <div className='w-1/2 sm:w-1/5'>
             <Dropdown id={id} label={label} size='small' state={state} setState={setState} options={data} getter={getter} required={true} />
         </div>
     )

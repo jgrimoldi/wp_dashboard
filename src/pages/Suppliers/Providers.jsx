@@ -172,7 +172,7 @@ const Products = () => {
           />
           <Searcher id='category' label='Categoría proveedor' url={categorySearcherGrid[0][0]} state={newCategory} setState={setNewCategory} edit={edit} select={idSelected} />
           <Input
-            id='supplier' useRef={editFocus} label='Nuevo proveedor' size='small' required={true} css='w-1/4 sm:w-1/2'
+            id='supplier' useRef={editFocus} label='Nuevo proveedor' size='small' required={true} css='w-1/2'
             state={newSupplier} setState={setNewSupplier} regEx={regEx.notEmpty}
           />
           <Input
@@ -192,7 +192,7 @@ const Products = () => {
             state={newEmail} setState={setNewEmail} regEx={regEx.email}
           />
           <Input
-            id='comments' label='Observaciones' size='small' required={true} css='w-1/4 sm:w-2/5'
+            id='comments' label='Observaciones' size='small' required={true} css='w-2/5'
             state={newComment} setState={setNewComment} regEx={regEx.notEmpty}
           />
           {edit === true ? <Button customFunction={editClient} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Editar proveedor' />

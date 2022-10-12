@@ -167,7 +167,7 @@ const Products = () => {
           <Searcher id='unit' label='Unidad de medida' url={unitsSearcherGrid[0][0]} state={newUnit} setState={setNewUnit} getter='magnitud' />
           <Searcher id='alicuota' label='Alicuota' url={vatGrid[0][0]} state={newAlicuota} setState={setNewAlicuota} getter='alicuota' />
           <Input
-            id='product' useRef={refFocus} label='Nuevo producto' size='small' required={true} css='w-1/3'
+            id='product' useRef={refFocus} label='Nuevo producto' size='small' required={true} css='w-full sm:w-1/3'
             state={newProduct} setState={setNewProduct} regEx={regEx.notEmpty}
           />
           <Input
