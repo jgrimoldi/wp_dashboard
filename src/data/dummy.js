@@ -257,7 +257,7 @@ export const lineCustomSeries = [
         dataSource: lineChartData[0],
         xName: 'x',
         yName: 'y',
-        name: 'Ventas por mes',
+        name: 'Stock valorizado',
         width: '2',
         marker: { visible: true, width: 10, height: 10 },
         fill: 'purple',
@@ -320,8 +320,6 @@ export const backupGrid = [
 
 export const productsGrid = [
     { name: 'ID', field: 'id', mobile: 'id', },
-    { name: 'Código de Barra', field: 'codigodebarra', mobile: 'codigodebarra', },
-    { name: 'Imagen', field: 'imagen', mobile: 'cantidad', },
     { name: 'Producto', field: 'nombre', mobile: 'nombre', },
     { name: 'Tipo de Producto', field: 'tipoproducto', mobile: 'tipoproducto', },
     { name: 'Unidad', field: 'abreviatura', mobile: 'abreviatura', },

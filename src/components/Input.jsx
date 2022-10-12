@@ -2,7 +2,7 @@ import React from 'react'
 import { TextField } from '@mui/material';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
-const Input = ({ id, type, label, size, tooltip, customFunction, color, icon, css, required, state = { value: '', error: null }, setState, regEx = '', helperText }) => {
+const Input = ({ id, useRef = null, type, label, size, tooltip, customFunction, color, icon, css, required, state = { value: '', error: null }, setState, regEx = '', helperText }) => {
 
     const handleChange = (event) => setState({ ...state, value: event.target.value });
 
@@ -19,7 +19,7 @@ const Input = ({ id, type, label, size, tooltip, customFunction, color, icon, cs
     return (
         <div className={`flex gap-2 ${css}`}>
             <TextField
-                id={id} name={id}
+                id={id} name={id} inputRef={useRef}
                 type={type ? type : 'text'} value={state.value}
                 onChange={handleChange} onKeyUp={handleValidation} onBlur={handleValidation}
                 label={label} placeholder={label}

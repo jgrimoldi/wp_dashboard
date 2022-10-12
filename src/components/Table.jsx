@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { BsCloudArrowDown, BsSearch } from 'react-icons/bs';
 
 import { Input, TableHead, Pagination } from '.';
-import noImage from '../data/imagen.jpg';
 import useTable from '../hooks/useTable';
 
 const Dates = ({ date }) => {
@@ -50,9 +49,9 @@ const FormatDesktop = ({ data, property }) => {
         );
     }
 
-    if (property.field === 'imagen') {
-        return (<img className='w-20 h-20' src={noImage} alt={`ID de producto: ${data.id}`} />);
-    }
+    // if (property.field === 'imagen') {
+    //     return (<img className='w-20 h-20' src={noImage} alt={`ID de producto: ${data.id}`} />);
+    // }
 
     if (property.field === 'Fecha Creación' || property.field === 'lastlogin') {
         return (<Dates date={data[property.field]} />);
@@ -79,9 +78,9 @@ const FormatMobile = ({ data, property }) => {
         </a>);
     }
 
-    if (property.mobile === 'imagen') {
-        return (<img className="rounded-full h-20" src={noImage} alt={`ID de producto: ${data.id}`} />);
-    }
+    // if (property.mobile === 'imagen') {
+    //     return (<img className="rounded-full h-20" src={noImage} alt={`ID de producto: ${data.id}`} />);
+    // }
 
     if (property.mobile === 'Fecha Creación' || property.mobile === 'lastlogin') {
         return (<Dates date={data[property.mobile]} />);

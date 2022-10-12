@@ -20,7 +20,6 @@ const Products = () => {
   const [newQuantity, setNewQuantity] = useState({ value: '', error: null });
   const [newMin, setNewMin] = useState({ value: '', error: null });
   const [newMax, setNewMax] = useState({ value: '', error: null });
-  const [newImage, setNewImage] = useState({ value: '', error: null });
   const [newComment, setNewComment] = useState({ value: '', error: null });
   const [showProductType, setShowProductType] = useState(null)
   const [showUnit, setShowUnit] = useState(null)
@@ -50,8 +49,8 @@ const Products = () => {
   }, [auth, setAuth])
 
   const addProduct = async () => {
-    if (newProductType.error === false && newUnit.error === false && newAlicuota.error === false && newProduct.error === false && newQuantity.error === false && newMin.error === false && newMax.error === false && newImage.error === false && newComment.error === false) {
-      await insertProduct(Number(newProductType.value), Number(newUnit.value), Number(newAlicuota.value), newProduct.value, newQuantity.value, newMin.value, newMax.value, newImage.value, newComment.value, auth.token)
+    if (newProductType.error === false && newUnit.error === false && newAlicuota.error === false && newProduct.error === false && newQuantity.error === false && newMin.error === false && newMax.error === false && newComment.error === false) {
+      await insertProduct(Number(newProductType.value), Number(newUnit.value), Number(newAlicuota.value), newProduct.value, newQuantity.value, newMin.value, newMax.value, newComment.value, auth.token)
         .then(response => {
           setProductsData(prevState => [...prevState, response.data]);
           setBanner({ ...banner, valid: true, error: false });
@@ -89,8 +88,6 @@ const Products = () => {
         setOpenModal({ ...openModal, value: '', open: false })
       })
   }
-
-  // TODO: type file on input IMAGE, how to add images and show on react
 
   return (
     <>
@@ -141,10 +138,6 @@ const Products = () => {
           <Input
             id='max' type='number' label='Stock máximo' size='small' required={true}
             state={newMax} setState={setNewMax} regEx={regEx.digitsRegExp}
-          />
-          <Input
-            id='image' label='Imagen' size='small' required={true}
-            state={newImage} setState={setNewImage} regEx={regEx.notEmpty}
           />
           <Input
             id='comments' label='Observaciones' size='small' required={true} css='w-1/3'

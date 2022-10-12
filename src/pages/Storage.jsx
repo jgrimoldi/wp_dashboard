@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BsXCircle, BsTrash, BsPencil } from 'react-icons/bs';
 
 import { SEO, Banner, Title, Table, Input, Button, Modal } from '../components';
@@ -10,10 +10,12 @@ import { insertWarehouses, updateWarehousesById } from '../services/StorageServi
 
 const Storage = () => {
   const { auth, setAuth } = useAuthContext();
+  const refFocus = useRef(null);
+  const initialState = { value: '', error: null };
   const [banner, setBanner] = useState({ valid: null, error: null, deleted: null, edit: null });
   const [warehousesData, setWarehousesData] = useState([]);
-  const [newWarehouse, setNewWarehouse] = useState({ value: '', error: null });
-  const [details, setDetails] = useState({ value: '', error: null });
+  const [newWarehouse, setNewWarehouse] = useState(initialState);
+  const [details, setDetails] = useState(initialState);
   const [idSelected, setIdSelected] = useState('');
   const [openModal, setOpenModal] = useState({ value: '', open: null });
   const [edit, setEdit] = useState(null);
@@ -37,6 +39,11 @@ const Storage = () => {
     return () => { controller.abort(); };
   }, [auth, setAuth])
 
+  const clearInputs = () => {
+    setNewWarehouse(initialState);
+    setDetails(initialState);
+  }
+
   const addWarehouse = async () => {
     if (newWarehouse.error === false && details.error === false) {
       await insertWarehouses(newWarehouse.value, details.value, auth.token)
@@ -51,6 +58,10 @@ const Storage = () => {
             return;
           }
           setBanner({ ...banner, valid: false, error: true });
+        })
+        .finally(() => {
+          clearInputs();
+          refFocus.current.focus();
         })
     } else {
       setBanner({ ...banner, valid: false, error: true });
@@ -73,7 +84,7 @@ const Storage = () => {
         setBanner({ ...banner, error: true });
       })
       .finally(() => {
-        setOpenModal({ ...openModal, value: '', open: false })
+        setOpenModal(initialState)
       })
   }
 
@@ -104,8 +115,8 @@ const Storage = () => {
         setBanner({ ...banner, error: true });
       })
       .finally(() => {
-        setNewWarehouse({ ...newWarehouse, value: '' });
-        setDetails({ ...details, value: '' });
+        setNewWarehouse(initialState);
+        setDetails(initialState);
         setIdSelected('');
         setEdit(false);
       })
@@ -128,7 +139,7 @@ const Storage = () => {
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
         <Title category="Mis" title="Almacenes" />
         <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
-          <Input id='warehouses' label='Nuevo almacén' size='small' css='w-full sm:w-2/5' required={true} state={newWarehouse} setState={setNewWarehouse} regEx={regEx.notEmpty} />
+          <Input id='warehouses' useRef={refFocus} label='Nuevo almacén' size='small' css='w-full sm:w-2/5' required={true} state={newWarehouse} setState={setNewWarehouse} regEx={regEx.notEmpty} />
           <Input id='details' label='Detalles del almacén' size='small' css='w-full sm:w-2/5' required={true} state={details} setState={setDetails} regEx={regEx.notEmpty} />
           {edit === true ? <Button customFunction={editWarehouse} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Editar almacén' />
             : <Button customFunction={addWarehouse} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Agregar almacén' />}
