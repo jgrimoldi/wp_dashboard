@@ -84,7 +84,7 @@ const Storage = () => {
         setBanner({ ...banner, error: true });
       })
       .finally(() => {
-        setOpenModal(initialState)
+        setOpenModal({ ...openModal, value: '', open: false })
       })
   }
 
@@ -100,6 +100,7 @@ const Storage = () => {
       })
       .finally(() => {
         setEdit(true);
+        refFocus.current.focus();
       })
   }
 
@@ -115,8 +116,7 @@ const Storage = () => {
         setBanner({ ...banner, error: true });
       })
       .finally(() => {
-        setNewWarehouse(initialState);
-        setDetails(initialState);
+        clearInputs();
         setIdSelected('');
         setEdit(false);
       })
@@ -147,7 +147,7 @@ const Storage = () => {
         <Table header={warehousesGrid} data={warehousesData} filterTitle='Mis Almacenes' checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected} />
         {!!idSelected &&
           <div className='flex gap-2 justify-end pt-5'>
-            <Button customFunction={() => setIdSelected('')} borderColor='black' color='black' backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
+            <Button customFunction={() => { setIdSelected(''); clearInputs() }} borderColor='black' color='black' backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
             <Button customFunction={editInputs} borderColor='blue' color='white' backgroundColor='blue' width='12/6' height='normal' text='Editar registro' icon={<BsPencil />} />
             <Button customFunction={confirmDelete} borderColor='blue' color='white' backgroundColor='blue' width='12/6' height='normal' text='Eliminar registro' icon={<BsTrash />} />
           </div>}
