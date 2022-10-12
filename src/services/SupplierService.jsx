@@ -27,7 +27,7 @@ export const insertCategory = (nombre, descripcion, token) => {
     )
 }
 
-export const updateCategory = (id, nombre, descripcion, token) => {
+export const updateCategoryById = (id, nombre, descripcion, token) => {
     return (
         API.put(URL_CATEGORY + id, { nombre, descripcion }, header(token))
             .then(response => {

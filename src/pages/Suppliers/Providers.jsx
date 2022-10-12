@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { BsXCircle, BsTrash, BsSearch } from 'react-icons/bs';
+import React, { useEffect, useState, useRef } from 'react';
+import { BsXCircle, BsTrash, BsSearch, BsPencil } from 'react-icons/bs';
 
 import { SEO, Banner, Title, Table, Input, Button, Modal, Searcher } from '../../components';
 import { providersGrid, categorySearcherGrid, regEx } from '../../data/dummy';
 import { URL_SUPPLIER } from '../../services/Api';
 import { useAuthContext } from '../../contexts/ContextAuth';
-import { deleteDataByIdFrom, getDataFrom } from '../../services/GdrService';
-import { insertSupplier } from '../../services/SupplierService';
+import { deleteDataByIdFrom, getDataFrom, getDataByIdFrom } from '../../services/GdrService';
+import { insertSupplier, updateSupplierById } from '../../services/SupplierService';
 
 const Products = () => {
   const { auth, setAuth } = useAuthContext();
-  const [banner, setBanner] = useState({ valid: null, error: null });
+  const addFocus = useRef(null);
+  const editFocus = useRef(null);
+  const initialState = { value: '', error: null };
+  const [banner, setBanner] = useState({ valid: null, error: null, deleted: null });
   const [providersData, setProvidersData] = useState([]);
-
   const [newId, setNewId] = useState({ value: '', error: null });
   const [newCategory, setNewCategory] = useState({ value: '', error: null });
   const [newSupplier, setNewSupplier] = useState({ value: '', error: null });
@@ -22,14 +24,13 @@ const Products = () => {
   const [newEmail, setNewEmail] = useState({ value: '', error: null });
   const [newComment, setNewComment] = useState({ value: '', error: null });
   const [showCategory, setShowCategory] = useState(null)
-
   const [idSelected, setIdSelected] = useState('');
   const [openModal, setOpenModal] = useState({ value: '', open: null });
+  const [edit, setEdit] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
-
     const getProviders = async () => {
       await getDataFrom(URL_SUPPLIER, signal, auth.token)
         .then(response => {
@@ -46,6 +47,17 @@ const Products = () => {
     return () => { controller.abort(); };
   }, [auth, setAuth])
 
+  const clearInputs = () => {
+    setNewId(initialState);
+    setNewCategory(initialState);
+    setNewSupplier(initialState);
+    setNewAddress(initialState);
+    setNewZip(initialState);
+    setNewPhone(initialState);
+    setNewEmail(initialState);
+    setNewComment(initialState);
+  }
+
   const addSupplier = async () => {
     if (newId.error === false && newCategory.error === false && newSupplier.error === false && newAddress.error === false && newZip.error === false && newPhone.error === false && newEmail.error === false && newComment.error === false) {
       await insertSupplier(Number(newId.value), Number(newCategory.value), newSupplier.value, newAddress.value, newZip.value, newPhone.value, newEmail.value, newComment.value, auth.token)
@@ -60,6 +72,10 @@ const Products = () => {
             return;
           }
           setBanner({ ...banner, valid: false, error: true });
+        })
+        .finally(() => {
+          clearInputs();
+          addFocus.current.focus();
         })
     } else {
       setBanner({ ...banner, valid: false, error: true });
@@ -86,6 +102,57 @@ const Products = () => {
       })
   }
 
+  const editInputs = async () => {
+    await getDataByIdFrom(URL_SUPPLIER, idSelected, auth.token)
+      .then(response => {
+        setNewId({ ...newId, value: response.data[0].id });
+        setNewCategory({ ...newCategory, value: response.data[0].fk_categoria });
+        setNewSupplier({ ...newSupplier, value: response.data[0].nombre });
+        setNewAddress({ ...newAddress, value: response.data[0].direccion });
+        setNewZip({ ...newZip, value: response.data[0].cp });
+        setNewPhone({ ...newPhone, value: response.data[0].tel });
+        setNewEmail({ ...newEmail, value: response.data[0].email });
+        setNewComment({ ...newComment, value: response.data[0].observaciones });
+      })
+      .catch(() => {
+        setNewId({ ...newId, value: '' });
+        setNewCategory({ ...newCategory, value: '' });
+        setNewSupplier({ ...newSupplier, value: '' });
+        setNewAddress({ ...newAddress, value: '' });
+        setNewZip({ ...newZip, value: '' });
+        setNewPhone({ ...newPhone, value: '' });
+        setNewEmail({ ...newEmail, value: '' });
+        setNewComment({ ...newComment, value: '' });
+      })
+      .finally(() => {
+        setEdit(true);
+        editFocus.current.focus();
+      })
+  }
+
+  const editClient = async () => {
+    await updateSupplierById(idSelected, newCategory.value, newSupplier.value, newAddress.value, newZip.value, newPhone.value, newEmail.value, newComment.value, auth.token)
+      .then(() => {
+        const selected = providersData.find(provider => provider.id === Number(idSelected));
+        selected.fk_categoria = newCategory.value;
+        selected.nombre = newSupplier.value;
+        selected.direccion = newAddress.value;
+        selected.cp = newZip.value;
+        selected.tel = newPhone.value;
+        selected.email = newEmail.value;
+        selected.observaciones = newComment.value;
+        setBanner({ ...banner, edit: true });
+      })
+      .catch(() => {
+        setBanner({ ...banner, error: true });
+      })
+      .finally(() => {
+        clearInputs();
+        setIdSelected('');
+        setEdit(false);
+      })
+  }
+
   return (
     <>
       <SEO title='Proveedores' />
@@ -96,6 +163,7 @@ const Products = () => {
           redirect='' customFunction={deleteDataById}
         />
       }
+      {banner.edit === true && <Banner text='¡Registro editado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, edit: false })} />}
       {banner.deleted === true && <Banner text='¡Registro eliminado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, deleted: false })} />}
       {banner.valid === true && <Banner text='¡Nuevo proveedor agregado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} />}
       {banner.error === true && <Banner text='¡Ups! No se pudo realizar la acción.' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
@@ -104,11 +172,11 @@ const Products = () => {
         <Title category="Lista de" title="Proveedores" />
         <div className='w-full flex justify-center flex-wrap gap-2 pb-5'>
           <Input
-            id='id' type='number' label='ID proveedor' size='small' required={true} css='w-1/4 sm:w-1/5'
+            id='id' type='number' useRef={addFocus} label='ID proveedor' size='small' required={true} disabled={edit} css='w-1/4 sm:w-1/5'
             state={newId} setState={setNewId} regEx={regEx.notEmpty}
           />
           <Input
-            id='category' type='number' label='Categoría proveedor' size='small' required={true} css='w-1/4 sm:w-1/5'
+            id='category' type='number' useRef={editFocus} label='Categoría proveedor' size='small' required={true} css='w-1/4 sm:w-1/5'
             state={newCategory} setState={setNewCategory} regEx={regEx.digitsRegExp}
             tooltip='Buscar en categoría de proveedores' customFunction={() => setShowCategory(true)} color='blue' icon={<BsSearch />}
           />
@@ -136,12 +204,14 @@ const Products = () => {
             id='comments' label='Observaciones' size='small' required={true} css='w-1/4 sm:w-2/5'
             state={newComment} setState={setNewComment} regEx={regEx.notEmpty}
           />
-          <Button customFunction={addSupplier} borderColor='blue' color='white' backgroundColor='blue' width='1/4' text='Agregar proveedor' />
+          {edit === true ? <Button customFunction={editClient} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Editar proveedor' />
+            : <Button customFunction={addSupplier} borderColor='blue' color='white' backgroundColor='blue' width='1/4' text='Agregar proveedor' />}
         </div>
         <Table header={providersGrid} data={providersData} filterTitle='Mis Proveedores' checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected} />
         {!!idSelected &&
           <div className='flex gap-2 justify-end pt-5'>
-            <Button customFunction={() => setIdSelected('')} borderColor='black' color='black' backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
+            <Button customFunction={() => { setIdSelected(''); clearInputs() }} borderColor='black' color='black' backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
+            <Button customFunction={editInputs} borderColor='blue' color='white' backgroundColor='blue' width='12/6' height='normal' text='Editar registro' icon={<BsPencil />} />
             <Button customFunction={confirmDelete} borderColor='blue' color='white' backgroundColor='blue' width='12/6' height='normal' text='Eliminar registro' icon={<BsTrash />} />
           </div>}
       </div>
