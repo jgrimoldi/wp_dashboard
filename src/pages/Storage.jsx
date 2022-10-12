@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { BsXCircle, BsTrash } from 'react-icons/bs';
+import { BsXCircle, BsTrash, BsPencil } from 'react-icons/bs';
 
 import { SEO, Banner, Title, Table, Input, Button, Modal } from '../components';
 import { warehousesGrid, regEx } from '../data/dummy';
 import { URL_STORAGE } from '../services/Api';
 import { useAuthContext } from '../contexts/ContextAuth';
-import { deleteDataByIdFrom, getDataFrom } from '../services/GdrService';
-import { insertWarehouses } from '../services/StorageService';
+import { deleteDataByIdFrom, getDataFrom, getDataByIdFrom } from '../services/GdrService';
+import { insertWarehouses, updateWarehousesById } from '../services/StorageService';
 
 const Storage = () => {
   const { auth, setAuth } = useAuthContext();
-  const [banner, setBanner] = useState({ valid: null, error: null, deleted: null });
+  const [banner, setBanner] = useState({ valid: null, error: null, deleted: null, edit: null });
   const [warehousesData, setWarehousesData] = useState([]);
-
   const [newWarehouse, setNewWarehouse] = useState({ value: '', error: null });
   const [details, setDetails] = useState({ value: '', error: null });
   const [idSelected, setIdSelected] = useState('');
   const [openModal, setOpenModal] = useState({ value: '', open: null });
+  const [edit, setEdit] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
-
     const getWarehouses = async () => {
       await getDataFrom(URL_STORAGE, signal, auth.token)
         .then(response => {
@@ -34,7 +33,6 @@ const Storage = () => {
           }
         })
     }
-
     getWarehouses();
     return () => { controller.abort(); };
   }, [auth, setAuth])
@@ -79,6 +77,40 @@ const Storage = () => {
       })
   }
 
+  const editInputs = async () => {
+    await getDataByIdFrom(URL_STORAGE, idSelected, auth.token)
+      .then(response => {
+        setNewWarehouse({ ...newWarehouse, value: response.data.nombre });
+        setDetails({ ...details, value: response.data.detalle });
+      })
+      .catch(() => {
+        setNewWarehouse({ ...newWarehouse, value: '' });
+        setDetails({ ...details, value: '' });
+      })
+      .finally(() => {
+        setEdit(true);
+      })
+  }
+
+  const editWarehouse = async () => {
+    await updateWarehousesById(idSelected, newWarehouse.value, details.value, auth.token)
+      .then(() => {
+        const selected = warehousesData.find(warehouse => warehouse.id === Number(idSelected));
+        selected.nombre = newWarehouse.value;
+        selected.detalle = details.value;
+        setBanner({ ...banner, edit: true });
+      })
+      .catch(() => {
+        setBanner({ ...banner, error: true });
+      })
+      .finally(() => {
+        setNewWarehouse({ ...newWarehouse, value: '' });
+        setDetails({ ...details, value: '' });
+        setIdSelected('');
+        setEdit(false);
+      })
+  }
+
   return (
     <>
       <SEO title='Almacén' />
@@ -89,6 +121,7 @@ const Storage = () => {
           redirect='' customFunction={deleteDataById}
         />
       }
+      {banner.edit === true && <Banner text='¡Registro editado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, edit: false })} />}
       {banner.deleted === true && <Banner text='¡Registro eliminado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, deleted: false })} />}
       {banner.valid === true && <Banner text='¡Nuevo almacén agregado!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} />}
       {banner.error === true && <Banner text='¡Ups! No se pudo realizar la acción.' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
@@ -97,12 +130,14 @@ const Storage = () => {
         <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
           <Input id='warehouses' label='Nuevo almacén' size='small' css='w-full sm:w-2/5' required={true} state={newWarehouse} setState={setNewWarehouse} regEx={regEx.notEmpty} />
           <Input id='details' label='Detalles del almacén' size='small' css='w-full sm:w-2/5' required={true} state={details} setState={setDetails} regEx={regEx.notEmpty} />
-          <Button customFunction={addWarehouse} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Agregar almacén' />
+          {edit === true ? <Button customFunction={editWarehouse} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Editar almacén' />
+            : <Button customFunction={addWarehouse} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Agregar almacén' />}
         </div>
         <Table header={warehousesGrid} data={warehousesData} filterTitle='Mis Almacenes' checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected} />
         {!!idSelected &&
           <div className='flex gap-2 justify-end pt-5'>
             <Button customFunction={() => setIdSelected('')} borderColor='black' color='black' backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
+            <Button customFunction={editInputs} borderColor='blue' color='white' backgroundColor='blue' width='12/6' height='normal' text='Editar registro' icon={<BsPencil />} />
             <Button customFunction={confirmDelete} borderColor='blue' color='white' backgroundColor='blue' width='12/6' height='normal' text='Eliminar registro' icon={<BsTrash />} />
           </div>}
       </div>
