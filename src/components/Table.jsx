@@ -45,8 +45,8 @@ const AddBarCode = ({ data, setOpen, setProductID }) => {
     }
 
     return (
-        <button type='button' onClick={() => handleClick(data.id)} style={{ backgroundColor: 'blue' }} className='text-xl border p-1 rounded-xl text-white hover:shadow-lg'>
-            <BsPlus></BsPlus>
+        <button type='button' onClick={() => handleClick(data.id)} style={{ backgroundColor: 'blue' }} className='flex gap-2 items-center border p-1.5 rounded-xl text-white hover:shadow-lg'>
+            Agregar <span className='text-xl'><BsPlus></BsPlus></span>
         </button>
     )
 }
