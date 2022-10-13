@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { BsCloudArrowDown, BsSearch } from 'react-icons/bs';
+import { BsCloudArrowDown, BsPlus, BsSearch } from 'react-icons/bs';
 
 import { Input, TableHead, Pagination } from '.';
 import useTable from '../hooks/useTable';
@@ -22,7 +22,7 @@ const Dates = ({ date }) => {
     )
 };
 
-const Radio = ({ data, state, setState }) => {
+export const Radio = ({ data, state, setState }) => {
 
     const handleChange = (event) => setState(event.target.value);
 
@@ -37,8 +37,21 @@ const Radio = ({ data, state, setState }) => {
     )
 };
 
-const FormatDesktop = ({ data, property }) => {
+const AddBarCode = ({ data, setOpen, setProductID }) => {
 
+    const handleClick = (id) => {
+        setProductID(Number(id));
+        setOpen(true);
+    }
+
+    return (
+        <button type='button' onClick={() => handleClick(data.id)} style={{ backgroundColor: 'blue' }} className='text-xl border p-1 rounded-xl text-white hover:shadow-lg'>
+            <BsPlus></BsPlus>
+        </button>
+    )
+}
+
+const FormatDesktop = ({ data, property }) => {
     if (property.field === 'url') {
         return (
             <a href={data[property.field]} style={{ color: 'blue' }}
@@ -96,7 +109,7 @@ const FormatMobile = ({ data, property }) => {
     return (<>{data[property.mobile]}</>);
 }
 
-const Table = ({ header, data, filterTitle, checkbox, stateCheckbox, setStateCheckbox }) => {
+const Table = ({ header, data, filterTitle, checkbox, stateCheckbox, setStateCheckbox, barcode, setOpenBarcode, setProductID }) => {
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const { slice, range } = useTable(data, page, rowsPerPage);
@@ -137,7 +150,7 @@ const Table = ({ header, data, filterTitle, checkbox, stateCheckbox, setStateChe
             setMobileData(sliceHeader);
         }
     }, [header, sliceData, isMounted]);
-
+    
     return (
         <>
             <div className='shadow flex justify-end p-2 bg-gray-50 border-b-2 border-gray-200'>
@@ -148,7 +161,7 @@ const Table = ({ header, data, filterTitle, checkbox, stateCheckbox, setStateChe
             </div>
             <div className='overflow-auto rounded-lg shadow hidden md:block'>
                 <table className='w-full table-auto'>
-                    <TableHead headSource={header} checkbox={checkbox} />
+                    <TableHead headSource={header} checkbox={checkbox} barcode={barcode} />
                     <tbody>
                         {data.length !== 0 ?
                             slice.filter(ifIncludes).map((data, index) =>
@@ -159,6 +172,7 @@ const Table = ({ header, data, filterTitle, checkbox, stateCheckbox, setStateChe
                                             <FormatDesktop data={data} property={property} />
                                         </td>
                                     )}
+                                    {barcode && <td className='w-fit p-3 text-sm text-center text-gray-700 whitespace-nowrap'><AddBarCode data={data} setOpen={setOpenBarcode} setProductID={setProductID} /></td>}
                                 </tr>
                             )
                             : <tr className='text-center bg-white even:bg-gray-50'><td className='p-3 text-sm text-gray-700 whitespace-nowrap'>No hay entradas para mostrar</td></tr>
@@ -184,6 +198,7 @@ const Table = ({ header, data, filterTitle, checkbox, stateCheckbox, setStateChe
                                     ))}
                                 </div>
                             ))}
+                            {barcode && <div><AddBarCode data={data} setOpen={setOpenBarcode} setProductID={setProductID} /></div>}
                         </div>
                     )
                     )

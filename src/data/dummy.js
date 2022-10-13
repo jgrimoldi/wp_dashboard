@@ -325,9 +325,9 @@ export const productsGrid = [
     { name: 'Unidad', field: 'abreviatura', mobile: 'abreviatura', },
     { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
     { name: 'Alicuota', field: 'alicuota', mobile: 'alicuota', },
-    { name: 'Cantidad', field: 'cantidad', mobile: 'stockmin', },
+    { name: 'Cantidad', field: 'cantidad', mobile: 'cantidad', },
     { name: 'Stock Mínimo', field: 'stockmin', mobile: 'stockmax', },
-    { name: 'Stock Máximo', field: 'stockmax', mobile: 'imagen', },
+    { name: 'Stock Máximo', field: 'stockmax', mobile: 'stockmin', },
 ];
 
 export const productsTypeGrid = [
@@ -416,4 +416,8 @@ export const usersGrid = [
     { name: 'Correo', field: 'email', mobile: 'email', },
     { name: 'Cuenta validada', field: 'validateAccount', mobile: 'validateAccount', },
     { name: 'Último inicio', field: 'lastlogin', mobile: 'lastlogin', },
+];
+
+export const barcodeGrid = [
+    { name: 'Códigos de barra', field: 'codigodebarra', mobile: 'codigodebarra' },
 ];

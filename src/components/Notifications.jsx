@@ -25,18 +25,6 @@ const Notifications = () => {
       <NewNotification backgroundColor='red' />
       <NewNotification backgroundColor='red' />
       <NewNotification backgroundColor='red' />
-      <NewNotification backgroundColor='red' />
-      <NewNotification backgroundColor='red' />
-      <NewNotification backgroundColor='red' />
-      <NewNotification backgroundColor='red' />
-      <NewNotification backgroundColor='red' />
-      <NewNotification backgroundColor='red' />
-      <NewNotification backgroundColor='red' />
-      <NewNotification backgroundColor='red' />
-      <NewNotification backgroundColor='red' />
-      <NewNotification backgroundColor='red' />
-      <NewNotification backgroundColor='red' />
-      <NewNotification backgroundColor='red' />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import API, { header, URL_PRODUCT, URL_PRODUCTTYPE, URL_UNIT } from './Api';
+import API, { header, URL_BARCODE, URL_PRODUCT, URL_PRODUCTTYPE, URL_UNIT } from './Api';
 
 export const insertProduct = (fk_tipoproducto, fk_unidad, fk_alicuota, nombre, cantidad, stockmin, stockmax, descripcion, token) => {
     return (
@@ -71,3 +71,24 @@ export const updateUnitById = (id, magnitud, abreviatura, token) => {
             })
     )
 }
+
+export const insertBarCode = (fk_producto, codigodebarra, token) => (
+    API.post(URL_BARCODE, { fk_producto, codigodebarra }, header(token))
+        .then(response => {
+            return response.data;
+        })
+)
+
+export const updateBarcodeById = (id, fk_producto, codigodebarra, token) => (
+    API.put(URL_BARCODE + id, { fk_producto, codigodebarra }, header(token))
+        .then(response => {
+            return response.data;
+        })
+)
+
+export const findBarcodeByProduct = (fk_producto, token) => (
+    API.get(URL_BARCODE + 'q/producto/' + fk_producto, header(token))
+        .then(response => {
+            return response.data;
+        })
+)

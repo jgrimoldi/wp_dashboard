@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { BsXCircle, BsTrash, BsPencil } from 'react-icons/bs';
 
-import { SEO, Banner, Title, Table, Input, Button, Modal, Searcher } from '../../components';
+import { SEO, Banner, Title, Table, Input, Button, Modal, Searcher, BarCode } from '../../components';
 import { productsGrid, productsTypeSearcherGrid, regEx, unitsSearcherGrid, vatGrid } from '../../data/dummy';
 import { URL_PRODUCT } from '../../services/Api';
 import { useAuthContext } from '../../contexts/ContextAuth';
@@ -25,6 +25,9 @@ const Products = () => {
   const [idSelected, setIdSelected] = useState('');
   const [openModal, setOpenModal] = useState({ value: '', open: null });
   const [edit, setEdit] = useState(null);
+
+  const [productID, setProductID] = useState('');
+  const [openBarcode, setOpenBarcode] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -74,7 +77,6 @@ const Products = () => {
           refFocus.current.focus();
         })
     } else {
-      console.log('aca')
       setBanner({ ...banner, valid: false, error: true });
     }
   }
@@ -149,6 +151,7 @@ const Products = () => {
   return (
     <>
       <SEO title='Productos' />
+      {openBarcode === true && <BarCode productID={productID} setState={setOpenBarcode} />}
       {
         openModal.open === true &&
         <Modal title='¿Está seguro que quiere eliminar este registro?' text={`El siguiente elemento (id: ${idSelected}) esta a punto de ser eliminado, ¿Desea continuar?`}
@@ -189,7 +192,9 @@ const Products = () => {
           {edit === true ? <Button customFunction={editProduct} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Editar producto' />
             : <Button customFunction={addProduct} borderColor='blue' color='white' backgroundColor='blue' width='1/4' text='Agregar producto' />}
         </div>
-        <Table header={productsGrid} data={productsData} filterTitle='Mis Productos' checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected} />
+        <Table header={productsGrid} data={productsData} filterTitle='Mis Productos'
+          checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected}
+          barcode={true} setOpenBarcode={setOpenBarcode} setProductID={setProductID} />
         {!!idSelected &&
           <div className='flex gap-2 justify-end pt-5'>
             <Button customFunction={() => { setIdSelected(''); clearInputs() }} borderColor='black' color='black' backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
