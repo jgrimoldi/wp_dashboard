@@ -4,7 +4,7 @@ import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
 const Input = ({ id, useRef = null, type, label, size, tooltip, customFunction, color, icon, css, required, disabled = false, state = { value: '', error: null }, setState, regEx = '', helperText }) => {
 
-    const handleChange = (event) => setState({ ...state, value: event.target.value });
+    const handleChange = (event) =>  setState({ ...state, value: event.target.value });
 
     const handleValidation = () => {
         if (regEx) {
