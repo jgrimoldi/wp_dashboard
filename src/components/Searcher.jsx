@@ -25,9 +25,7 @@ const Searcher = ({ id, label, url, state, setState, getter = 'nombre' }) => {
     }, [auth, url, getter])
 
     return (
-        <div className='w-1/2 sm:w-1/5'>
-            <Dropdown id={id} label={label} size='small' state={state} setState={setState} options={data} getter={getter} required={true} />
-        </div>
+        <Dropdown id={id} label={label} size='small' state={state} setState={setState} options={data} getter={getter} required={true} />
     )
 }
 

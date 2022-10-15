@@ -13,8 +13,8 @@ const ProductType = () => {
   const [newProductType, setNewProductType] = useState(initialState);
   const [details, setDetails] = useState(initialState);
   const inputConfig = [
-    { field: 'nombre', id: 'productType', useRef: refFocus, label: 'Nuevo tipo de producto', state: newProductType, setState: setNewProductType, expression: 'notEmpty', css: '' },
-    { field: 'descripcion', id: 'details', label: 'Detalles del tipo de producto', state: details, setState: setDetails, expression: 'notEmpty', css: '' },
+    { field: 'nombre', id: 'productType', useRef: refFocus, label: 'Nuevo tipo de producto', state: newProductType, setState: setNewProductType, expression: 'notEmpty', css: 'w-full sm:w-[30%] md:w-1/4' },
+    { field: 'descripcion', id: 'details', label: 'Detalles del tipo de producto', state: details, setState: setDetails, expression: 'notEmpty', css: 'w-full sm:w-[30%] md:w-1/4' },
   ];
 
   const addProductType = async () => {

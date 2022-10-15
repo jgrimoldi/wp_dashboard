@@ -13,8 +13,8 @@ const Products = () => {
   const [newCategory, setNewCategory] = useState(initialState);
   const [details, setDetails] = useState(initialState);
   const inputConfig = [
-    { field: 'nombre', id: 'category', useRef: refFocus, label: 'Nueva categoría de proveedor', state: newCategory, setState: setNewCategory, expression: 'notEmpty', css: '' },
-    { field: 'descripcion', id: 'details', label: 'Detalles de la categoría', state: details, setState: setDetails, expression: 'notEmpty', css: '' },
+    { field: 'nombre', id: 'category', useRef: refFocus, label: 'Nueva categoría de proveedor', state: newCategory, setState: setNewCategory, expression: 'notEmpty', css: 'w-full sm:w-[30%] md:w-1/4' },
+    { field: 'descripcion', id: 'details', label: 'Detalles de la categoría', state: details, setState: setDetails, expression: 'notEmpty', css: 'w-full sm:w-[30%] md:w-1/4' },
   ];
 
   const addCategory = async () => {

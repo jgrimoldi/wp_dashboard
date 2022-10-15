@@ -19,13 +19,13 @@ const Clients = () => {
   const [newEmail, setNewEmail] = useState(initialState);
   const [details, setDetails] = useState(initialState);
   const inputConfig = [
-    { field: 'id', id: 'id', useRef: addFocus, type: 'number', label: 'ID cliente', disabled: true, state: newId, setState: setNewId, expression: 'notEmpty', css: '' },
-    { field: 'nombre', id: 'client', useRef: editFocus, label: 'Nuevo cliente', state: newClient, setState: setNewClient, expression: 'notEmpty', css: '' },
-    { field: 'direccion', id: 'address', label: 'Dirección', state: newAddress, setState: setNewAddress, expression: 'notEmpty', css: '' },
-    { field: 'cp', id: 'zip', label: 'Ciudad/Código postal', state: newZip, setState: setNewZip, expression: 'notEmpty', css: '' },
-    { field: 'tel', id: 'phone', type: 'number', label: 'Número de telefono', state: newPhone, setState: setNewPhone, expression: 'digitsRegExp', css: '' },
-    { field: 'email', id: 'email', type: 'email', label: 'Correo electrónico', state: newEmail, setState: setNewEmail, expression: 'email', css: '' },
-    { field: 'observaciones', id: 'comments', label: 'Observaciones', state: details, setState: setDetails, expression: 'notEmpty', css: '' },
+    { field: 'id', id: 'id', useRef: addFocus, type: 'number', label: 'ID cliente', disabled: true, state: newId, setState: setNewId, expression: 'notEmpty', css: 'w-1/6' },
+    { field: 'nombre', id: 'client', useRef: editFocus, label: 'Nuevo cliente', state: newClient, setState: setNewClient, expression: 'notEmpty', css: 'sm:w-2/6' },
+    { field: 'direccion', id: 'address', label: 'Dirección', state: newAddress, setState: setNewAddress, expression: 'notEmpty', css: 'w-5/6 sm:w-1/4' },
+    { field: 'cp', id: 'zip', label: 'Ciudad/Código postal', state: newZip, setState: setNewZip, expression: 'notEmpty', css: 'w-5/6 sm:w-auto' },
+    { field: 'tel', id: 'phone', type: 'number', label: 'Número de telefono', state: newPhone, setState: setNewPhone, expression: 'digitsRegExp', css: 'w-5/6 sm:w-1/5' },
+    { field: 'email', id: 'email', type: 'email', label: 'Correo electrónico', state: newEmail, setState: setNewEmail, expression: 'email', css: 'w-5/6 sm:w-1/5' },
+    { field: 'observaciones', id: 'comments', label: 'Observaciones', state: details, setState: setDetails, expression: 'notEmpty', css: 'w-5/6 sm:w-1/2' },
   ];
 
   const addClient = async () => {

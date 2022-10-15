@@ -13,8 +13,8 @@ const Storage = () => {
   const [newWarehouse, setNewWarehouse] = useState(initialState);
   const [details, setDetails] = useState(initialState);
   const inputConfig = [
-    { field: 'nombre', id: 'warehouses', useRef: refFocus, label: 'Nuevo almacén', size: 'small', css: 'w-full sm:w-2/5', state: newWarehouse, setState: setNewWarehouse, expression: 'notEmpty' },
-    { field: 'detalle', id: 'details', label: 'Detalles del almacén', size: 'small', css: 'w-full sm:w-2/5', state: details, setState: setDetails, expression: 'notEmpty' }
+    { field: 'nombre', id: 'warehouses', useRef: refFocus, label: 'Nuevo almacén', size: 'small', state: newWarehouse, setState: setNewWarehouse, expression: 'notEmpty', css: 'w-full sm:w-[30%] md:w-1/4' },
+    { field: 'detalle', id: 'details', label: 'Detalles del almacén', size: 'small', state: details, setState: setDetails, expression: 'notEmpty', css: 'w-full sm:w-[30%] md:w-1/4' }
   ];
 
   const addStorage = async () => {

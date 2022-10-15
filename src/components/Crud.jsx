@@ -138,8 +138,8 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
                         )
                     })}
                     {edit === true
-                        ? <Button customFunction={updateRecord} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Editar registro' />
-                        : <Button customFunction={addRecord} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Agregar registro' />}
+                        ? <Button customFunction={updateRecord} borderColor='blue' color='white' backgroundColor='blue' width='full sm:w-1/3' text='Editar registro' />
+                        : <Button customFunction={addRecord} borderColor='blue' color='white' backgroundColor='blue' width='full sm:w-1/3' text='Agregar registro' />}
                 </div>
                 <Table
                     header={grid} data={recordsData} filterTitle={`Mis ${title}`}
@@ -147,11 +147,14 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
                     barcode={barcode} setOpenBarcode={setOpen} setProductID={setProductID}
                 />
                 {!!idSelected &&
-                    <div className='flex gap-2 justify-end pt-5'>
-                        <Button customFunction={clearInputs} borderColor='black' color='black' backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
-                        <Button customFunction={editInputs} borderColor='blue' color='white' backgroundColor='blue' width='12/6' height='normal' text='Editar registro' icon={<BsPencil />} />
-                        <Button customFunction={confirmDelete} borderColor='blue' color='white' backgroundColor='blue' width='12/6' height='normal' text='Eliminar registro' icon={<BsTrash />} />
-                    </div>}
+                    <div className='w-full flex sm:justify-end mt-5'>
+                        <div className='w-full sm:w-3/5 grid grid-cols-3 gap-1 '>
+                            <Button customFunction={clearInputs} borderColor='black' color='black' backgroundColor='transparent' width='full' text='Cancelar' />
+                            <Button customFunction={editInputs} borderColor='blue' color='white' backgroundColor='blue' width='full' text='Editar' icon={<BsPencil />} />
+                            <Button customFunction={confirmDelete} borderColor='blue' color='white' backgroundColor='blue' width='full' text='Eliminar' icon={<BsTrash />} />
+                        </div>
+                    </div>
+                }
             </div>
         </>
     )
