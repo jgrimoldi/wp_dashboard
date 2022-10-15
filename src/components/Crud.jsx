@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { BsXCircle, BsTrash, BsPencil } from 'react-icons/bs';
 
-import { Banner, Title, Table, Input, Button, Modal } from '../components';
+import { Banner, Title, Table, Input, Button, Modal, Searcher } from '../components';
 import { regEx } from '../data/dummy';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { deleteDataByIdFrom, getDataFrom, getDataByIdFrom } from '../services/GdrService';
 
-const Crud = ({ title, config, URL, grid, add, update }) => {
+const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, setOpen, setProductID }) => {
 
     const { auth, handleErrors } = useAuthContext();
-    const ref = config.map(input => input.useRef);
+    const ref = config.find(input => input.useRef && input.useRef !== undefined);
     const initialState = { value: '', error: null };
     const createBanner = { text: '¡Nuevo registro agregado!', background: 'green' }
     const updateBanner = { text: '¡Registro editado exitosamente!', background: 'green' }
@@ -35,10 +35,12 @@ const Crud = ({ title, config, URL, grid, add, update }) => {
 
     const clearInputs = () => {
         config.forEach(input => {
-            input.setState(initialState);
+            if (input.field)
+                input.setState(initialState);
         });
         setOpenModal(initialState);
         setIdSelected('');
+        setEdit(false);
     }
 
     const addRecord = async () => {
@@ -88,7 +90,7 @@ const Crud = ({ title, config, URL, grid, add, update }) => {
                 clearInputs();
                 setBanner({ ...banner, value: errorBanner, error: false });
             })
-            .finally(() => ref[0].current.focus())
+            .finally(() => ref.useRef.current.focus())
     }
 
     const handleEdit = () => {
@@ -100,13 +102,12 @@ const Crud = ({ title, config, URL, grid, add, update }) => {
         })
     }
 
-    const editRecord = async () => {
+    const updateRecord = async () => {
         await update(idSelected)
             .then(() => {
                 handleEdit();
                 setBanner({ ...banner, value: updateBanner, error: false });
                 clearInputs();
-                setEdit(false);
             })
             .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
     }
@@ -122,17 +123,29 @@ const Crud = ({ title, config, URL, grid, add, update }) => {
                 />}
             {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner(initialState)} />}
             <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
-                <Title category='Mis' title={title} />
+                <Title category={sufix} title={title} />
                 <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
                     {config.map((input, index) => {
-                        const { id, useRef, label, size, state, setState, css, expression } = input;
-                        return (<span className={css} key={index}><Input key={index} id={id} useRef={useRef} label={label} size={size} required={true} state={state} setState={setState} regEx={regEx[expression]} /></span>)
+                        const { getter, url, field, id, useRef, type, label, disabled, state, setState, expression, helperText, css } = input;
+                        return (
+                            <span className={css} key={index}>
+                                {field
+                                    ? <Input id={id} useRef={useRef} type={type} label={label} size='small'
+                                        required={true} disabled={disabled && edit}
+                                        state={state} setState={setState} regEx={regEx[expression]} helperText={helperText} />
+                                    : <Searcher id={id} label={label} url={url} state={state} setState={setState} getter={getter} />}
+                            </span>
+                        )
                     })}
                     {edit === true
-                        ? <Button customFunction={editRecord} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Editar registro' />
+                        ? <Button customFunction={updateRecord} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Editar registro' />
                         : <Button customFunction={addRecord} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Agregar registro' />}
                 </div>
-                <Table header={grid} data={recordsData} filterTitle={`Mis ${title}`} checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected} />
+                <Table
+                    header={grid} data={recordsData} filterTitle={`Mis ${title}`}
+                    checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected}
+                    barcode={barcode} setOpenBarcode={setOpen} setProductID={setProductID}
+                />
                 {!!idSelected &&
                     <div className='flex gap-2 justify-end pt-5'>
                         <Button customFunction={clearInputs} borderColor='black' color='black' backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
