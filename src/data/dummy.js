@@ -222,49 +222,22 @@ export const themeColors = [
 
 export const LinePrimaryXAxis = {
     valueType: 'DateTime',
-    labelFormat: 'y',
+    labelFormat: 'MM/y',
     intervalType: 'Months',
+    rangePadding: 'Additional',
     edgeLabelPlacement: 'Shift',
     majorGridLines: { width: 0 },
-    background: 'white',
 };
 
 export const LinePrimaryYAxis = {
-    labelFormat: '{value}',
-    rangePadding: 'None',
+    labelFormat: '{value}ARS',
+    rangePadding: 'Additional',
     minimum: 0,
-    maximum: 100,
-    interval: 20,
+    interval: 50,
     lineStyle: { width: 0 },
     majorTickLines: { width: 0 },
     minorTickLines: { width: 0 },
 };
-
-export const lineChartData = [
-    [
-        { x: new Date(2022, 9, 1), y: 0 },
-        { x: new Date(2022, 10, 1), y: 24 },
-        { x: new Date(2022, 11, 1), y: 36 },
-        { x: new Date(2023, 0, 1), y: 38 },
-        { x: new Date(2023, 1, 1), y: 54 },
-        { x: new Date(2023, 2, 1), y: 57 },
-        { x: new Date(2023, 3, 1), y: 70 },
-    ],
-];
-
-export const lineCustomSeries = [
-    {
-        dataSource: lineChartData[0],
-        xName: 'x',
-        yName: 'y',
-        name: 'Stock valorizado',
-        width: '2',
-        marker: { visible: true, width: 10, height: 10 },
-        fill: 'purple',
-        type: 'Line'
-    },
-
-];
 
 export const incomeGrid = [
     {

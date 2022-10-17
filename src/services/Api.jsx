@@ -4,6 +4,7 @@ export default axios.create({ baseURL: `http://stock.agsistemas.net.ar:3001/api/
 
 export const header = (token) => ({ headers: { Authorization: `JWT ${token}` } });
 
+export const URL_DASHBOARD = 'dashboard/';
 export const URL_STORAGE = 'almacen/';
 export const URL_WAREHOUSE = 'almacenestablecimiento/';
 export const URL_AUTH = 'auth/';
