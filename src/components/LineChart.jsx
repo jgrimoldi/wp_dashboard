@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChartComponent, SeriesCollectionDirective, SeriesDirective, Inject, SplineSeries, DateTime, Legend, Tooltip } from '@syncfusion/ej2-react-charts';
+import { ChartComponent, SeriesCollectionDirective, SeriesDirective, Inject, LineSeries, DateTime, Legend, Tooltip } from '@syncfusion/ej2-react-charts';
 
 import { LinePrimaryXAxis, LinePrimaryYAxis } from '../data/dummy';
 import { useAuthContext } from '../contexts/ContextAuth';
@@ -11,8 +11,8 @@ const LineChart = () => {
     const [incomeData, setIncomeData] = useState([]);
     const [expenseData, setExpensesData] = useState([]);
     const lineCustomSeries = [
-        { type: 'Spline', dataSource: incomeData, xName: 'fecha', yName: 'total', name: 'Ingresos', width: '2', marker: { visible: true, width: 10, height: 10 }, },
-        { type: 'Spline', dataSource: expenseData, xName: 'fecha', yName: 'total', name: 'Egresos', width: '2', marker: { visible: true, width: 10, height: 10 }, },
+        { type: 'Line', dataSource: incomeData, xName: 'fecha', yName: 'total', name: 'Ingresos', width: '2', marker: { visible: true, width: 10, height: 10 }, },
+        { type: 'Line', dataSource: expenseData, xName: 'fecha', yName: 'total', name: 'Egresos', width: '2', marker: { visible: true, width: 10, height: 10 }, },
     ];
 
     const sumDoubleDates = (array) => {
@@ -81,7 +81,7 @@ const LineChart = () => {
             background='#FFFFFF'
             legendSettings={{ background: 'white' }}
         >
-            <Inject services={[SplineSeries, DateTime, Legend, Tooltip]} />
+            <Inject services={[LineSeries, DateTime, Legend, Tooltip]} />
             <SeriesCollectionDirective>
                 {lineCustomSeries.map((item, index) => <SeriesDirective key={index} {...item} />)}
             </SeriesCollectionDirective>

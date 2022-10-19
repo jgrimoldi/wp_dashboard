@@ -32,9 +32,15 @@ const Backup = () => {
     return () => { controller.abort(); };
   }, [auth, setAuth])
 
+  const getNewObject = (object) => {
+    return { ['Creado Por']: object.createdBy, ['Fecha Creación']: new Date(object.createdAt), nombre: object.nombre, size: object.size, url: object.url };
+  }
+
   const handleBackup = async () => {
     await createBackup(auth.user.id, auth.token)
-      .then(() => {
+      .then(response => {
+        const newObject = getNewObject(response.data);
+        setBackupData(prevState => [newObject, ...prevState]);
         setBanner({ ...banner, valid: true })
       })
       .catch(error => {
