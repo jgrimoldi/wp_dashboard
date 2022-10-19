@@ -138,7 +138,7 @@ const BarCode = ({ productID, setState }) => {
         <div className='flex flex-col item gap-5 bg-white w-11/12 sm:w-4/5 lg:w-3/5 p-5 rounded-3xl'>
           <form onSubmit={handleSubmit} className='w-full md:w-2/5 flex flex-col justify-center items-center gap-2'>
             <div className='self-start text-lg'>Códigos de barras para {product.name}</div>
-            <Input id='barcode' type='number' useRef={refFocus} label='Ingrese código de barras' css='w-full' state={barcodes} setState={setBarcodes} regEx={regEx.notEmpty} disabled={barcodesData.length === product.quantity} helperText='El campo no puede estar vacío' />
+            <Input id='barcode' type='number' useRef={refFocus} label='Ingrese código de barras' css='w-full' state={barcodes} setState={setBarcodes} regEx={regEx.notEmpty} helperText='El campo no puede estar vacío' />
             <div className='w-full flex gap-1'>
               <Button customFunction={handleClose} borderColor='black' color='black' backgroundColor='transparent' text='Cerrar' width='1/2' />
               {edit === true ? <Button customFunction={editBarcode} borderColor='blue' color='white' backgroundColor='blue' width='12/6' text='Editar código' />

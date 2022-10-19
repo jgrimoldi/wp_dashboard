@@ -58,6 +58,7 @@ const Sidebar = () => {
   }
 
   const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-white text-md m-2';
+  const disabledLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-gray-400 text-md m-2';
   const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2';
 
   return (
@@ -92,10 +93,10 @@ const Sidebar = () => {
               {item.links.map((link) => (
                 <NavLink
                   to={`/${link.url}`}
-                  key={link.url}
+                  key={link.name} // link.url
                   onClick={handleCloseSidebar}
-                  style={({ isActive }) => ({ backgroundColor: isActive ? 'blue' : '', })}
-                  className={({ isActive }) => (isActive ? activeLink : normalLink)}
+                  style={({ isActive }) => ({ backgroundColor: link.url === '/' || !isActive ? '' : 'blue', })}
+                  className={({ isActive }) => (link.url === '/' ? disabledLink : isActive ? activeLink : normalLink)}
                 >
                   {link.icon}
                   <span className="capitalize ">{link.name}</span>

@@ -109,10 +109,10 @@ const FormatMobile = ({ data, property }) => {
     return (<>{data[property.mobile]}</>);
 }
 
-const Table = ({ header, data, filterTitle, checkbox, stateCheckbox, setStateCheckbox, barcode, setOpenBarcode, setProductID }) => {
+const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbox, setStateCheckbox, barcode, setOpenBarcode, setProductID }) => {
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const { slice, range } = useTable(data, page, rowsPerPage);
+    const { slice, range } = useTable(data, page, rowsPerPage, sortFunction);
     const [filteredValue, setFilteredValue] = useState({ value: '', error: null });
     const [mobileData, setMobileData] = useState([]);
     const [isMounted, setIsMounted] = useState(false);
@@ -150,7 +150,7 @@ const Table = ({ header, data, filterTitle, checkbox, stateCheckbox, setStateChe
             setMobileData(sliceHeader);
         }
     }, [header, sliceData, isMounted]);
-    
+
     return (
         <>
             <div className='shadow flex justify-end p-2 bg-gray-50 border-b-2 border-gray-200'>

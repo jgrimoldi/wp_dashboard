@@ -16,18 +16,20 @@ const sliceData = (data, page, rowsPerPage) => {
 }
 
 
-const useTable = (data, page, rowsPerPage) => {
+const useTable = (data, page, rowsPerPage, sortFunction) => {
     const [tableRange, setTableRange] = useState([]);
     const [slice, setSlice] = useState([]);
 
     useEffect(() => {
+        data.sort(sortFunction);
+
         const range = calculateRange(data, rowsPerPage);
         setTableRange([...range]);
 
         const slice = sliceData(data, page, rowsPerPage);
         setSlice([...slice]);
 
-    }, [data, setTableRange, page, setSlice, rowsPerPage]);
+    }, [data, setTableRange, page, setSlice, rowsPerPage, sortFunction]);
 
     return { slice, range: tableRange };
 }

@@ -46,6 +46,8 @@ const Backup = () => {
       })
   }
 
+  const sortByLastCreated = (data, anotherData) => new Date(anotherData['Fecha Creación']) < new Date(data['Fecha Creación']) ? -1 : 1
+
   return (
     <>
       <SEO title='Backup' />
@@ -53,7 +55,7 @@ const Backup = () => {
       {banner.error === true && <Banner text='¡Ups! El backup no pudo realizarse' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
         <Title category="Mis" title="Backups" />
-        <Table header={backupGrid} data={backupData} filterTitle='Mis Backups' checkbox={false} />
+        <Table header={backupGrid} data={backupData} filterTitle='Mis Backups' checkbox={false} sortFunction={sortByLastCreated} />
         <div className='w-full flex justify-end py-8'>
           <Button customFunction={handleBackup} borderColor='blue' color='white' backgroundColor='blue' text='Nuevo backup' icon={<BsCloudUpload />} />
         </div>

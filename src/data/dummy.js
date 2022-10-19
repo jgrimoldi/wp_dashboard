@@ -17,7 +17,6 @@ import {
     BsArrowRepeat,
     BsQuestionCircle,
 } from 'react-icons/bs';
-import { URL_CATEGORY, URL_PRODUCTTYPE, URL_UNIT, URL_VAT } from '../services/Api';
 
 export const regEx = {
     user: /^[a-zA-Z0-9_-]{4,16}$/,
@@ -126,12 +125,12 @@ export const sidebar = [
         links: [
             {
                 name: 'Estadisticas',
-                url: 'estadisticas',
+                url: '/', //estadisticas
                 icon: <BsBarChart />,
             },
             {
                 name: 'Reportes',
-                url: 'reportes',
+                url: '/', //reportes
                 icon: <BsFileBarGraph />,
             },
         ],
@@ -157,12 +156,12 @@ export const sidebar = [
         links: [
             {
                 name: 'Configuración',
-                url: 'perfil',
+                url: '/', //perfil
                 icon: <BsGear />,
             },
             {
                 name: 'Ayuda',
-                url: 'ayuda',
+                url: '/', //ayuda
                 icon: <BsQuestionCircle />,
             },
         ],
@@ -222,21 +221,22 @@ export const themeColors = [
 
 export const LinePrimaryXAxis = {
     valueType: 'DateTime',
-    labelFormat: 'MM/y',
-    intervalType: 'Months',
+    labelFormat: 'dd/MMM',
+    intervalType: 'Days',
     rangePadding: 'Additional',
-    edgeLabelPlacement: 'Shift',
     majorGridLines: { width: 0 },
+    labelStyle: {
+        size: '10px'
+    }
 };
 
 export const LinePrimaryYAxis = {
     labelFormat: '{value}ARS',
     rangePadding: 'Additional',
-    minimum: 0,
-    interval: 50,
     lineStyle: { width: 0 },
     majorTickLines: { width: 0 },
     minorTickLines: { width: 0 },
+    arrangeByIndex: true,
 };
 
 export const incomeGrid = [
@@ -280,6 +280,7 @@ export const incomeGrid = [
         textAlign: 'Center',
         editType: 'numericedit',
     },
+
     // IVA, Unidad de medida, Abreviatura, SN, TotalIva, TotalCompra
 ];
 
@@ -292,7 +293,6 @@ export const backupGrid = [
 ];
 
 export const productsGrid = [
-    { name: 'ID', field: 'id', mobile: 'id', },
     { name: 'Producto', field: 'nombre', mobile: 'nombre', },
     { name: 'Tipo de Producto', field: 'tipoproducto', mobile: 'tipoproducto', },
     { name: 'Unidad', field: 'abreviatura', mobile: 'abreviatura', },
@@ -304,59 +304,22 @@ export const productsGrid = [
 ];
 
 export const productsTypeGrid = [
-    { name: 'ID', field: 'id', mobile: 'id', },
     { name: 'Nombre Insumo', field: 'nombre', mobile: 'nombre', },
-    { name: 'Descripción', field: 'descripcion', mobile: '', },
-    { name: '', field: '', mobile: 'descripcion', },
-];
-
-export const productsTypeSearcherGrid = [
-    [URL_PRODUCTTYPE],
-    [
-        { name: 'Nombre Insumo', field: 'nombre', mobile: 'nombre', },
-        { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
-    ]
+    { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
 ];
 
 export const unitsGrid = [
-    { name: 'ID', field: 'id', mobile: 'id', },
     { name: 'Magnitud', field: 'magnitud', mobile: 'magnitud', },
     { name: 'Abreviatura', field: 'abreviatura', mobile: 'abreviatura', },
 ];
 
-export const unitsSearcherGrid = [
-    [URL_UNIT],
-    [
-        { name: 'Magnitud', field: 'magnitud', mobile: 'magnitud', },
-        { name: 'Abreviatura', field: 'abreviatura', mobile: 'abreviatura', },
-    ]
-];
-
-export const vatGrid = [
-    [URL_VAT],
-    [
-        { name: 'ID', field: 'id', mobile: 'id', },
-        { name: 'Alicuota', field: 'alicuota', mobile: 'alicuota', },
-    ]
-];
-
 export const categoryGrid = [
-    { name: 'ID', field: 'id', mobile: 'id', },
     { name: 'Nombre Insumo', field: 'nombre', mobile: 'nombre', },
-    { name: 'Descripción', field: 'descripcion', mobile: '', },
-    { name: '', field: '', mobile: 'descripcion', },
-];
-
-export const categorySearcherGrid = [
-    [URL_CATEGORY],
-    [
-        { name: 'Nombre Insumo', field: 'nombre', mobile: 'nombre', },
-        { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
-    ]
+    { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
 ];
 
 export const providersGrid = [
-    { name: 'ID', field: 'id', mobile: 'id', },
+    { name: 'CUIT/CUIL', field: 'id', mobile: 'id', },
     { name: 'Categoria', field: 'categoria', mobile: 'categoria', },
     { name: 'Proveedor', field: 'nombre', mobile: 'nombre', },
     { name: 'Dirección', field: 'direccion', mobile: 'direccion', },
@@ -367,13 +330,12 @@ export const providersGrid = [
 ];
 
 export const warehousesGrid = [
-    { name: 'ID', field: 'id', mobile: 'id' },
     { name: 'Almacén', field: 'nombre', mobile: 'nombre' },
     { name: 'Detalles', field: 'detalle', mobile: 'detalle' },
 ];
 
 export const clientsGrid = [
-    { name: 'ID', field: 'id', mobile: 'id', },
+    { name: 'CUIT/CUIL', field: 'id', mobile: 'id', },
     { name: 'Cliente', field: 'nombre', mobile: 'nombre', },
     { name: 'Dirección', field: 'direccion', mobile: 'direccion', },
     { name: 'Código Postal', field: 'cp', mobile: 'cp', },
@@ -383,7 +345,6 @@ export const clientsGrid = [
 ];
 
 export const usersGrid = [
-    { name: 'ID', field: 'id', mobile: 'id', },
     { name: 'Nombre', field: 'nombre', mobile: 'nombre', },
     { name: 'Apellido', field: 'apellido', mobile: 'apellido', },
     { name: 'Correo', field: 'email', mobile: 'email', },
