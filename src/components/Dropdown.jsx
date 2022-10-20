@@ -3,7 +3,7 @@ import { Autocomplete, FormControl, TextField } from '@mui/material';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups/index.js';
 
 
-const Dropdown = ({ id, label, size, state, setState, options, getter, helperText, tooltip, customFunction, color, icon, required }) => {
+const Dropdown = ({ id, label, size, state, setState, options, getter, helperText, tooltip, customFunction, color, icon, required, disabled }) => {
 
     const handleChange = (newValue) => {
         if (!newValue)
@@ -31,6 +31,7 @@ const Dropdown = ({ id, label, size, state, setState, options, getter, helperTex
                     options={options}
                     getOptionLabel={(option) => option[getter] || ''}
                     isOptionEqualToValue={(option, value) => option[getter] === value[getter]}
+                    disabled={disabled}
                     renderInput={(params) => <TextField {...params} error={state.error} label={label} placeholder={label} size={size ? size : 'normal'} variant='outlined' helperText={state.error && helperText} />}
                 />
             </FormControl>

@@ -84,13 +84,13 @@ const FormatDesktop = ({ data, property }) => {
         if (data.validateAccount === null && new Date(data[property.field]) > today)
             return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>Rechazado</span>);
 
-        return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50'>Confirmado</span>);
+        return (<span className=''></span>);
     }
 
     if (property.field === 'resetPasswordExpires') {
         const today = new Date();
         if (data.resetPasswordExpires === null)
-            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50'>Completado</span>);
+            return (<span className=''></span>);
         if (new Date(data[property.field]) <= today)
             return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50'>Pendiente</span>);
 

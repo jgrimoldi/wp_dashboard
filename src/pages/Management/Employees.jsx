@@ -87,7 +87,7 @@ const Employees = () => {
                 handleInputs(response.data);
                 setEdit(true);
             })
-            .catch(error => {
+            .catch(() => {
                 clearInputs();
                 setBanner({ ...banner, value: errorBanner, error: false });
             })
@@ -127,9 +127,9 @@ const Employees = () => {
                     setFunction={clearInputs} redirect='' customFunction={deleteDataById}
                 />}
             {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner(initialState)} />}
-            <SEO title='Empleados' />
+            <SEO title='Usuarios' />
             <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
-                <Title category="Mis" title="Empleados" />
+                <Title category="Mis" title="Usuarios" />
                 <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
                     {edit === true && config.map((input, index) => {
                         const { getter, url, field, id, useRef, type, label, disabled, state, setState, expression, helperText, css } = input;
@@ -147,7 +147,7 @@ const Employees = () => {
                 </div>
                 <Table
                     header={employeesGrid} data={employeesData.filter(user => user.id !== auth.user.id && user.fk_perfil !== 3)}
-                    filterTitle='Mis empleados' checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected} sortFunction={sortByLastCreated}
+                    filterTitle='Mis Usuarios' checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected} sortFunction={sortByLastCreated}
                 />
                 {!!idSelected &&
                     <div className='w-full flex sm:justify-end mt-5'>

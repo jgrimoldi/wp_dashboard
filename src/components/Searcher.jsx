@@ -4,7 +4,7 @@ import { Dropdown } from '.';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { getDataFrom } from '../services/GdrService';
 
-const Searcher = ({ id, label, url, state, setState, getter = 'nombre' }) => {
+const Searcher = ({ id, label, url, state, setState, getter = 'nombre', disabled }) => {
     const { auth } = useAuthContext();
     const [data, setData] = useState([]);
 
@@ -25,7 +25,7 @@ const Searcher = ({ id, label, url, state, setState, getter = 'nombre' }) => {
     }, [auth, url, getter])
 
     return (
-        <Dropdown id={id} label={label} size='small' state={state} setState={setState} options={data} getter={getter} required={true} />
+        <Dropdown id={id} label={label} size='small' state={state} setState={setState} options={data} getter={getter} required={true} disabled={disabled} />
     )
 }
 

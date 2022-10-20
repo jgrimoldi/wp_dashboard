@@ -141,12 +141,12 @@ export const sidebar = [
         title: 'Administración',
         links: [
             {
-                name: 'Registro de usuarios',
+                name: 'Registro de Usuarios',
                 url: 'registro',
                 icon: <BsPersonPlus />,
             },
             {
-                name: 'Empleados',
+                name: 'Usuarios',
                 url: 'empleados',
                 icon: <BsPeople />,
             },
@@ -246,48 +246,15 @@ export const LinePrimaryYAxis = {
 };
 
 export const incomeGrid = [
-    {
-        field: 'Code',
-        headerText: 'Código ID',
-        width: '80',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Product',
-        headerText: 'Nombre del producto',
-        width: '150',
-        textAlign: 'Center',
-    },
-    {
-        field: 'Amount',
-        headerText: 'Cantidad',
-        width: '150',
-        textAlign: 'Center',
-        editType: 'numericedit',
-    },
-    {
-        field: 'Price',
-        headerText: 'Precio',
-        width: '100',
-        textAlign: 'Center',
-        editType: 'numericedit',
-    },
-    {
-        field: 'Partial',
-        headerText: 'Parcial',
-        width: '150',
-        textAlign: 'Center',
-        editType: 'numericedit',
-    },
-    {
-        field: 'Partial',
-        headerText: 'Parcial',
-        width: '150',
-        textAlign: 'Center',
-        editType: 'numericedit',
-    },
-
-    // IVA, Unidad de medida, Abreviatura, SN, TotalIva, TotalCompra
+    { name: 'Producto', field: 'product', mobile: 'product', },
+    { name: 'Unidades', field: 'quantity', mobile: 'quantity', },
+    { name: 'U.Med', field: 'units', mobile: 'units', },
+    { name: 'P. Unit', field: 'price', mobile: 'price', },
+    { name: 'Precio', field: 'subTotal', mobile: 'subTotal', },
+    { name: 'Alicuota', field: 'VAT', mobile: 'VAT', },
+    { name: 'Importe IVA', field: '', mobile: '', },
+    { name: 'SubTotal', field: '', mobile: '', },
+    { name: 'Agregar SN', field: '', mobile: '', },
 ];
 
 export const backupGrid = [
