@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { HomeNavigation, HomeTemplate, ProtectedRoutes } from './components';
-import { Dashboard, Storage, Clients, Products, ProductType, Units, Providers, Category, Income, Expenses, Transfer, Stats, Reports, Register, Settings, Backup, Help, Login, ForgotPassword, ResetPassword, AccountValidation, Unauthorized, NotFound } from './pages';
+import { Dashboard, Storage, Clients, Products, ProductType, Units, Providers, Category, Income, Expenses, Transfer, Stats, Reports, Register, Settings, Backup, Help, Login, ForgotPassword, ResetPassword, AccountValidation, Unauthorized, NotFound, Employees } from './pages';
 import './App.css';
 
 import { useAuthContext } from './contexts/ContextAuth';
@@ -51,6 +51,7 @@ const App = () => {
                 <Register />
               </ProtectedRoutes>
             } />
+            <Route path='/empleados' element={<Employees />} />
             <Route path='/perfil' element={<Settings />} />
             <Route path='/restaurar' element={<Backup />} />
 

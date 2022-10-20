@@ -18,6 +18,7 @@ export { default as Stats } from './Stats';
 export { default as Reports } from './Reports';
 export { default as Help } from './Help';
 export { default as Register } from './Management/Register';
+export { default as Employees } from './Management/Employees';
 export { default as Settings } from './Management/Settings';
 export { default as Backup } from './Management/Backup';
 export { default as Unauthorized } from './Unauthorized';

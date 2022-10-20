@@ -16,6 +16,7 @@ import {
     BsGear,
     BsArrowRepeat,
     BsQuestionCircle,
+    BsPersonLinesFill,
 } from 'react-icons/bs';
 
 export const regEx = {
@@ -58,7 +59,7 @@ export const sidebar = [
             {
                 name: 'Clientes',
                 url: 'clientes',
-                icon: <BsPeople />,
+                icon: <BsPersonLinesFill />,
             }
         ]
     },
@@ -143,6 +144,11 @@ export const sidebar = [
                 name: 'Registro de usuarios',
                 url: 'registro',
                 icon: <BsPersonPlus />,
+            },
+            {
+                name: 'Empleados',
+                url: 'empleados',
+                icon: <BsPeople />,
             },
             {
                 name: 'Backup',
@@ -350,6 +356,18 @@ export const usersGrid = [
     { name: 'Correo', field: 'email', mobile: 'email', },
     { name: 'Cuenta validada', field: 'validateAccount', mobile: 'validateAccount', },
     { name: 'Último inicio', field: 'lastlogin', mobile: 'lastlogin', },
+];
+
+export const employeesGrid = [
+    { name: 'Nombre', field: 'nombre', mobile: 'nombre', },
+    { name: 'Apellido', field: 'apellido', mobile: 'apellido', },
+    { name: 'Correo', field: 'email', mobile: 'email', },
+    { name: 'Cuenta validada', field: 'validateAccount', mobile: 'validateAccount', },
+    { name: 'Pendiente de validación', field: 'validateAccountExpires', mobile: 'validateAccountExpires', },
+    { name: 'Último inicio', field: 'lastlogin', mobile: 'lastlogin', },
+    { name: 'Cambio de clave', field: 'resetPasswordExpires', mobile: 'resetPasswordExpires', },
+    { name: 'Fecha de creación', field: 'createdAt', mobile: 'createdAt', },
+    { name: 'Creado por', field: 'createdBy', mobile: 'createdBy', },
 ];
 
 export const barcodeGrid = [
