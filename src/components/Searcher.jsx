@@ -14,7 +14,7 @@ const Searcher = ({ id, label, url, state, setState, getter = 'nombre' }) => {
         const getData = async () => {
             await getDataFrom(url, signal, auth.token)
                 .then(response => {
-                    setData(response.data.sort((info, anotherInfo) => info[getter].localeCompare(anotherInfo[getter])));
+                    setData(response.data.filter(info => !!auth.user && auth.user.fk_perfil !== 3 ? info.nom_perfil !== 'dev' : true).sort((info, anotherInfo) => info[getter].localeCompare(anotherInfo[getter])));
                 })
                 .catch(() => {
                     setData([]);

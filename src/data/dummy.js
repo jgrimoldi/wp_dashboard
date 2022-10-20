@@ -367,7 +367,6 @@ export const employeesGrid = [
     { name: 'Último inicio', field: 'lastlogin', mobile: 'lastlogin', },
     { name: 'Cambio de clave', field: 'resetPasswordExpires', mobile: 'resetPasswordExpires', },
     { name: 'Fecha de creación', field: 'createdAt', mobile: 'createdAt', },
-    { name: 'Creado por', field: 'createdBy', mobile: 'createdBy', },
 ];
 
 export const barcodeGrid = [

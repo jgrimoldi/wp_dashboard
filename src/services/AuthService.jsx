@@ -1,6 +1,6 @@
 import API, { header, URL_AUTH } from './Api';
 
-export const updateUserById = (id, email, nombre, apellido, fk_perfil, fk_empresa, fk_theme, token) => {
+export const updateUserById = (id, email, nombre, apellido, fk_perfil, fk_empresa, fk_theme = 1, token) => {
     return (
         API.put(URL_AUTH + id, { email, nombre, apellido, fk_perfil, fk_empresa, fk_theme }, header(token))
             .then(response => {
