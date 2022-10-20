@@ -70,6 +70,10 @@ const FormatDesktop = ({ data, property }) => {
         return (<Dates date={data[property.field]} />);
     }
 
+    if (property.field === 'alicuota') {
+        return (<>{data[property.field]}%</>);
+    }
+
     if (property.field === 'validateAccount') {
         if (data[property.field] === null || data[property.field] === false)
             return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>Sin validar</span>);
@@ -115,6 +119,10 @@ const FormatMobile = ({ data, property }) => {
     //     return (<img className="rounded-full h-20" src={noImage} alt={`ID de producto: ${data.id}`} />);
     // }
 
+    if (property.field === 'alicuota') {
+        return (<>{data[property.field]}%</>);
+    }
+
     if (property.mobile === 'Fecha Creación' || property.mobile === 'lastlogin' || property.mobile === 'createdAt') {
         return (<Dates date={data[property.mobile]} />);
     }
@@ -124,6 +132,26 @@ const FormatMobile = ({ data, property }) => {
             return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>Sin validar</span>);
 
         return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50'>Validado</span>);
+    }
+
+    if (property.field === 'validateAccountExpires') {
+        const today = new Date();
+        if (data.validateAccount === null && new Date(data[property.field]) <= today)
+            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50'>Pendiente</span>);
+        if (data.validateAccount === null && new Date(data[property.field]) > today)
+            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>Rechazado</span>);
+
+        return (<span className=''></span>);
+    }
+
+    if (property.field === 'resetPasswordExpires') {
+        const today = new Date();
+        if (data.resetPasswordExpires === null)
+            return (<span className=''></span>);
+        if (new Date(data[property.field]) <= today)
+            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50'>Pendiente</span>);
+
+        return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>Expirado</span>);
     }
 
     return (<>{data[property.mobile]}</>);

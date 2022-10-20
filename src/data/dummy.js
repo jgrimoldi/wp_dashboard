@@ -251,7 +251,7 @@ export const incomeGrid = [
     { name: 'U.Med', field: 'units', mobile: 'units', },
     { name: 'P. Unit', field: 'price', mobile: 'price', },
     { name: 'Precio', field: 'subTotal', mobile: 'subTotal', },
-    { name: 'Alicuota', field: 'VAT', mobile: 'VAT', },
+    { name: 'Alicuota', field: 'alicuota', mobile: 'alicuota', },
     { name: 'Importe IVA', field: '', mobile: '', },
     { name: 'SubTotal', field: '', mobile: '', },
     { name: 'Agregar SN', field: '', mobile: '', },

@@ -57,7 +57,7 @@ const Income = () => {
       units: detailsProduct.abreviatura,
       price: detailsPrice.value,
       subTotal: subTotal(detailsQuantity.value, detailsPrice.value),
-      VAT: detailsProduct.alicuota,
+      alicuota: detailsProduct.alicuota,
     }
     setRecordsData((prevState) => [...prevState, objectsCart]);
   }
