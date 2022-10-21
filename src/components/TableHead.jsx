@@ -9,7 +9,7 @@ const TableHead = ({ headSource, checkbox, barcode }) => {
           <th key={index} className='p-3 text-sm font-semibold tracking-wide text-left'>{item.name}</th>
         ))
         }
-        {barcode && <th className='p-3 text-sm font-semibold tracking-wide text-left'>Códigos de barra</th>}
+        {barcode && <th className='p-3 text-sm font-semibold tracking-wide text-left'>Agregar</th>}
       </tr>
     </thead>
   )

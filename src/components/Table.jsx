@@ -62,6 +62,11 @@ const FormatDesktop = ({ data, property }) => {
         );
     }
 
+    if (property.field === 'unitPrice' || property.field === 'price' || property.field === 'VAT' || property.field === 'subTotal') {
+        return ('$' + data[property.mobile]);
+    }
+
+
     // if (property.field === 'imagen') {
     //     return (<img className='w-20 h-20' src={noImage} alt={`ID de producto: ${data.id}`} />);
     // }
@@ -107,6 +112,10 @@ const FormatDesktop = ({ data, property }) => {
 const FormatMobile = ({ data, property }) => {
     if (property.mobile === 'cantidad') {
         return (data[property.mobile] + ' Unidad/es');
+    }
+
+    if (property.mobile === 'unitPrice' || property.mobile === 'price' || property.mobile === 'VAT' || property.mobile === 'subTotal') {
+        return ('$' + data[property.mobile]);
     }
 
     if (property.mobile === 'url') {

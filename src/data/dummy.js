@@ -30,6 +30,8 @@ export const regEx = {
     specialCharRegExp: /(?=.*?[#?!@$%^&*+.-])/,
     minLengthRegExp: /.{8,}/,
     notEmpty: /(.|\s)*\S(.|\s)*/,
+    alphanumeric: /^[a-zA-Z0-9]*$/,
+    alphanumericHyphen: /^[a-zA-Z0-9-]+$/
 };
 
 export const sidebar = [
@@ -249,12 +251,11 @@ export const incomeGrid = [
     { name: 'Producto', field: 'product', mobile: 'product', },
     { name: 'Unidades', field: 'quantity', mobile: 'quantity', },
     { name: 'U.Med', field: 'units', mobile: 'units', },
-    { name: 'P. Unit', field: 'price', mobile: 'price', },
-    { name: 'Precio', field: 'subTotal', mobile: 'subTotal', },
+    { name: 'P. Unit', field: 'unitPrice', mobile: 'unitPrice', },
+    { name: 'Precio', field: 'price', mobile: 'price', },
     { name: 'Alicuota', field: 'alicuota', mobile: 'alicuota', },
-    { name: 'Importe IVA', field: '', mobile: '', },
-    { name: 'SubTotal', field: '', mobile: '', },
-    { name: 'Agregar SN', field: '', mobile: '', },
+    { name: 'Importe IVA', field: 'VAT', mobile: 'VAT', },
+    { name: 'SubTotal', field: 'subTotal', mobile: 'subTotal', },
 ];
 
 export const backupGrid = [
@@ -338,4 +339,12 @@ export const employeesGrid = [
 
 export const barcodeGrid = [
     { name: 'Códigos de barra', field: 'codigodebarra', mobile: 'codigodebarra' },
+];
+
+export const serialNumberGrid = [
+    { name: 'SN', field: 'sn', mobile: 'sn' },
+    { name: 'mac1', field: 'mac1', mobile: 'mac1' },
+    { name: 'mac2', field: 'mac2', mobile: 'mac2' },
+    { name: 'mac3', field: 'mac3', mobile: 'mac3' },
+    { name: 'en', field: 'en', mobile: 'en' },
 ];
