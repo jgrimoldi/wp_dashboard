@@ -31,7 +31,7 @@ export const regEx = {
     minLengthRegExp: /.{8,}/,
     notEmpty: /(.|\s)*\S(.|\s)*/,
     alphanumeric: /^[a-zA-Z0-9]*$/,
-    alphanumericHyphen: /^[a-zA-Z0-9-]+$/
+    alphanumericHyphen: /^[a-fA-F0-9-:.]+$/
 };
 
 export const sidebar = [

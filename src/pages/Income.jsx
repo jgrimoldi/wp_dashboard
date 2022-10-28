@@ -43,8 +43,6 @@ const Income = () => {
   const [detailsQuantity, setDetailsQuantity] = useState(initialState);
   const [detailsPrice, setDetailsPrice] = useState(initialState);
 
-  const [incomePurchase, setIncomePurchase] = useState({});
-  const [incomeDetails, setIncomeDetails] = useState([]);
   const [incomeSerialNumbers, setIncomeSerialNumbers] = useState([]);
 
   const [subTotalPrice, setSubTotalPrice] = useState(0);
@@ -151,7 +149,7 @@ const Income = () => {
       return {
         fk_proveedor: supplier.id,
         fechacompra: purchaseDate.value,
-        subTotal: subTotalPrice.toFixed(2),
+        subtotal: subTotalPrice.toFixed(2),
         totaliva: totalVATPrice.toFixed(2),
         total: totalPrice.toFixed(2),
       }
@@ -181,20 +179,14 @@ const Income = () => {
   }
 
   const generateIncome = async () => {
-    setIncomePurchase(generatePurchase);
-    setIncomeDetails(generateDetails);
     generateSerials();
 
-    await insertNewIncome(incomePurchase, incomeDetails, incomeSerialNumbers, auth.token)
-      .then(response => {
-        console.log(response.data);
+    await insertNewIncome(generatePurchase(), generateDetails(), incomeSerialNumbers, auth.token)
+      .then(() => {
         setBanner({ ...banner, value: createBanner, error: false });
         clearInputs();
       })
-      .catch(error => {
-        console.log(error);
-        setBanner({ ...banner, value: errorBanner, error: true })
-      })
+      .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
   }
 
 

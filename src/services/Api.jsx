@@ -20,6 +20,7 @@ export const URL_COMPANYMODULE = 'empresaModulo/';
 export const URL_ESTABLISHMENT = 'establecimiento/';
 export const URL_VAT = 'iva/';
 export const URL_MODULE = 'modulo/';
+export const URL_SN = 'numeroserie/';
 export const URL_PROFILE = 'perfil/';
 export const URL_PERMISSION = 'permiso/';
 export const URL_PRODUCT = 'producto/';
