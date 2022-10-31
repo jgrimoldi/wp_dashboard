@@ -8,14 +8,20 @@ import { updateUserById } from '../services/AuthService';
 import { useAuthContext } from '../contexts/ContextAuth';
 
 const ThemeSettings = () => {
-  const { auth } = useAuthContext();
+  const { auth, setAuth, handleErrors } = useAuthContext();
   const { currentColor, setMode } = useStateContext();
+
+  const updateObject = (new_fk_theme) => {
+    const userUpdated = { ...auth.user, fk_theme: new_fk_theme };
+    setAuth({ ...auth, user: userUpdated });
+    localStorage.setItem('_fDataUser', JSON.stringify({ ...auth, user: userUpdated }));
+  }
 
   const changeTheme = async (mode, fk_theme) => {
     setMode(mode);
     await updateUserById(auth.user.id, auth.user.email, auth.user.nombre, auth.user.apellido, auth.user.fk_perfil, auth.user.fk_empresa, Number(fk_theme), auth.token)
-      .then(() => '')
-      .catch(() => '')
+      .then(() => updateObject(Number(fk_theme)))
+      .catch(error => handleErrors(error))
   }
 
   return (

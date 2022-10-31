@@ -103,8 +103,8 @@ const Register = () => {
           {!!errorForm.value && <ErrorLabel color='red'>{errorForm.value}</ErrorLabel>}
         </div>
         <div className='w-full md:w-4/5 flex gap-1 justify-end m-auto pt-5'>
-          <Button customFunction={setEmpty} borderColor='black' color='black' backgroundColor='transparent' text='Vaciar entradas' height={true} />
-          <Button customFunction={handleRegister} borderColor='blue' color='white' backgroundColor='blue' text='Registrar usuario' height={true} />
+          <Button customFunction={setEmpty} borderColor={themeColors.highEmphasis} color={themeColors.highEmphasis} backgroundColor='transparent' text='Vaciar entradas' height={true} />
+          <Button customFunction={handleRegister} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} text='Registrar usuario' height={true} />
         </div>
       </div>
     </>

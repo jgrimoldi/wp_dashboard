@@ -16,7 +16,7 @@ export const ContextProvider = ({ children }) => {
         const colorsByTheme = { 'dark': themeColorsSetter[1].colors, 'light': themeColorsSetter[0].colors }
 
         setCurrentMode(mode);
-        setCurrentColor(colorsByTheme[mode].background);
+        setCurrentColor(colorsByTheme[mode]?.background);
         setThemeColors(colorsByTheme[mode]);
 
         localStorage.setItem('themeColors', JSON.stringify(colorsByTheme[mode]));
