@@ -69,8 +69,8 @@ const LineChart = () => {
     }, [auth, handleErrors]);
 
     const lineCustomSeries = [
-        { type: 'Line', dataSource: createMissingData(getLastMovs(sumDoubleDates(fixObject(incomeData)))), xName: 'fecha', yName: 'total', name: 'Ingresos', width: '2', marker: { visible: true, width: 10, height: 10 }, fill: themeColors.primary },
-        { type: 'Line', dataSource: createMissingData(getLastMovs(sumDoubleDates(fixObject(expenseData)))), xName: 'fecha', yName: 'total', name: 'Egresos', width: '2', marker: { visible: true, width: 10, height: 10 }, fill: themeColors.secondary },
+        { type: 'Line', dataSource: createMissingData(getLastMovs(sumDoubleDates(fixObject(incomeData)))), xName: 'fecha', yName: 'total', name: 'Ingresos', width: '2', marker: { visible: true, width: 10, height: 10 }, fill: themeColors?.primary },
+        { type: 'Line', dataSource: createMissingData(getLastMovs(sumDoubleDates(fixObject(expenseData)))), xName: 'fecha', yName: 'total', name: 'Egresos', width: '2', marker: { visible: true, width: 10, height: 10 }, fill: themeColors?.secondary },
     ];
 
     return (

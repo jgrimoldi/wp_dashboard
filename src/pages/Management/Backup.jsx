@@ -65,7 +65,7 @@ const Backup = () => {
         <Title category="Mis" title="Backups" />
         <Table header={backupGrid} data={backupData} filterTitle='Mis Backups' checkbox={false} sortFunction={sortByLastCreated} />
         <div className='w-full flex justify-end py-8'>
-          <Button customFunction={handleBackup} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} text='Nuevo backup' icon={<BsCloudUpload />} />
+          <Button customFunction={handleBackup} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Nuevo backup' icon={<BsCloudUpload />} />
         </div>
       </div>
     </>

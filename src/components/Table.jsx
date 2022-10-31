@@ -50,7 +50,7 @@ const AddBarCode = ({ data, setOpen, setProductID }) => {
     }
 
     return (
-        <button type='button' onClick={() => handleClick(data.id)} style={{ backgroundColor: themeColors.primary }} className='flex gap-2 items-center border p-1.5 rounded-xl text-white dark:text-black hover:shadow-lg'>
+        <button type='button' onClick={() => handleClick(data.id)} style={{ backgroundColor: themeColors?.primary }} className='flex gap-2 items-center border p-1.5 rounded-xl text-white dark:text-black hover:shadow-lg'>
             Agregar <span className='text-xl'><BsPlus></BsPlus></span>
         </button>
     )
@@ -62,7 +62,7 @@ const FormatDesktop = ({ data, property }) => {
 
     if (property.field === 'url') {
         return (
-            <a href={data[property.field]} style={{ color: themeColors.primary }}
+            <a href={data[property.field]} style={{ color: themeColors?.primary }}
                 className='flex items-center gap-1 font-bold hover:underline'
                 target='_blank' rel="noreferrer" download='filename' >
                 Descargar <span className='text-2xl'><BsCloudArrowDown /></span>
@@ -144,7 +144,7 @@ const FormatMobile = ({ data, property }) => {
     }
 
     if (property.mobile === 'url') {
-        return (<a href={data[property.mobile]} style={{ color: themeColors.primary }} className='flex items-center gap-1 font-bold hover:underline' target='_blank' rel="noreferrer" download='filename'>
+        return (<a href={data[property.mobile]} style={{ color: themeColors?.primary }} className='flex items-center gap-1 font-bold hover:underline' target='_blank' rel="noreferrer" download='filename'>
             Descargar <span className='text-2xl'><BsCloudArrowDown /></span>
         </a>);
     }
@@ -239,7 +239,7 @@ const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbo
             <div className='shadow flex justify-end p-2 bg-gray-50  dark:bg-secondary-dark-bg'>
                 <Input id='filter' label={`Buscar en ${filterTitle}`} size='small' css='w-full sm:w-1/2'
                     state={filteredValue} setState={setFilteredValue}
-                    tooltip={`Filtrar ${filterTitle}`} color={themeColors.primary} icon={<BsSearch />}
+                    tooltip={`Filtrar ${filterTitle}`} color={themeColors?.primary} icon={<BsSearch />}
                 />
             </div>
             <div className='overflow-auto rounded-lg shadow hidden md:block'>

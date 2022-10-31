@@ -28,18 +28,18 @@ const Password = ({ id, label, css, color, required, customFunction, state = { v
             <FormControl variant='outlined' error={state.error} fullWidth required={required}
                 sx={{
                     input: {
-                        color: themeColors.highEmphasis
+                        color: themeColors?.highEmphasis
                     },
                     '& input': { textTransform: 'capitalize' },
                     '& .MuiOutlinedInput-root': {
                         '&.Mui-focused fieldset': {
-                            borderColor: themeColors.secondary,
+                            borderColor: themeColors?.secondary,
                         }
                     },
                     '& label': {
-                        color: themeColors.mediumEmphasis,
+                        color: themeColors?.mediumEmphasis,
                         '&.Mui-focused': {
-                            color: themeColors.secondary,
+                            color: themeColors?.secondary,
                         }
                     }
                 }}

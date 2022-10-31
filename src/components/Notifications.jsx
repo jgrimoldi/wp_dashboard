@@ -38,7 +38,7 @@ const ValuedStock = ({ token, handleErrors }) => {
 const NewNotification = ({ text, topic }) => {
   const { themeColors } = useStateContext();
   const defaultColor = '#FFFFFF';
-  const backgroundByTopic = { INFO: themeColors.confirm, ALERT: '#FFC300', CRITICAL: themeColors.error }
+  const backgroundByTopic = { INFO: themeColors?.confirm, ALERT: '#FFC300', CRITICAL: themeColors?.error }
 
   return (
     <div className='relative bg-gray-50 dark:bg-gray-500 rounded-3xl p-5 mt-4 shadow-md'>
@@ -94,13 +94,13 @@ const Notifications = () => {
           <p className='text-xl font-semibold text-black dark:text-white'>Notificaciones</p>
           <div className='flex gap-4'>
             <TooltipComponent content='Filtrar informativos' position='TopCenter'>
-              <button type='button' onClick={handleFilter} value='INFO' style={{ backgroundColor: themeColors.confirm }} className='flex items-center justify-center w-10 h-10 text-xl text-white font-bold rounded-full p-2'>{filterBy.INFO.length}</button>
+              <button type='button' onClick={handleFilter} value='INFO' style={{ backgroundColor: themeColors?.confirm }} className='flex items-center justify-center w-10 h-10 text-xl text-white font-bold rounded-full p-2'>{filterBy.INFO.length}</button>
             </TooltipComponent>
             <TooltipComponent content='Filtrar advertencias' position='TopCenter'>
               <button type='button' onClick={handleFilter} value='ALERT' style={{ backgroundColor: '#FFC300' }} className='flex items-center justify-center w-10 h-10 text-xl text-white font-bold rounded-full p-2'>{filterBy.ALERT.length}</button>
             </TooltipComponent>
             <TooltipComponent content='Filtrar críticos' position='TopCenter'>
-              <button type='button' onClick={handleFilter} value='CRITICAL' style={{ backgroundColor: themeColors.error }} className='flex items-center justify-center w-10 h-10 text-xl text-white font-bold rounded-full p-2'>{filterBy.CRITICAL.length}</button>
+              <button type='button' onClick={handleFilter} value='CRITICAL' style={{ backgroundColor: themeColors?.error }} className='flex items-center justify-center w-10 h-10 text-xl text-white font-bold rounded-full p-2'>{filterBy.CRITICAL.length}</button>
             </TooltipComponent>
           </div>
         </div>

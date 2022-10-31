@@ -33,10 +33,10 @@ const Income = () => {
   const [month, day, year] = [date.getMonth() + 1, date.getDate(), date.getFullYear()];
   const formatedDate = `${year}-${month < 10 ? '0' + month : month}-${day}`
   const initialState = { value: '', error: null };
-  const createBanner = { text: '¡Compra registrada exitosamente!', background: themeColors.confirm }
-  const errorBanner = { text: '¡Ups! No se pudo realizar la acción.', background: themeColors.error }
-  const updateBanner = { text: '¡Registro editado exitosamente!', background: themeColors.confirm }
-  const deleteBanner = { text: 'Producto eliminado de la compra exitosamente!', background: themeColors.confirm }
+  const createBanner = { text: '¡Compra registrada exitosamente!', background: themeColors?.confirm }
+  const errorBanner = { text: '¡Ups! No se pudo realizar la acción.', background: themeColors?.error }
+  const updateBanner = { text: '¡Registro editado exitosamente!', background: themeColors?.confirm }
+  const deleteBanner = { text: 'Producto eliminado de la compra exitosamente!', background: themeColors?.confirm }
   const [recordsData, setRecordsData] = useState([]);
   const [supplier, setSupplier] = useState('');
   const [warehouse, setWarehouse] = useState('');
@@ -207,7 +207,7 @@ const Income = () => {
         <Modal
           title='¿Está seguro que quiere eliminar este registro?'
           text={`El siguiente elemento (id: ${idSelected}) esta a punto de ser eliminado, ¿Desea continuar?`}
-          buttonText='Eliminar registro' color={themeColors.error} icon={<BsXCircle />}
+          buttonText='Eliminar registro' color={themeColors?.error} icon={<BsXCircle />}
           setFunction={clearInputs} redirect='' customFunction={deleteDataById}
         />}
       {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner(initialState)} />}
@@ -220,8 +220,8 @@ const Income = () => {
             <MakeInputs configInputs={inputsDetails} />
             <div className='w-full flex justify-center pb-4'>
               {edit === true
-                ? <Button customFunction={updateCartRecord} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='full sm:w-1/3' text='Editar registro' />
-                : <Button customFunction={addToCart} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='full sm:w-1/3' text='Agregar registro' />}
+                ? <Button customFunction={updateCartRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Editar registro' />
+                : <Button customFunction={addToCart} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Agregar registro' />}
             </div>
           </>
         }
@@ -233,13 +233,13 @@ const Income = () => {
         {!!idSelected &&
           <div className='w-full flex sm:justify-end mt-5'>
             <div className='w-full sm:w-3/5 grid grid-cols-3 gap-1 '>
-              <Button customFunction={clearInputs} borderColor={themeColors.highEmphasis} color={themeColors.highEmphasis} backgroundColor='transparent' width='full' text='Cancelar' />
-              <Button customFunction={editInputs} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='full' text='Editar' icon={<BsPencil />} />
-              <Button customFunction={confirmDelete} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='full' text='Eliminar' icon={<BsTrash />} />
+              <Button customFunction={clearInputs} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' width='full' text='Cancelar' />
+              <Button customFunction={editInputs} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full' text='Editar' icon={<BsPencil />} />
+              <Button customFunction={confirmDelete} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full' text='Eliminar' icon={<BsTrash />} />
             </div>
           </div>
         }
-        <div style={{ color: themeColors.highEmphasis }} className='w-full flex flex-col gap-2 pt-8'>
+        <div style={{ color: themeColors?.highEmphasis }} className='w-full flex flex-col gap-2 pt-8'>
           <div className='flex justify-end items-center gap-2 text-2xl'>
             <span className='font-semibold tracking-wide uppercase'>SubTotal:</span>
             <span className='font-[monospace] text-3xl'>$ {subTotalPrice.toFixed(2)}</span>
@@ -253,7 +253,7 @@ const Income = () => {
             <span className='font-[monospace] text-3xl'>$ {totalPrice.toFixed(2)}</span>
           </div>
           <div className='w-full flex justify-center'>
-            <Button customFunction={generateIncome} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='1/4' text='Generar compra' />
+            <Button customFunction={generateIncome} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='1/4' text='Generar compra' />
           </div>
         </div>
       </div>

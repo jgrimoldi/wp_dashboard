@@ -106,7 +106,7 @@ const Sidebar = () => {
                   to={`/${link.url}`}
                   key={link.name} // link.url
                   onClick={handleCloseSidebar}
-                  style={({ isActive }) => ({ backgroundColor: link.url === '/' || !isActive ? '' : themeColors.primary, })}
+                  style={({ isActive }) => ({ backgroundColor: link.url === '/' || !isActive ? '' : themeColors?.primary, })}
                   className={({ isActive }) => (link.url === '/' ? disabledLink : isActive ? activeLink : normalLink)}
                 >
                   {link.icon}
@@ -119,7 +119,7 @@ const Sidebar = () => {
             to='/inicio'
             key='logout'
             onClick={handleLogout}
-            style={({ isActive }) => ({ backgroundColor: isActive ? themeColors.primary : '', })}
+            style={({ isActive }) => ({ backgroundColor: isActive ? themeColors?.primary : '', })}
             className={({ isActive }) => (isActive ? activeLink : normalLink)}
           >
             <BsBoxArrowLeft />

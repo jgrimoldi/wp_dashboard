@@ -97,14 +97,14 @@ const Register = () => {
           <Input id='email' label='Correo electrónico' state={email} setState={setEmail} regEx={regEx.email} helperText='No es un correo válido' required={true} />
           <Dropdown id='role' label='Perfil' state={profileValue} setState={setProfileValue} options={profiles} getter='nom_perfil' helperText='Elija un perfil' required={true} />
           <Dropdown id='company' label='Empresa' state={companiesValue} setState={setCompaniesValue} options={optionsCompanies} getter='nombre' helperText='Elija una empresa' required={true} />
-          <Password id='password' label='Contraseña' color={themeColors.secondary} state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
+          <Password id='password' label='Contraseña' color={themeColors?.secondary} state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
           {!!password.value && <GroupValidator password={password.value} />}
-          <Password id='passwordVerify' label='Confirmar contraseña' color={themeColors.secondary} state={passwordVerify} setState={setPasswordVerify} customFunction={handleValidatePassword} helperText='Las contraseñas no coinciden' />
+          <Password id='passwordVerify' label='Confirmar contraseña' color={themeColors?.secondary} state={passwordVerify} setState={setPasswordVerify} customFunction={handleValidatePassword} helperText='Las contraseñas no coinciden' />
           {!!errorForm.value && <ErrorLabel color='red'>{errorForm.value}</ErrorLabel>}
         </div>
         <div className='w-full md:w-4/5 flex gap-1 justify-end m-auto pt-5'>
-          <Button customFunction={setEmpty} borderColor={themeColors.highEmphasis} color={themeColors.highEmphasis} backgroundColor='transparent' text='Vaciar entradas' height={true} />
-          <Button customFunction={handleRegister} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} text='Registrar usuario' height={true} />
+          <Button customFunction={setEmpty} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' text='Vaciar entradas' height={true} />
+          <Button customFunction={handleRegister} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Registrar usuario' height={true} />
         </div>
       </div>
     </>

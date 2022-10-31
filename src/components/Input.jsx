@@ -34,17 +34,17 @@ const Input = ({ id, useRef = null, type, label, size, tooltip, customFunction, 
                 disabled={disabled}
                 sx={{
                     input: {
-                        color: themeColors.highEmphasis
+                        color: themeColors?.highEmphasis
                     },
                     '& .MuiOutlinedInput-root': {
                         '&.Mui-focused fieldset': {
-                            borderColor: themeColors.secondary,
+                            borderColor: themeColors?.secondary,
                         }
                     },
                     '& label': {
-                        color: themeColors.mediumEmphasis,
+                        color: themeColors?.mediumEmphasis,
                         '&.Mui-focused': {
-                            color: themeColors.secondary,
+                            color: themeColors?.secondary,
                         }
                     }
                 }}
