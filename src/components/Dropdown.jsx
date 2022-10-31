@@ -1,9 +1,10 @@
 import React from 'react';
 import { Autocomplete, FormControl, TextField } from '@mui/material';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups/index.js';
+import { useStateContext } from '../contexts/ContextProvider';
 
 const Dropdown = ({ id, label, size, state, setState, options, getter, helperText, tooltip, customFunction, color, icon, required, disabled }) => {
-
+    const { themeColors } = useStateContext();
     const handleChange = (newValue) => {
         if (!newValue)
             return
@@ -22,7 +23,6 @@ const Dropdown = ({ id, label, size, state, setState, options, getter, helperTex
         <div className='flex gap-2'>
             <FormControl fullWidth required={required}>
                 <Autocomplete
-                    sx={{ '& input': { textTransform: 'capitalize' } }}
                     id={id} name={id}
                     value={state.value}
                     onChange={(_, newValue) => handleChange(newValue)}
@@ -31,7 +31,24 @@ const Dropdown = ({ id, label, size, state, setState, options, getter, helperTex
                     getOptionLabel={(option) => option[getter] || ''}
                     isOptionEqualToValue={(option, value) => option[getter] === value[getter]}
                     disabled={disabled}
-                    renderInput={(params) => <TextField {...params} error={state.error} label={label} placeholder={label} size={size ? size : 'normal'} variant='outlined' helperText={state.error && helperText} className='bg-white rounded-md' />}
+                    sx={{
+                        input: {
+                            color: themeColors.highEmphasis
+                        },
+                        '& input': { textTransform: 'capitalize' },
+                        '& .MuiOutlinedInput-root': {
+                            '&.Mui-focused fieldset': {
+                                borderColor: themeColors.secondary,
+                            }
+                        },
+                        '& label': {
+                            color: themeColors.mediumEmphasis,
+                            '&.Mui-focused': {
+                                color: themeColors.secondary,
+                            }
+                        }
+                    }}
+                    renderInput={(params) => <TextField {...params} error={state.error} label={label} placeholder={label} size={size ? size : 'normal'} variant='outlined' helperText={state.error && helperText} className='bg-white dark:bg-secondary-dark-bg rounded-md' />}
                 />
             </FormControl>
             {tooltip

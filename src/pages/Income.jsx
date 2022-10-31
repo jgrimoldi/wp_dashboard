@@ -75,7 +75,6 @@ const Income = () => {
       if (input.field)
         input.setState(initialState);
     });
-    setDetailsProduct('');
     setOpenModal(initialState);
     setIdSelected('');
     setEdit(false);
@@ -103,6 +102,8 @@ const Income = () => {
       setTotalPrice((prevState) => prevState += Number(objectsCart.subTotal));
       setRecordsData((prevState) => [...prevState, objectsCart]);
       clearInputs();
+      if (edit)
+        deleteDataById();
     } else {
       setBanner({ ...banner, value: errorBanner, error: true });
     }
@@ -114,8 +115,9 @@ const Income = () => {
     setTotalVATPrice((prevState) => prevState -= Number(objectDeleted.VAT));
     setTotalPrice((prevState) => prevState -= Number(objectDeleted.subTotal));
     setRecordsData(current => current.filter(record => record.id !== Number(openModal.value)));
-    setBanner({ ...banner, value: deleteBanner, error: false });
     setOpenModal(initialState);
+    if (!edit)
+      setBanner({ ...banner, value: deleteBanner, error: false });
   }
 
   const confirmDelete = () => {
@@ -144,7 +146,6 @@ const Income = () => {
   }
 
   const updateCartRecord = () => {
-    deleteDataById();
     addToCart();
     setBanner({ ...banner, value: updateBanner, error: false });
     clearInputs();
@@ -191,8 +192,6 @@ const Income = () => {
       .then(() => {
         setBanner({ ...banner, value: createBanner, error: false });
         clearInputs();
-        setSupplier('');
-        setWarehouse('');
         setRecordsData([]);
         setSubTotalPrice(0);
         setTotalVATPrice(0);

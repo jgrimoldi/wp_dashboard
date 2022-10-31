@@ -1,9 +1,10 @@
 import React from 'react'
 import { TextField } from '@mui/material';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
+import { useStateContext } from '../contexts/ContextProvider';
 
 const Input = ({ id, useRef = null, type, label, size, tooltip, customFunction, color, icon, css, required, disabled = false, state = { value: '', error: null }, setState, regEx = '', helperText }) => {
-
+    const { themeColors } = useStateContext();
     const handleChange = (event) => setState({ ...state, value: event.target.value });
 
     const handleValidation = () => {
@@ -27,10 +28,27 @@ const Input = ({ id, useRef = null, type, label, size, tooltip, customFunction, 
                 variant='outlined'
                 required={required}
                 error={state.error}
-                className='bg-white rounded-md'
+                className='bg-white rounded-md dark:bg-secondary-dark-bg'
                 helperText={state.error && helperText}
                 fullWidth
                 disabled={disabled}
+                sx={{
+                    input: {
+                        color: themeColors.highEmphasis
+                    },
+                    '& .MuiOutlinedInput-root': {
+                        '&.Mui-focused fieldset': {
+                            borderColor: themeColors.secondary,
+                        }
+                    },
+                    '& label': {
+                        color: themeColors.mediumEmphasis,
+                        '&.Mui-focused': {
+                            color: themeColors.secondary,
+                        }
+                    }
+                }}
+
             />
             {tooltip ?
                 <TooltipComponent content={tooltip} position="TopCenter">

@@ -1,3 +1,4 @@
+import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import React, { useState, useRef } from 'react';
 import { useEffect } from 'react';
 import { BsPencil, BsTrash, BsXCircle } from 'react-icons/bs';
@@ -31,9 +32,9 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
     const disabled = recordsData.length === Number(product.quantity);
     const inputConfig = [
         { field: 'sn', id: 'serial', useRef: refFocus, label: 'Número de serie (Alfanumérico)', disabled: disabled && !edit, state: newSerialNumber, setState: setNewSerialNumber, expression: 'alphanumeric', css: 'w-1/3' },
-        { field: 'mac1', id: 'mac1', label: 'mac (11:22:33:44:55:66)', disabled: disabled && !edit, state: newMac1, setState: setNewMac1, expression: 'alphanumericHyphen', css: 'w-1/3' },
-        { field: 'mac2', id: 'mac2', label: 'mac (11:22:33:44:55:66)', disabled: disabled && !edit, state: newMac2, setState: setNewMac2, expression: 'alphanumericHyphen', css: 'w-1/3' },
-        { field: 'mac3', id: 'mac3', label: 'mac (11:22:33:44:55:66)', disabled: disabled && !edit, state: newMac3, setState: setNewMac3, expression: 'alphanumericHyphen', css: 'w-1/3' },
+        { field: 'mac1', id: 'mac1', label: 'mac1', disabled: disabled && !edit, state: newMac1, setState: setNewMac1, expression: 'alphanumericHyphen', css: 'w-1/3', tooltip: 'Formatos: (11:22:33:44:55:66 o 1122.3344.5566 o 1122-3344-5566)' },
+        { field: 'mac2', id: 'mac2', label: 'mac2', disabled: disabled && !edit, state: newMac2, setState: setNewMac2, expression: 'alphanumericHyphen', css: 'w-1/3', tooltip: 'Formatos: (11:22:33:44:55:66 o 1122.3344.5566 o 1122-3344-5566)' },
+        { field: 'mac3', id: 'mac3', label: 'mac3', disabled: disabled && !edit, state: newMac3, setState: setNewMac3, expression: 'alphanumericHyphen', css: 'w-1/3', tooltip: 'Formatos: (11:22:33:44:55:66 o 1122.3344.5566 o 1122-3344-5566)' },
         { field: 'en', id: 'en', label: 'en (Alfanumérico)', disabled: disabled && !edit, state: newEn, setState: setNewEn, expression: 'alphanumeric', css: 'w-1/4' },
     ]
 
@@ -66,7 +67,6 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
         setIdSelected('');
         setEdit(false);
     }
-
     const addSerialNumber = async () => {
         const objectSN = {
             id: (Math.ceil(Math.random() * 10000)),
@@ -78,23 +78,31 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
             mac3: newMac3.value,
             en: newEn.value,
         };
-        await getDataByIdFrom(URL_SN, Number(newSerialNumber.value), auth.token)
-            .then(response => {
-                if (response.data === null && !!newSerialNumber.value && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
+        try {
+            let response = await getDataByIdFrom(URL_SN, Number(newSerialNumber.value), auth.token);
+            if (response.data === null) {
+                if (!!newSerialNumber.value && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
                     setRecordsData((prevState) => [...prevState, objectSN]);
                     clearInputs();
                     refFocus.current.focus();
+                    if (edit) {
+                        deleteDataById()
+                    }
                 } else {
                     setBanner({ ...banner, value: errorBanner, error: true });
                 }
-            }).catch(() => {
+            } else {
                 setBanner({ ...banner, value: errorBanner, error: true });
-            })
+            }
+        } catch (error) {
+            setBanner({ ...banner, value: errorBanner, error: true })
+        }
     }
 
     const deleteDataById = () => {
         setRecordsData(current => current.filter(record => record.id !== Number(openModal.value)));
-        setBanner({ ...banner, value: deleteBanner, error: false });
+        if (!edit)
+            setBanner({ ...banner, value: deleteBanner, error: false });
         clearInputs();
         setOpenModal(initialState);
     }
@@ -123,8 +131,7 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
     }
 
     const updateSerialNumbers = () => {
-        deleteDataById();
-        addSerialNumber();
+        addSerialNumber()
         setBanner({ ...banner, value: updateBanner, error: false });
         clearInputs();
     }
@@ -154,13 +161,15 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                         <div className='self-start text-lg'>Números de serie para {product.product}</div>
                         <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
                             {inputConfig.map((input, index) => {
-                                const { id, useRef, type, label, disabled, state, setState, expression, helperText, css } = input;
+                                const { id, useRef, type, label, disabled, state, setState, expression, helperText, css, tooltip } = input;
                                 return (
-                                    <span className={css} key={index}>
-                                        <Input id={id} useRef={useRef} type={type} label={label} size='small'
-                                            required={true} disabled={disabled}
-                                            state={state} setState={setState} regEx={regEx[expression]} helperText={helperText} />
-                                    </span>
+                                    <TooltipComponent content={tooltip} position="TopCenter">
+                                        <span className={css} key={index}>
+                                            <Input id={id} useRef={useRef} type={type} label={label} size='small'
+                                                required={true} disabled={disabled}
+                                                state={state} setState={setState} regEx={regEx[expression]} helperText={helperText} />
+                                        </span>
+                                    </TooltipComponent>
                                 )
                             })}
                         </div>

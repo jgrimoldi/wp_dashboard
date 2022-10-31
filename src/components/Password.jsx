@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, FormHelperText } from '@mui/material';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
+import { useStateContext } from '../contexts/ContextProvider';
 
 const Password = ({ id, label, css, color, required, customFunction, state = { value: '', error: null }, setState, regEx = '', helperText }) => {
-
+    const { themeColors } = useStateContext();
     const [showPassword, setShowPassword] = useState(null);
 
     const handleChange = (event) => setState({ ...state, value: event.target.value });
@@ -24,7 +25,25 @@ const Password = ({ id, label, css, color, required, customFunction, state = { v
 
     return (
         <div className={`flex gap-2 ${css}`}>
-            <FormControl variant='outlined' error={state.error} fullWidth required={required}>
+            <FormControl variant='outlined' error={state.error} fullWidth required={required}
+                sx={{
+                    input: {
+                        color: themeColors.highEmphasis
+                    },
+                    '& input': { textTransform: 'capitalize' },
+                    '& .MuiOutlinedInput-root': {
+                        '&.Mui-focused fieldset': {
+                            borderColor: themeColors.secondary,
+                        }
+                    },
+                    '& label': {
+                        color: themeColors.mediumEmphasis,
+                        '&.Mui-focused': {
+                            color: themeColors.secondary,
+                        }
+                    }
+                }}
+            >
                 <InputLabel htmlFor={id}>{label}</InputLabel>
                 <OutlinedInput
                     id={id} name={id}
@@ -32,7 +51,7 @@ const Password = ({ id, label, css, color, required, customFunction, state = { v
                     label={label} placeholder={label}
                     onChange={handleChange} onBlur={handleValidation} onKeyUp={handleValidation}
                     value={state.value}
-                    className='bg-white'
+                    className='bg-white dark:bg-secondary-dark-bg'
                     endAdornment={
                         <InputAdornment position='end'>
                             <IconButton
