@@ -4,6 +4,7 @@ import { BsCloudArrowDown, BsPlus, BsSearch } from 'react-icons/bs';
 
 import { Input, TableHead, Pagination } from '.';
 import { useAuthContext } from '../contexts/ContextAuth';
+import { useStateContext } from '../contexts/ContextProvider';
 import useTable from '../hooks/useTable';
 import { reSendValidation } from '../services/AuthService';
 
@@ -31,7 +32,7 @@ export const Radio = ({ data, state, setState }) => {
 
     return (
         <input
-            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+            className='w-4 h-4 text-blue-600 dark:text-purple-300 dark:accent-purple-300 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-purple-300 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
             defaultValue={data.id}
             onChange={handleChange}
             type='checkbox' name='table'
@@ -41,6 +42,7 @@ export const Radio = ({ data, state, setState }) => {
 };
 
 const AddBarCode = ({ data, setOpen, setProductID }) => {
+    const { themeColors } = useStateContext();
 
     const handleClick = (id) => {
         setProductID(Number(id));
@@ -48,18 +50,19 @@ const AddBarCode = ({ data, setOpen, setProductID }) => {
     }
 
     return (
-        <button type='button' onClick={() => handleClick(data.id)} style={{ backgroundColor: 'blue' }} className='flex gap-2 items-center border p-1.5 rounded-xl text-white hover:shadow-lg'>
+        <button type='button' onClick={() => handleClick(data.id)} style={{ backgroundColor: themeColors.primary }} className='flex gap-2 items-center border p-1.5 rounded-xl text-white dark:text-black hover:shadow-lg'>
             Agregar <span className='text-xl'><BsPlus></BsPlus></span>
         </button>
     )
 }
 
 const FormatDesktop = ({ data, property }) => {
+    const { themeColors } = useStateContext();
     const { auth } = useAuthContext();
 
     if (property.field === 'url') {
         return (
-            <a href={data[property.field]} style={{ color: 'blue' }}
+            <a href={data[property.field]} style={{ color: themeColors.primary }}
                 className='flex items-center gap-1 font-bold hover:underline'
                 target='_blank' rel="noreferrer" download='filename' >
                 Descargar <span className='text-2xl'><BsCloudArrowDown /></span>
@@ -92,16 +95,16 @@ const FormatDesktop = ({ data, property }) => {
         if ((data[property.field] === null || data[property.field] === false) && expires < today) {
             return (
                 <TooltipComponent content={`Reenviar validación a ${data.email}`} position="BottomCenter">
-                    <button onClick={() => reSendValidation(data.email, auth.token)} className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>
+                    <button onClick={() => reSendValidation(data.email, auth.token)} className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 dark:bg-red-800 dark:text-red-200 rounded-lg bg-opacity-50'>
                         Sin validar
                     </button>
                 </TooltipComponent>
             );
         }
         if (expires >= today)
-            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>Sin validar</span>);
+            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 dark:bg-red-800 dark:text-red-200 rounded-lg bg-opacity-50'>Sin validar</span>);
 
-        return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50'>Validado</span>);
+        return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 dark:bg-green-800 dark:text-green-200 rounded-lg bg-opacity-50'>Validado</span>);
     }
 
     if (property.field === 'validateAccountExpires') {
@@ -112,9 +115,9 @@ const FormatDesktop = ({ data, property }) => {
         if (Number(data.validateAccount) === 1)
             return (<span className=''></span>);
         if (expires >= today)
-            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50'>Pendiente</span>);
+            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 dark:bg-yellow-800 dark:text-yellow-200 rounded-lg bg-opacity-50'>Pendiente</span>);
         if (expires < today)
-            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>Rechazado</span>);
+            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 dark:bg-red-800 dark:text-red-200 rounded-lg bg-opacity-50'>Rechazado</span>);
     }
 
     if (property.field === 'resetPasswordExpires') {
@@ -122,15 +125,16 @@ const FormatDesktop = ({ data, property }) => {
         if (data.resetPasswordExpires === null)
             return (<span className=''></span>);
         if (new Date(data[property.field]) <= today)
-            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50'>Pendiente</span>);
+            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 dark:bg-yellow-800 dark:text-yellow-200 rounded-lg bg-opacity-50'>Pendiente</span>);
 
-        return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>Expirado</span>);
+        return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 dark:bg-red-800 dark:text-red-200 rounded-lg bg-opacity-50'>Expirado</span>);
     }
 
     return (<>{data[property.field]}</>);
 }
 
 const FormatMobile = ({ data, property }) => {
+    const { themeColors } = useStateContext();
     if (property.mobile === 'cantidad') {
         return (data[property.mobile] + ' Unidad/es');
     }
@@ -140,7 +144,7 @@ const FormatMobile = ({ data, property }) => {
     }
 
     if (property.mobile === 'url') {
-        return (<a href={data[property.mobile]} style={{ color: 'blue' }} className='flex items-center gap-1 font-bold hover:underline' target='_blank' rel="noreferrer" download='filename'>
+        return (<a href={data[property.mobile]} style={{ color: themeColors.primary }} className='flex items-center gap-1 font-bold hover:underline' target='_blank' rel="noreferrer" download='filename'>
             Descargar <span className='text-2xl'><BsCloudArrowDown /></span>
         </a>);
     }
@@ -188,6 +192,7 @@ const FormatMobile = ({ data, property }) => {
 }
 
 const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbox, setStateCheckbox, barcode, setOpenBarcode, setProductID }) => {
+    const { themeColors } = useStateContext();
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const { slice, range } = useTable(data, page, rowsPerPage, sortFunction);
@@ -231,10 +236,10 @@ const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbo
 
     return (
         <>
-            <div className='shadow flex justify-end p-2 bg-gray-50 border-b-2 border-gray-200'>
+            <div className='shadow flex justify-end p-2 bg-gray-50  dark:bg-secondary-dark-bg'>
                 <Input id='filter' label={`Buscar en ${filterTitle}`} size='small' css='w-full sm:w-1/2'
                     state={filteredValue} setState={setFilteredValue}
-                    tooltip={`Filtrar ${filterTitle}`} color='blue' icon={<BsSearch />}
+                    tooltip={`Filtrar ${filterTitle}`} color={themeColors.primary} icon={<BsSearch />}
                 />
             </div>
             <div className='overflow-auto rounded-lg shadow hidden md:block'>
@@ -243,17 +248,17 @@ const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbo
                     <tbody>
                         {data.length !== 0 ?
                             slice.filter(ifIncludes).map((data, index) =>
-                                <tr key={index} className='bg-white even:bg-gray-50'>
-                                    {checkbox && <td className='w-fit p-3 text-sm text-gray-700 whitespace-nowrap'><Radio data={data} state={stateCheckbox} setState={setStateCheckbox} /></td>}
+                                <tr key={index} className='bg-white dark:bg-secondary-dark-bg'>
+                                    {checkbox && <td className='w-fit p-3 text-sm text-gray-700 dark:text-gray-100 whitespace-nowrap'><Radio data={data} state={stateCheckbox} setState={setStateCheckbox} /></td>}
                                     {header.map((property, key) =>
-                                        <td key={key} className='w-fit p-3 text-sm text-gray-700 whitespace-nowrap'>
+                                        <td key={key} className='w-fit p-3 text-sm text-gray-700 dark:text-gray-100 whitespace-nowrap'>
                                             <FormatDesktop data={data} property={property} />
                                         </td>
                                     )}
-                                    {barcode && <td className='w-fit p-3 text-sm text-center text-gray-700 whitespace-nowrap'><AddBarCode data={data} setOpen={setOpenBarcode} setProductID={setProductID} /></td>}
+                                    {barcode && <td className='w-fit p-3 text-sm text-center text-gray-700 dark:text-gray-100 whitespace-nowrap'><AddBarCode data={data} setOpen={setOpenBarcode} setProductID={setProductID} /></td>}
                                 </tr>
                             )
-                            : <tr className='text-center bg-white even:bg-gray-50'><td className='p-3 text-sm text-gray-700 whitespace-nowrap'>No hay entradas para mostrar</td></tr>
+                            : <tr className='text-center bg-white dark:bg-secondary-dark-bg'><td className='p-3 text-sm text-gray-700 dark:text-gray-100 whitespace-nowrap'>No hay entradas para mostrar</td></tr>
                         }
                     </tbody>
                 </table>
@@ -262,15 +267,15 @@ const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbo
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden mt-4'>
                 {data.length !== 0 ?
                     slice.map((data, index) => (
-                        <div key={index} className='bg-white space-y-3 p-4 rounded-lg shadow'>
-                            <div className='flex items-center space-x-2 text-sm'>
+                        <div key={index} className='bg-white dark:bg-secondary-dark-bg space-y-3 p-4 rounded-lg shadow'>
+                            <div className='flex items-center space-x-2 text-sm dark:text-gray-100'>
                                 {checkbox && <Radio data={data} state={stateCheckbox} setState={setStateCheckbox} />}
                                 {mobileData[0].map((property, index) => (
                                     <div key={index}><FormatMobile data={data} property={property} /></div>
                                 ))}
                             </div>
                             {mobileData.slice(1).map((elements, index) => (
-                                <div key={index} className='flex flex-wrap gap-3'>
+                                <div key={index} className='flex flex-wrap gap-3 dark:text-gray-100'>
                                     {elements.map((property, index) => (
                                         <div key={index} className='whitespace-nowrap'><FormatMobile data={data} property={property} /></div>
                                     ))}
@@ -280,7 +285,7 @@ const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbo
                         </div>
                     )
                     )
-                    : <p className='p-3 text-sm text-gray-700 whitespace-nowrap'>No hay entradas para mostrar</p>
+                    : <p className='p-3 text-sm text-gray-700 dark:text-gray-100 whitespace-nowrap'>No hay entradas para mostrar</p>
                 }
             </div>
 

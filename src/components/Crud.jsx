@@ -5,16 +5,17 @@ import { Banner, Title, Table, Input, Button, Modal, Searcher } from '../compone
 import { regEx } from '../data/dummy';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { deleteDataByIdFrom, getDataFrom, getDataByIdFrom } from '../services/GdrService';
+import { useStateContext } from '../contexts/ContextProvider';
 
 const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, setOpen, setProductID }) => {
-
+    const { themeColors } = useStateContext();
     const { auth, handleErrors } = useAuthContext();
     const ref = config.find(input => input.useRef && input.useRef !== undefined);
     const initialState = { value: '', error: null };
-    const createBanner = { text: '¡Nuevo registro agregado!', background: 'green' }
-    const updateBanner = { text: '¡Registro editado exitosamente!', background: 'green' }
-    const deleteBanner = { text: '¡Registro eliminado exitosamente!', background: 'green' }
-    const errorBanner = { text: '¡Ups! No se pudo realizar la acción.', background: 'red' }
+    const createBanner = { text: '¡Nuevo registro agregado!', background: themeColors.confirm }
+    const updateBanner = { text: '¡Registro editado exitosamente!', background: themeColors.confirm }
+    const deleteBanner = { text: '¡Registro eliminado exitosamente!', background: themeColors.confirm }
+    const errorBanner = { text: '¡Ups! No se pudo realizar la acción.', background: themeColors.error }
     const [banner, setBanner] = useState(initialState);
     const [openModal, setOpenModal] = useState(initialState);
     const [recordsData, setRecordsData] = useState([]);
@@ -118,11 +119,11 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
                 <Modal
                     title='¿Está seguro que quiere eliminar este registro?'
                     text={`El siguiente elemento (id: ${idSelected}) esta a punto de ser eliminado, ¿Desea continuar?`}
-                    buttonText='Eliminar registro' color='red' icon={<BsXCircle />}
+                    buttonText='Eliminar registro' color={themeColors.error} icon={<BsXCircle />}
                     setFunction={clearInputs} redirect='' customFunction={deleteDataById}
                 />}
             {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner(initialState)} />}
-            <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
+            <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>
                 <Title category={sufix} title={title} />
                 <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
                     {config.map((input, index) => {
@@ -138,8 +139,8 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
                         )
                     })}
                     {edit === true
-                        ? <Button customFunction={updateRecord} borderColor='blue' color='white' backgroundColor='blue' width='full sm:w-1/3' text='Editar registro' />
-                        : <Button customFunction={addRecord} borderColor='blue' color='white' backgroundColor='blue' width='full sm:w-1/3' text='Agregar registro' />}
+                        ? <Button customFunction={updateRecord} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='full sm:w-1/3' text='Editar registro' />
+                        : <Button customFunction={addRecord} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='full sm:w-1/3' text='Agregar registro' />}
                 </div>
                 <Table
                     header={grid} data={recordsData} filterTitle={`Mis ${title}`}
@@ -149,9 +150,9 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
                 {!!idSelected &&
                     <div className='w-full flex sm:justify-end mt-5'>
                         <div className='w-full sm:w-3/5 grid grid-cols-3 gap-1 '>
-                            <Button customFunction={clearInputs} borderColor='black' color='black' backgroundColor='transparent' width='full' text='Cancelar' />
-                            <Button customFunction={editInputs} borderColor='blue' color='white' backgroundColor='blue' width='full' text='Editar' icon={<BsPencil />} />
-                            <Button customFunction={confirmDelete} borderColor='blue' color='white' backgroundColor='blue' width='full' text='Eliminar' icon={<BsTrash />} />
+                            <Button customFunction={clearInputs} borderColor={themeColors.highEmphasis} color={themeColors.highEmphasis} backgroundColor='transparent' width='full' text='Cancelar' />
+                            <Button customFunction={editInputs} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='full' text='Editar' icon={<BsPencil />} />
+                            <Button customFunction={confirmDelete} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='full' text='Eliminar' icon={<BsTrash />} />
                         </div>
                     </div>
                 }

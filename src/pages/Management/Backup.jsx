@@ -7,8 +7,10 @@ import { URL_BACKUP } from '../../services/Api';
 import { useAuthContext } from '../../contexts/ContextAuth';
 import { createBackup } from '../../services/BackupService';
 import { getDataFrom } from '../../services/GdrService';
+import { useStateContext } from '../../contexts/ContextProvider';
 
 const Backup = () => {
+  const { themeColors } = useStateContext();
   const { auth, setAuth } = useAuthContext();
   const [banner, setBanner] = useState({ valid: null, error: null });
   const [backupData, setBackupData] = useState([]);
@@ -59,11 +61,11 @@ const Backup = () => {
       <SEO title='Backup' />
       {banner.valid === true && <Banner text='¡Backup exitoso!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} />}
       {banner.error === true && <Banner text='¡Ups! El backup no pudo realizarse' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
-      <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
+      <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>
         <Title category="Mis" title="Backups" />
         <Table header={backupGrid} data={backupData} filterTitle='Mis Backups' checkbox={false} sortFunction={sortByLastCreated} />
         <div className='w-full flex justify-end py-8'>
-          <Button customFunction={handleBackup} borderColor='blue' color='white' backgroundColor='blue' text='Nuevo backup' icon={<BsCloudUpload />} />
+          <Button customFunction={handleBackup} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} text='Nuevo backup' icon={<BsCloudUpload />} />
         </div>
       </div>
     </>

@@ -36,7 +36,7 @@ const Dashboard = () => {
   return (
     <>
       <SEO title='Dashboard' />
-      <div className='m-2 md:m-10 mt-24 p-2 md:p-10'>
+      <div className='m-2 md:m-10 mt-24 p-2 md:p-10 '>
         <Title category='Hola,' title={fullName} />
         <div className='overflow-hidden relative p-2'>
           <div className='float-left w-full sm:w-2/3 grid grid-cols-1 gap-8 items-center rounded-3xl p-4 '>
@@ -46,7 +46,7 @@ const Dashboard = () => {
               <Tiles title='Productos' text='producto' url={URL_PRODUCT} token={auth.token} to='/productos' />
             </div>
             <LineChart />
-            <div className='bg-white p-5 rounded-lg shadow-xl'>
+            <div className='bg-white dark:bg-secondary-dark-bg p-5 rounded-lg shadow-xl'>
               <Table header={usersGrid} data={users.filter(user => user.id !== auth.user.id && user.fk_perfil !== 3)} filterTitle='Empleados' sortFunction={sortByLastLogin} />
             </div>
           </div>

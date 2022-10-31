@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
+import { useStateContext } from '../contexts/ContextProvider';
 
 const Pagination = ({ range, setPage, page, slice, data, pageRows, setRows }) => {
+    const { themeColors } = useStateContext();
 
     useEffect(() => {
         if (slice.length < 1 && page !== 1) {
@@ -36,7 +38,7 @@ const Pagination = ({ range, setPage, page, slice, data, pageRows, setRows }) =>
                         <button
                             key={index}
                             aria-current={page === element ? 'page' : ''}
-                            style={{ backgroundColor: page === element ? 'blue' : '' }}
+                            style={{ backgroundColor: page === element ? themeColors.primary : '' }}
                             className={page === element ? activeLink : normalLink}
                             onClick={() => { setPage(element) }}
                         >

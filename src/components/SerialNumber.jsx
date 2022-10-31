@@ -4,11 +4,13 @@ import { BsPencil, BsTrash, BsXCircle } from 'react-icons/bs';
 
 import { Button, Input, Modal, Banner, Table } from '.';
 import { useAuthContext } from '../contexts/ContextAuth';
+import { useStateContext } from '../contexts/ContextProvider';
 import { regEx, serialNumberGrid } from '../data/dummy';
 import { URL_SN } from '../services/Api';
 import { getDataByIdFrom } from '../services/GdrService';
 
 const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
+    const { themeColors } = useStateContext();
     const refFocus = useRef(null);
     const { auth } = useAuthContext();
     const initialState = { value: '', error: null };
@@ -163,9 +165,9 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                             })}
                         </div>
                         <div className='w-1/2 flex gap-1'>
-                            <Button customFunction={handleClose} borderColor='black' color='black' backgroundColor='transparent' text='Cerrar' width='1/2' />
-                            {edit === true ? <Button customFunction={updateSerialNumbers} borderColor='blue' color='white' backgroundColor='blue' width='1/2' text='Editar numero de serie' />
-                                : <Button customFunction={addSerialNumber} borderColor='blue' color='white' backgroundColor='blue' text='Guardar' width='1/2' />}
+                            <Button customFunction={handleClose} borderColor={themeColors.highEmphasis} color={themeColors.highEmphasis} backgroundColor='transparent' text='Cerrar' width='1/2' />
+                            {edit === true ? <Button customFunction={updateSerialNumbers} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='1/2' text='Editar numero de serie' />
+                                : <Button customFunction={addSerialNumber} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} text='Guardar' width='1/2' />}
                         </div>
                     </form>
                     <div className='w-full'>
@@ -174,12 +176,12 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                     </div>
                     {!!idSelected &&
                         <div className='flex gap-2 justify-end pt-5'>
-                            <Button customFunction={clearInputs} borderColor='black' color='black' backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
-                            <Button customFunction={editInputs} borderColor='blue' color='white' backgroundColor='blue' width='12/6' height='normal' text='Editar registro' icon={<BsPencil />} />
-                            <Button customFunction={confirmDelete} borderColor='blue' color='white' backgroundColor='blue' width='12/6' height='normal' text='Eliminar registro' icon={<BsTrash />} />
+                            <Button customFunction={clearInputs} borderColor={themeColors.highEmphasis} color={themeColors.highEmphasis} backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
+                            <Button customFunction={editInputs} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='12/6' height='normal' text='Editar registro' icon={<BsPencil />} />
+                            <Button customFunction={confirmDelete} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='12/6' height='normal' text='Eliminar registro' icon={<BsTrash />} />
                         </div>}
                     <div className='w-1/3 m-auto'>
-                        {disabled && !edit && <Button customFunction={handleSubmit} borderColor='blue' color='white' backgroundColor='blue' width='12/6' height='normal' text='Agregar números de serie' />}
+                        {disabled && !edit && <Button customFunction={handleSubmit} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='12/6' height='normal' text='Agregar números de serie' />}
                     </div>
                 </div>
             </div>

@@ -2,7 +2,6 @@ import React from 'react';
 import { Autocomplete, FormControl, TextField } from '@mui/material';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups/index.js';
 
-
 const Dropdown = ({ id, label, size, state, setState, options, getter, helperText, tooltip, customFunction, color, icon, required, disabled }) => {
 
     const handleChange = (newValue) => {
@@ -32,13 +31,13 @@ const Dropdown = ({ id, label, size, state, setState, options, getter, helperTex
                     getOptionLabel={(option) => option[getter] || ''}
                     isOptionEqualToValue={(option, value) => option[getter] === value[getter]}
                     disabled={disabled}
-                    renderInput={(params) => <TextField {...params} error={state.error} label={label} placeholder={label} size={size ? size : 'normal'} variant='outlined' helperText={state.error && helperText} />}
+                    renderInput={(params) => <TextField {...params} error={state.error} label={label} placeholder={label} size={size ? size : 'normal'} variant='outlined' helperText={state.error && helperText} className='bg-white rounded-md' />}
                 />
             </FormControl>
             {tooltip
                 ?
                 <TooltipComponent content={tooltip} position="TopCenter">
-                    <button type='button' onClick={customFunction} style={{ backgroundColor: color }} className='relative p-2 text-white text-2xl rounded-md'>
+                    <button type='button' onClick={customFunction} style={{ backgroundColor: color }} className='relative p-2 text-white dark:text-black text-2xl rounded-md'>
                         {icon}
                     </button>
                 </TooltipComponent>

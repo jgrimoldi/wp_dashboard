@@ -4,7 +4,7 @@ import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
 const Input = ({ id, useRef = null, type, label, size, tooltip, customFunction, color, icon, css, required, disabled = false, state = { value: '', error: null }, setState, regEx = '', helperText }) => {
 
-    const handleChange = (event) =>  setState({ ...state, value: event.target.value });
+    const handleChange = (event) => setState({ ...state, value: event.target.value });
 
     const handleValidation = () => {
         if (regEx) {
@@ -27,13 +27,14 @@ const Input = ({ id, useRef = null, type, label, size, tooltip, customFunction, 
                 variant='outlined'
                 required={required}
                 error={state.error}
+                className='bg-white rounded-md'
                 helperText={state.error && helperText}
                 fullWidth
                 disabled={disabled}
             />
             {tooltip ?
                 <TooltipComponent content={tooltip} position="TopCenter">
-                    <button type='button' onClick={customFunction} style={{ backgroundColor: color }} className='relative p-2 text-white text-2xl rounded-md'>
+                    <button type='button' onClick={customFunction} style={{ backgroundColor: color }} className='relative p-2 text-white dark:text-black text-2xl rounded-md'>
                         {icon}
                     </button>
                 </TooltipComponent>

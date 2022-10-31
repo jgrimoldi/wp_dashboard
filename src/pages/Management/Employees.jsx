@@ -128,7 +128,7 @@ const Employees = () => {
                 />}
             {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner(initialState)} />}
             <SEO title='Usuarios' />
-            <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
+            <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>
                 <Title category="Mis" title="Usuarios" />
                 <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
                     {edit === true && config.map((input, index) => {

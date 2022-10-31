@@ -6,8 +6,10 @@ import { useAuthContext } from '../../contexts/ContextAuth';
 import { URL_COMPANY, URL_PROFILE } from '../../services/Api';
 import { registerUser } from '../../services/AuthService';
 import { getDataFrom } from '../../services/GdrService';
+import { useStateContext } from '../../contexts/ContextProvider';
 
 const Register = () => {
+  const { themeColors } = useStateContext();
   const { auth, setAuth } = useAuthContext();
   const [name, setName] = useState({ value: '', error: null });
   const [surname, setSurname] = useState({ value: '', error: null });
@@ -87,7 +89,7 @@ const Register = () => {
       <SEO title='Registro de usuarios' />
       {errorForm.error === false && <Banner text='Registro exitoso!' backgroundColor='green' setState={() => setErrorForm({ ...errorForm, error: null })} />}
       {errorForm.error === true && <Banner text='¡Ups! El registro no pudo realizarse' backgroundColor='red' setState={() => setErrorForm({ ...errorForm, error: null })} />}
-      <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl'>
+      <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>
         <Title category="Registro de" title="Empleados" />
         <div className='w-full md:w-4/5 flex flex-col gap-5 m-auto'>
           <Input id='name' label='Nombre' state={name} setState={setName} regEx={regEx.text} helperText='No es un nombre válido' required={true} />
@@ -95,9 +97,9 @@ const Register = () => {
           <Input id='email' label='Correo electrónico' state={email} setState={setEmail} regEx={regEx.email} helperText='No es un correo válido' required={true} />
           <Dropdown id='role' label='Perfil' state={profileValue} setState={setProfileValue} options={profiles} getter='nom_perfil' helperText='Elija un perfil' required={true} />
           <Dropdown id='company' label='Empresa' state={companiesValue} setState={setCompaniesValue} options={optionsCompanies} getter='nombre' helperText='Elija una empresa' required={true} />
-          <Password id='password' label='Contraseña' color='purple' state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
+          <Password id='password' label='Contraseña' color={themeColors.secondary} state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
           {!!password.value && <GroupValidator password={password.value} />}
-          <Password id='passwordVerify' label='Confirmar contraseña' color='purple' state={passwordVerify} setState={setPasswordVerify} customFunction={handleValidatePassword} helperText='Las contraseñas no coinciden' />
+          <Password id='passwordVerify' label='Confirmar contraseña' color={themeColors.secondary} state={passwordVerify} setState={setPasswordVerify} customFunction={handleValidatePassword} helperText='Las contraseñas no coinciden' />
           {!!errorForm.value && <ErrorLabel color='red'>{errorForm.value}</ErrorLabel>}
         </div>
         <div className='w-full md:w-4/5 flex gap-1 justify-end m-auto pt-5'>

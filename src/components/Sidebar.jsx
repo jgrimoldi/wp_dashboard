@@ -12,7 +12,7 @@ import { useStateContext } from '../contexts/ContextProvider';
 import { useAuthContext } from '../contexts/ContextAuth';
 
 const Sidebar = () => {
-  const { activeMenu, setActiveMenu, screenSize } = useStateContext();
+  const { activeMenu, setActiveMenu, screenSize, themeColors } = useStateContext();
   const { auth, setAuth } = useAuthContext();
   const [fullName, setFullName] = useState({ name: '', surname: '' });
   const [profile, setProfile] = useState('');
@@ -95,7 +95,7 @@ const Sidebar = () => {
                   to={`/${link.url}`}
                   key={link.name} // link.url
                   onClick={handleCloseSidebar}
-                  style={({ isActive }) => ({ backgroundColor: link.url === '/' || !isActive ? '' : 'blue', })}
+                  style={({ isActive }) => ({ backgroundColor: link.url === '/' || !isActive ? '' : themeColors.primary, })}
                   className={({ isActive }) => (link.url === '/' ? disabledLink : isActive ? activeLink : normalLink)}
                 >
                   {link.icon}
@@ -108,7 +108,7 @@ const Sidebar = () => {
             to='/inicio'
             key='logout'
             onClick={handleLogout}
-            style={({ isActive }) => ({ backgroundColor: isActive ? 'blue' : '', })}
+            style={({ isActive }) => ({ backgroundColor: isActive ? themeColors.primary : '', })}
             className={({ isActive }) => (isActive ? activeLink : normalLink)}
           >
             <BsBoxArrowLeft />

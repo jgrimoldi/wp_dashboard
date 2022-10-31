@@ -32,6 +32,7 @@ const Password = ({ id, label, css, color, required, customFunction, state = { v
                     label={label} placeholder={label}
                     onChange={handleChange} onBlur={handleValidation} onKeyUp={handleValidation}
                     value={state.value}
+                    className='bg-white'
                     endAdornment={
                         <InputAdornment position='end'>
                             <IconButton

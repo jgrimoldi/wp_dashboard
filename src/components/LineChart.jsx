@@ -5,8 +5,10 @@ import { LinePrimaryXAxis, LinePrimaryYAxis } from '../data/dummy';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { URL_DASHBOARD } from '../services/Api';
 import { getDataFrom } from '../services/GdrService';
+import { useStateContext } from '../contexts/ContextProvider';
 
 const LineChart = () => {
+    const { themeColors } = useStateContext();
     const { auth, handleErrors } = useAuthContext();
     const [incomeData, setIncomeData] = useState([]);
     const [expenseData, setExpensesData] = useState([]);
@@ -67,16 +69,16 @@ const LineChart = () => {
     }, [auth, handleErrors]);
 
     const lineCustomSeries = [
-        { type: 'Line', dataSource: createMissingData(getLastMovs(sumDoubleDates(fixObject(incomeData)))), xName: 'fecha', yName: 'total', name: 'Ingresos', width: '2', marker: { visible: true, width: 10, height: 10 }, },
-        { type: 'Line', dataSource: createMissingData(getLastMovs(sumDoubleDates(fixObject(expenseData)))), xName: 'fecha', yName: 'total', name: 'Egresos', width: '2', marker: { visible: true, width: 10, height: 10 }, },
+        { type: 'Line', dataSource: createMissingData(getLastMovs(sumDoubleDates(fixObject(incomeData)))), xName: 'fecha', yName: 'total', name: 'Ingresos', width: '2', marker: { visible: true, width: 10, height: 10 }, fill: themeColors.primary },
+        { type: 'Line', dataSource: createMissingData(getLastMovs(sumDoubleDates(fixObject(expenseData)))), xName: 'fecha', yName: 'total', name: 'Egresos', width: '2', marker: { visible: true, width: 10, height: 10 }, fill: themeColors.secondary },
     ];
 
     return (
-        <div className='w-full bg-white p-5 rounded-lg shadow-xl'>
-            <div className='flex justify-between items-center gap-2 mb-2'>
+        <div className='w-full bg-white dark:bg-secondary-dark-bg p-5 rounded-lg shadow-xl'>
+            <div className='flex justify-between items-center gap-2 mb-2 dark:text-white'>
                 <p className='text-xl font-semibold'>Ingresos/Egresos</p>
                 <div>Rango de días {' : '}
-                    <select value={dateRange} onChange={(event) => setDateRange(event.target.value)}>
+                    <select className='bg-white dark:bg-secondary-dark-bg' value={dateRange} onChange={(event) => setDateRange(event.target.value)}>
                         <option value={7}>7 días</option>
                         <option value={15}>15 días</option>
                         <option value={30}>30 días</option>
@@ -91,7 +93,7 @@ const LineChart = () => {
                     primaryXAxis={LinePrimaryXAxis}
                     primaryYAxis={LinePrimaryYAxis}
                     chartArea={{ border: { width: 1 } }}
-                    background='#FFFFFF'
+                    background='transparent'
                     legendSettings={{ background: 'white' }}
                 >
                     <Inject services={[LineSeries, DateTime, Legend, Tooltip]} />
