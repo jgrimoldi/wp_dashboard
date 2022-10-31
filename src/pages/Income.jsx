@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BsXCircle, BsTrash, BsPencil } from 'react-icons/bs';
 
 import { SEO, Title, Table, Input, Searcher, Button, Modal, Banner, SerialNumber } from '../components';
@@ -42,9 +42,7 @@ const Income = () => {
   const [detailsProduct, setDetailsProduct] = useState('');
   const [detailsQuantity, setDetailsQuantity] = useState(initialState);
   const [detailsPrice, setDetailsPrice] = useState(initialState);
-
   const [incomeSerialNumbers, setIncomeSerialNumbers] = useState([]);
-
   const [subTotalPrice, setSubTotalPrice] = useState(0);
   const [totalVATPrice, setTotalVATPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -64,6 +62,10 @@ const Income = () => {
     { field: 'quantity', id: 'quantity', type: 'number', label: 'Unidades', state: detailsQuantity, setState: setDetailsQuantity, expression: 'digitsRegExp', css: 'w-1/6' },
     { field: 'unitPrice', id: 'price', type: 'number', label: 'Precio', state: detailsPrice, setState: setDetailsPrice, expression: 'digitsRegExp', css: 'w-1/6' },
   ]
+
+  useEffect(() => {
+    setTimeout(() => setBanner({ error: null }), 2000);
+  }, [banner])
 
   const clearInputs = () => {
     inputsDetails.forEach(input => {
