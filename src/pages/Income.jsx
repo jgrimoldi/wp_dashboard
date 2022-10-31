@@ -64,8 +64,9 @@ const Income = () => {
   ]
 
   useEffect(() => {
-    setTimeout(() => setBanner({ error: null }), 2000);
-  }, [banner])
+    let shadowBanner = setTimeout(() => setBanner({ error: null }), 2000);
+    return () => { clearTimeout(shadowBanner) };
+  });
 
   const clearInputs = () => {
     inputsDetails.forEach(input => {
@@ -94,7 +95,7 @@ const Income = () => {
       this.VAT = calculateIVA(this.price, detailsProduct.alicuota);
       this.subTotal = calculateSubTotal(this.VAT, this.price);
     };
-    if (detailsQuantity.error === false && detailsPrice.error === false) {
+    if (!!detailsProduct && detailsQuantity.error === false && detailsPrice.error === false) {
       setSubTotalPrice((prevState) => prevState += Number(objectsCart.price));
       setTotalVATPrice((prevState) => prevState += Number(objectsCart.VAT));
       setTotalPrice((prevState) => prevState += Number(objectsCart.subTotal));
@@ -197,7 +198,6 @@ const Income = () => {
       })
       .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
   }
-
 
   return (
     <>

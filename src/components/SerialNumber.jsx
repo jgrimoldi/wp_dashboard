@@ -28,12 +28,17 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
     const [edit, setEdit] = useState(null);
     const disabled = recordsData.length === Number(product.quantity);
     const inputConfig = [
-        { field: 'sn', id: 'serial', useRef: refFocus, label: 'Número de serie', disabled: disabled && !edit, state: newSerialNumber, setState: setNewSerialNumber, expression: 'alphanumeric', css: 'w-1/3' },
-        { field: 'mac1', id: 'mac1', label: 'mac 1', disabled: disabled && !edit, state: newMac1, setState: setNewMac1, expression: 'alphanumericHyphen', css: 'w-1/3' },
-        { field: 'mac2', id: 'mac2', label: 'mac 2', disabled: disabled && !edit, state: newMac2, setState: setNewMac2, expression: 'alphanumericHyphen', css: 'w-1/3' },
-        { field: 'mac3', id: 'mac3', label: 'mac 3', disabled: disabled && !edit, state: newMac3, setState: setNewMac3, expression: 'alphanumericHyphen', css: 'w-1/3' },
-        { field: 'en', id: 'en', label: 'en', disabled: disabled && !edit, state: newEn, setState: setNewEn, expression: 'alphanumericHyphen', css: 'w-1/4' },
+        { field: 'sn', id: 'serial', useRef: refFocus, label: 'Número de serie (Alfanumérico)', disabled: disabled && !edit, state: newSerialNumber, setState: setNewSerialNumber, expression: 'alphanumeric', css: 'w-1/3' },
+        { field: 'mac1', id: 'mac1', label: 'mac (11:22:33:44:55:66)', disabled: disabled && !edit, state: newMac1, setState: setNewMac1, expression: 'alphanumericHyphen', css: 'w-1/3' },
+        { field: 'mac2', id: 'mac2', label: 'mac (11:22:33:44:55:66)', disabled: disabled && !edit, state: newMac2, setState: setNewMac2, expression: 'alphanumericHyphen', css: 'w-1/3' },
+        { field: 'mac3', id: 'mac3', label: 'mac (11:22:33:44:55:66)', disabled: disabled && !edit, state: newMac3, setState: setNewMac3, expression: 'alphanumericHyphen', css: 'w-1/3' },
+        { field: 'en', id: 'en', label: 'en (Alfanumérico)', disabled: disabled && !edit, state: newEn, setState: setNewEn, expression: 'alphanumeric', css: 'w-1/4' },
     ]
+
+    useEffect(() => {
+        let shadowBanner = setTimeout(() => setBanner({ error: null }), 2000);
+        return () => { clearTimeout(shadowBanner) };
+    });
 
     useEffect(() => {
         if (state.length !== 0) {
@@ -73,9 +78,7 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
         };
         await getDataByIdFrom(URL_SN, Number(newSerialNumber.value), auth.token)
             .then(response => {
-                console.log(response.data);
-                console.log(response.data === null, newSerialNumber.error === false, newMac1.error === false, newMac2.error === false, newMac3.error === false, newEn.error === false);
-                if (response.data === null && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
+                if (response.data === null && !!newSerialNumber.value && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
                     setRecordsData((prevState) => [...prevState, objectSN]);
                     clearInputs();
                     refFocus.current.focus();
