@@ -54,6 +54,13 @@ export const resetPassword = (token) => {
     )
 }
 
+export const reSendValidation = (email, token) => {
+    return (
+        API.post(URL_AUTH + 'validateAccountResend', { email }, header(token))
+            .then(response => response.data)
+    )
+}
+
 export const validateAccount = (token) => {
     return (
         API.get(URL_AUTH + 'validateAccount/' + token)

@@ -51,16 +51,18 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
             if (input.field)
                 input.setState(initialState);
         });
+        setNewMac1({ value: '', error: false });
+        setNewMac2({ value: '', error: false });
+        setNewMac3({ value: '', error: false });
+        setNewEn({ value: '', error: false });
         setOpenModal(initialState);
         setIdSelected('');
         setEdit(false);
     }
 
-
-
     const addSerialNumber = async () => {
         const objectSN = {
-            id: (Math.ceil(Math.random()) * 10000),
+            id: (Math.ceil(Math.random() * 10000)),
             fk_producto: product.id,
             fk_almacen: warehouse,
             sn: newSerialNumber.value,
@@ -71,6 +73,8 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
         };
         await getDataByIdFrom(URL_SN, Number(newSerialNumber.value), auth.token)
             .then(response => {
+                console.log(response.data);
+                console.log(response.data === null, newSerialNumber.error === false, newMac1.error === false, newMac2.error === false, newMac3.error === false, newEn.error === false);
                 if (response.data === null && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
                     setRecordsData((prevState) => [...prevState, objectSN]);
                     clearInputs();
@@ -78,7 +82,9 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                 } else {
                     setBanner({ ...banner, value: errorBanner, error: true });
                 }
-            });
+            }).catch(() => {
+                setBanner({ ...banner, value: errorBanner, error: true });
+            })
     }
 
     const deleteDataById = () => {
@@ -105,7 +111,7 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
             setOpenModal({ ...openModal, value: idSelected });
 
         setStates.forEach((setState, index) => {
-            setState((prevState) => { return { ...prevState, value: response[0][fields[index]] } })
+            setState((prevState) => { return { ...prevState, value: response[0][fields[index]], error: false } })
         })
         refFocus.current.focus();
         setEdit(true);

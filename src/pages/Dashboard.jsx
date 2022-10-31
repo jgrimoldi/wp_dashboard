@@ -45,14 +45,7 @@ const Dashboard = () => {
               <Tiles title='Proveedores' text='proveedor' url={URL_SUPPLIER} token={auth.token} to='/proveedores' />
               <Tiles title='Productos' text='producto' url={URL_PRODUCT} token={auth.token} to='/productos' />
             </div>
-            <div className='w-full bg-white p-5 rounded-lg shadow-xl'>
-              <div className='mb-2'>
-                <p className='text-xl font-semibold'>Ingresos/Egresos</p>
-              </div>
-              <div className='md:w-full overflow-auto'>
-                <LineChart />
-              </div>
-            </div>
+            <LineChart />
             <div className='bg-white p-5 rounded-lg shadow-xl'>
               <Table header={usersGrid} data={users.filter(user => user.id !== auth.user.id && user.fk_perfil !== 3)} filterTitle='Empleados' sortFunction={sortByLastLogin} />
             </div>

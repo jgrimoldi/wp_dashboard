@@ -70,6 +70,7 @@ const Income = () => {
       if (input.field)
         input.setState(initialState);
     });
+    setDetailsProduct('');
     setOpenModal(initialState);
     setIdSelected('');
     setEdit(false);
@@ -185,6 +186,12 @@ const Income = () => {
       .then(() => {
         setBanner({ ...banner, value: createBanner, error: false });
         clearInputs();
+        setSupplier('');
+        setWarehouse('');
+        setRecordsData([]);
+        setSubTotalPrice(0);
+        setTotalVATPrice(0);
+        setTotalPrice(0);
       })
       .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
   }

@@ -1,8 +1,11 @@
+import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import React, { useState, useEffect, useCallback } from 'react';
 import { BsCloudArrowDown, BsPlus, BsSearch } from 'react-icons/bs';
 
 import { Input, TableHead, Pagination } from '.';
+import { useAuthContext } from '../contexts/ContextAuth';
 import useTable from '../hooks/useTable';
+import { reSendValidation } from '../services/AuthService';
 
 const Dates = ({ date }) => {
     const fullDate = new Date(date);
@@ -52,6 +55,8 @@ const AddBarCode = ({ data, setOpen, setProductID }) => {
 }
 
 const FormatDesktop = ({ data, property }) => {
+    const { auth } = useAuthContext();
+
     if (property.field === 'url') {
         return (
             <a href={data[property.field]} style={{ color: 'blue' }}
@@ -80,7 +85,20 @@ const FormatDesktop = ({ data, property }) => {
     }
 
     if (property.field === 'validateAccount') {
-        if (data[property.field] === null || data[property.field] === false)
+        const today = new Date();
+        let expires = new Date(data.validateAccountExpires);
+        expires = new Date(expires.getTime() + 3 * 60 * 60 * 1000);
+
+        if ((data[property.field] === null || data[property.field] === false) && expires < today) {
+            return (
+                <TooltipComponent content={`Reenviar validación a ${data.email}`} position="BottomCenter">
+                    <button onClick={() => reSendValidation(data.email, auth.token)} className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>
+                        Sin validar
+                    </button>
+                </TooltipComponent>
+            );
+        }
+        if (expires >= today)
             return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>Sin validar</span>);
 
         return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50'>Validado</span>);
@@ -88,12 +106,15 @@ const FormatDesktop = ({ data, property }) => {
 
     if (property.field === 'validateAccountExpires') {
         const today = new Date();
-        if (data.validateAccount === null && new Date(data[property.field]) <= today)
-            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50'>Pendiente</span>);
-        if (data.validateAccount === null && new Date(data[property.field]) > today)
-            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>Rechazado</span>);
+        let expires = new Date(data[property.field]);
+        expires = new Date(expires.getTime() + 3 * 60 * 60 * 1000);
 
-        return (<span className=''></span>);
+        if (Number(data.validateAccount) === 1)
+            return (<span className=''></span>);
+        if (expires >= today)
+            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50'>Pendiente</span>);
+        if (expires < today)
+            return (<span className='p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50'>Rechazado</span>);
     }
 
     if (property.field === 'resetPasswordExpires') {
