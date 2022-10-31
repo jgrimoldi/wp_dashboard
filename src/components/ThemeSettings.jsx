@@ -2,21 +2,30 @@ import React from 'react';
 import { BsCheck } from 'react-icons/bs';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
-import { themeColors } from '../data/dummy';
+import { themeColorsSetter } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
+import { updateUserById } from '../services/AuthService';
+import { useAuthContext } from '../contexts/ContextAuth';
 
 const ThemeSettings = () => {
-
+  const { auth } = useAuthContext();
   const { currentColor, setMode } = useStateContext();
+
+  const changeTheme = async (mode, fk_theme) => {
+    setMode(mode);
+    await updateUserById(auth.user.id, auth.user.email, auth.user.nombre, auth.user.apellido, auth.user.fk_perfil, auth.user.fk_empresa, Number(fk_theme), auth.token)
+      .then(() => '')
+      .catch(() => '')
+  }
 
   return (
     <div key='Temas'>
       <p className="text-gray-400 dark:text-gray-400 m-3 mt-4 uppercase">Temas</p>
       <div className='flex flex-wrap items-center gap-5 pl-4 pt-3 pb-2.5 text-md text-gray-700 dark:text-gray-200 m-2'>
-        {themeColors.map((item, index) => (
+        {themeColorsSetter.map((item, index) => (
           <TooltipComponent key={index} content={item.name} position='BottomCenter'>
             <div>
-              <button type='button' className='border border-black dark:border-white h-10 w-10 rounded-full cursor-pointer' style={{ backgroundColor: item.hex }} onClick={() => { setMode(item.mode, item.colors) }}>
+              <button type='button' className='border border-black dark:border-white h-10 w-10 rounded-full cursor-pointer' style={{ backgroundColor: item.hex }} onClick={() => changeTheme(item.mode, item.fk_theme)}>
                 <BsCheck className={`ml-2 text-2xl text-${item.secondary} ${currentColor === item.hex ? 'block' : 'hidden'}`} />
               </button>
             </div>

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { themeColorsSetter } from '../data/dummy';
 
 const StateContext = createContext();
 
@@ -8,15 +9,17 @@ export const ContextProvider = ({ children }) => {
     const [loginNavbar, setLoginNavbar] = useState(false);
     const [screenSize, setScreenSize] = useState(undefined);
     const [currentColor, setCurrentColor] = useState('#FFFFFF');
-    const [themeColors, setThemeColors] = useState({});
+    const [themeColors, setThemeColors] = useState(themeColorsSetter[0].colors);
     const [currentMode, setCurrentMode] = useState('white');
 
-    const setMode = (mode, colors) => {
-        setCurrentMode(mode);
-        setCurrentColor(colors.background);
-        setThemeColors(colors);
+    const setMode = (mode) => {
+        const colorsByTheme = { 'dark': themeColorsSetter[1].colors, 'light': themeColorsSetter[0].colors }
 
-        localStorage.setItem('themeColors', JSON.stringify(colors));
+        setCurrentMode(mode);
+        setCurrentColor(colorsByTheme[mode].background);
+        setThemeColors(colorsByTheme[mode]);
+
+        localStorage.setItem('themeColors', JSON.stringify(colorsByTheme[mode]));
         localStorage.setItem('themeMode', mode);
     }
 

@@ -12,13 +12,24 @@ import { useStateContext } from '../contexts/ContextProvider';
 import { useAuthContext } from '../contexts/ContextAuth';
 
 const Sidebar = () => {
-  const { activeMenu, setActiveMenu, screenSize, themeColors } = useStateContext();
+  const { activeMenu, setActiveMenu, screenSize, themeColors, setMode } = useStateContext();
   const { auth, setAuth } = useAuthContext();
   const [fullName, setFullName] = useState({ name: '', surname: '' });
   const [profile, setProfile] = useState('');
   const [company, setCompany] = useState({ data: {}, user: {} });
   const [isMounted, setIsMounted] = useState(false);
+  const [themeOnScreen, setThemeOnScreen] = useState(null);
 
+  useEffect(() => {
+    const themes = { 1: 'light', 2: 'dark' };
+    const userThemeMode = themes[auth.user.fk_theme];
+    return () => {
+      if(themeOnScreen !== true){
+      setMode(userThemeMode);
+      setThemeOnScreen(true);
+    }
+  }
+  })
 
   useEffect(() => {
     if (!auth.token && localStorage.getItem('_fUserData') !== null) {
