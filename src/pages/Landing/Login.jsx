@@ -10,7 +10,7 @@ import { useAuthContext } from '../../contexts/ContextAuth';
 import { useStateContext } from '../../contexts/ContextProvider';
 
 const Login = () => {
-    const { setLoginNavbar } = useStateContext();
+    const { setLoginNavbar, themeColors } = useStateContext();
     const { setAuth } = useAuthContext();
     const captcha = useRef(null);
     const [user, setUser] = useState(null);
@@ -22,7 +22,7 @@ const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const validToken = location.state?.from?.pathname || '/dashboard';
-    const from = location.state?.from?.pathname || '/ups';
+    const from = '/ups';
 
     useEffect(() => {
         setLoginNavbar(false);
@@ -41,7 +41,7 @@ const Login = () => {
                 await loginUser(email.value, password.value)
                     .then(response => {
                         if (response?.data?.user?.validateAccount === false) {
-                            setAuth(response.data.user);
+                            setAuth({ notValid: response.data });
                             navigate(from, { replace: true });
                         } else {
                             setAuth(response.data);
@@ -68,25 +68,25 @@ const Login = () => {
         <>
             <SEO title='Inicio de sesión' description='AG Stock es un software online para inventario de productos para administrar tu local. Planifica, gestiona y anticípate a la demanda.' />
             <div className='mt-52 md:mt-0'>
-                {loading === true && <LoadingSpinner color='blue' />}
+                {loading === true && <LoadingSpinner color={themeColors?.primary} />}
                 <div className='hidden lg:block absolute w-2/3 h-fit m-auto top-0 bottom-0 z-0'>
                     <img className='w-full max-h-[863px] ' src={heroImage} alt='Trabajadores de reposición' />
                 </div>
                 <div className='relative w-full flex justify-center items-center lg:justify-end lg:px-72 z-50'>
                     <Form title='Inicia sesión en tu cuenta'>
                         <Input id='email' type='email' label='Correo electrónico' state={email} setState={setEmail} regEx={regEx.email} helperText='No es un correo válido' />
-                        <Password id='password' label='Contraseña' color='purple' state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
+                        <Password id='password' label='Contraseña' color={themeColors?.secondary} state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
                         <ReCAPTCHA ref={captcha} sitekey='6LeBRkQhAAAAAE4WcBWP3GxOTlkTG7Ev5iTbXTOj' className='m-auto' />
                         <div className='flex flex-col gap-2'>
-                            {validForm.error === true && <ErrorLabel color='red'>{validForm.value}</ErrorLabel>}
-                            <Button customFunction={handleLogin} borderColor='blue' color='white' backgroundColor='blue' text='Iniciar sesión' width='full' height={true} />
+                            {validForm.error === true && <ErrorLabel color={themeColors?.error}>{validForm.value}</ErrorLabel>}
+                            <Button customFunction={handleLogin} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Iniciar sesión' width='full' height={true} />
                             <NavLink to='/recuperacion' key='forgotPassword'>
-                                <span style={{ color: 'blue' }} className='text-14'>¿Olvidaste tu contraseña?</span>
+                                <span style={{ color: themeColors?.primary }} className='text-14'>¿Olvidaste tu contraseña?</span>
                             </NavLink>
                         </div>
                     </Form>
                 </div>
-            </div>
+            </div >
         </>
     )
 }

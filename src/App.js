@@ -24,6 +24,11 @@ const App = () => {
           <Route path='/recuperacion' element={<ForgotPassword />} />
           <Route path='/restauracion/:token' element={<ResetPassword />} />
           <Route path='/validacion/:token' element={<AccountValidation />} />
+          <Route path='/ups' element={
+            <ProtectedRoutes isAllowed={!!auth?.notValid} redirectTo='/inicio'>
+              <NotValid />
+            </ProtectedRoutes>
+          } />
         </Route>
 
         <Route element={(<HomeNavigation />)}>
@@ -62,7 +67,6 @@ const App = () => {
           </Route>
         </Route>
 
-        <Route path='/ups' element={<NotValid />} />
         <Route path='/404' element={<NotFound />} />
         <Route path='*' element={<Navigate to='/404' />} />
 

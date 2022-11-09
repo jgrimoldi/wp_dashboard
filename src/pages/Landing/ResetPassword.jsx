@@ -8,7 +8,7 @@ import { resetPassword, updatePasswordByEmail } from '../../services/AuthService
 import { useStateContext } from '../../contexts/ContextProvider';
 
 const ResetPassword = () => {
-    const { setLoginNavbar } = useStateContext();
+    const { setLoginNavbar, themeColors } = useStateContext();
     const { token } = useParams();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState({ value: '', error: null });
@@ -73,12 +73,12 @@ const ResetPassword = () => {
         <>
             <SEO title='Restablece tu contraseña' />
             <div className='w-full flex justify-center items-center mt-60 md:mt-0'>
-                {loading === true && <LoadingSpinner color='blue' />}
+                {loading === true && <LoadingSpinner color={themeColors?.primary} />}
                 {modal.success === true &&
                     <Modal
                         title='Contraseña actualizada'
                         text='Has actualizado correctamente tu contraseña.'
-                        color='purple' icon={<BsCheckCircle />}
+                        color={themeColors?.secondary} icon={<BsCheckCircle />}
                         setFunction={() => setModal({ ...modal, success: false })}
                         buttonText='Continuar'
                     />
@@ -87,7 +87,7 @@ const ResetPassword = () => {
                     <Modal
                         title='Oops! Ocurrio un error'
                         text='El siguiente enlace ha caducado o no es correcto. Por favor vuelva a intentar o comuniquese con el soporte.'
-                        color='red' icon={<BsXCircle />}
+                        color={themeColors?.error} icon={<BsXCircle />}
                         setFunction={() => { }}
                         buttonText='Volver al inicio'
                     />
@@ -96,14 +96,14 @@ const ResetPassword = () => {
                     <div className='text-left'>
                         Tu correo: {email}
                     </div>
-                    <Password id='password' label='Contraseña' color='purple' state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
-                    <Password id='passwordVerify' label='Confirmar contraseña' color='purple' state={passwordVerify} setState={setPasswordVerify} customFunction={handleValidatePassword} helperText='Las contraseñas no coinciden' />
+                    <Password id='password' label='Contraseña' color={themeColors?.secondary} state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
+                    <Password id='passwordVerify' label='Confirmar contraseña' color={themeColors?.secondary} state={passwordVerify} setState={setPasswordVerify} customFunction={handleValidatePassword} helperText='Las contraseñas no coinciden' />
                     {!!password.value && <GroupValidator password={password.value} />}
                     <div className='flex flex-col gap-2'>
-                        {validForm.error === true && <ErrorLabel color='red'>{validForm.value}</ErrorLabel>}
+                        {validForm.error === true && <ErrorLabel color={themeColors?.error}>{validForm.value}</ErrorLabel>}
                         <div className='flex gap-1'>
-                            <Button customFunction={() => { }} borderColor='black' color='black' backgroundColor='transparent' text='Cancelar' width='full' height={true} />
-                            <Button customFunction={handleReset} borderColor='blue' color='white' backgroundColor='blue' text='Confirmar' width='full' height={true} />
+                            <Button customFunction={() => { }} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' text='Cancelar' width='full' height={true} />
+                            <Button customFunction={handleReset} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Confirmar' width='full' height={true} />
                         </div>
                     </div>
                 </Form>

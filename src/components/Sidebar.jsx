@@ -43,6 +43,7 @@ const Sidebar = () => {
         })
         .catch(error => {
           if (error.response.data.error === 'NOT_PAYLOAD_DATA_JWT') {
+            setMode('light');
             setAuth({});
             localStorage.removeItem('_fDataUser');
           }
@@ -55,7 +56,7 @@ const Sidebar = () => {
       setFullName((prevFullName) => { return { ...prevFullName, name: auth.user.nombre, surname: auth.user.apellido } })
       setIsMounted(true);
     }
-  }, [auth, setAuth, isMounted])
+  }, [auth, setAuth, isMounted, setMode])
 
   const handleCloseSidebar = () => {
     if (activeMenu && screenSize <= 1000) {
