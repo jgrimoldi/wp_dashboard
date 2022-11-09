@@ -35,7 +35,7 @@ const Backup = () => {
   }, [auth, setAuth])
 
   const getNewObject = (object) => {
-    return { ['Creado Por']: object.createdBy, ['Fecha Creación']: new Date(object.createdAt), nombre: object.nombre, size: object.size, url: object.url };
+    return { createdBy: object.createdBy, createdAt: new Date(object.createdAt), nombre: object.nombre, size: object.size, url: object.url };
   }
 
   const handleBackup = async () => {
@@ -55,6 +55,8 @@ const Backup = () => {
   }
 
   const sortByLastCreated = (data, anotherData) => new Date(anotherData['Fecha Creación']) < new Date(data['Fecha Creación']) ? -1 : 1
+
+  console.log(backupData)
 
   return (
     <>

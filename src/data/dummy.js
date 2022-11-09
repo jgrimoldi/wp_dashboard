@@ -261,8 +261,8 @@ export const incomeGrid = [
 ];
 
 export const backupGrid = [
-    { name: 'Creado por', field: 'Creado por', mobile: 'Creado por', },
-    { name: 'Fecha', field: 'Fecha Creación', mobile: 'Fecha Creación', },
+    { name: 'Creado por', field: 'createdBy', mobile: 'createdBy', },
+    { name: 'Fecha', field: 'createdAt', mobile: 'createdAt', },
     { name: 'Nombre', field: 'nombre', mobile: 'size', },
     { name: 'Tamaño', field: 'size', mobile: 'nombre', },
     { name: 'Descargar', field: 'url', mobile: 'url', },

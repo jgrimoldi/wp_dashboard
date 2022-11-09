@@ -24,11 +24,11 @@ const Sidebar = () => {
     const themes = { 1: 'light', 2: 'dark' };
     const userThemeMode = themes[auth.user.fk_theme];
     return () => {
-      if(themeOnScreen !== true){
-      setMode(userThemeMode);
-      setThemeOnScreen(true);
+      if (themeOnScreen !== true) {
+        setMode(userThemeMode);
+        setThemeOnScreen(true);
+      }
     }
-  }
   })
 
   useEffect(() => {
@@ -64,6 +64,7 @@ const Sidebar = () => {
   }
 
   const handleLogout = () => {
+    setMode('light');
     setAuth({});
     localStorage.removeItem('_fDataUser');
   }

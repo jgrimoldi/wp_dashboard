@@ -31,7 +31,7 @@ const Income = () => {
   const { auth } = useAuthContext();
   const date = new Date();
   const [month, day, year] = [date.getMonth() + 1, date.getDate(), date.getFullYear()];
-  const formatedDate = `${year}-${month < 10 ? '0' + month : month}-${day}`
+  const formatedDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
   const initialState = { value: '', error: null };
   const createBanner = { text: '¡Compra registrada exitosamente!', background: themeColors?.confirm }
   const errorBanner = { text: '¡Ups! No se pudo realizar la acción.', background: themeColors?.error }

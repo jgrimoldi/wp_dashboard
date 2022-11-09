@@ -156,7 +156,7 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                 />}
             {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner(initialState)} />}
             <div className='h-screen flex items-center justify-center'>
-                <div className='flex flex-col item gap-5 bg-white w-11/12 sm:w-4/5 lg:w-3/5 p-5 rounded-3xl'>
+                <div className='flex flex-col item gap-5 bg-white dark:bg-secondary-dark-bg w-11/12 sm:w-4/5 lg:w-3/5 p-5 rounded-3xl'>
                     <form onSubmit={addSerialNumber} className='w-full flex flex-col justify-center items-center gap-2'>
                         <div className='self-start text-lg'>Números de serie para {product.product}</div>
                         <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
@@ -174,9 +174,9 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                             })}
                         </div>
                         <div className='w-1/2 flex gap-1'>
-                            <Button customFunction={handleClose} borderColor={themeColors.highEmphasis} color={themeColors.highEmphasis} backgroundColor='transparent' text='Cerrar' width='1/2' />
-                            {edit === true ? <Button customFunction={updateSerialNumbers} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='1/2' text='Editar numero de serie' />
-                                : <Button customFunction={addSerialNumber} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} text='Guardar' width='1/2' />}
+                            <Button customFunction={handleClose} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' text='Cerrar' width='1/2' />
+                            {edit === true ? <Button customFunction={updateSerialNumbers} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='1/2' text='Editar numero de serie' />
+                                : <Button customFunction={addSerialNumber} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Guardar' width='1/2' />}
                         </div>
                     </form>
                     <div className='w-full'>
@@ -185,12 +185,12 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                     </div>
                     {!!idSelected &&
                         <div className='flex gap-2 justify-end pt-5'>
-                            <Button customFunction={clearInputs} borderColor={themeColors.highEmphasis} color={themeColors.highEmphasis} backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
-                            <Button customFunction={editInputs} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='12/6' height='normal' text='Editar registro' icon={<BsPencil />} />
-                            <Button customFunction={confirmDelete} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='12/6' height='normal' text='Eliminar registro' icon={<BsTrash />} />
+                            <Button customFunction={clearInputs} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' width='12/6' height='normal' text='Cancelar' />
+                            <Button customFunction={editInputs} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='12/6' height='normal' text='Editar registro' icon={<BsPencil />} />
+                            <Button customFunction={confirmDelete} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='12/6' height='normal' text='Eliminar registro' icon={<BsTrash />} />
                         </div>}
                     <div className='w-1/3 m-auto'>
-                        {disabled && !edit && <Button customFunction={handleSubmit} borderColor={themeColors.primary} color={themeColors.background} backgroundColor={themeColors.primary} width='12/6' height='normal' text='Agregar números de serie' />}
+                        {disabled && !edit && <Button customFunction={handleSubmit} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='12/6' height='normal' text='Agregar números de serie' />}
                     </div>
                 </div>
             </div>
