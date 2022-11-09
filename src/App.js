@@ -2,15 +2,16 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { HomeNavigation, HomeTemplate, ProtectedRoutes } from './components';
-import { Dashboard, Storage, Clients, Products, ProductType, Units, Providers, Category, Income, Expenses, Transfer, Stats, Reports, Register, Settings, Backup, Help, Login, ForgotPassword, ResetPassword, AccountValidation, Unauthorized, NotFound, Employees } from './pages';
+import { Dashboard, Storage, Clients, Products, ProductType, Units, Providers, Category, Income, Expenses, Transfer, Stats, Reports, Register, Settings, Backup, Help, Login, ForgotPassword, ResetPassword, AccountValidation, Unauthorized, NotFound, Employees, NotValid } from './pages';
 import './App.css';
 
 import { useAuthContext } from './contexts/ContextAuth';
 
 const App = () => {
 
-  const privateRoles = [2, 3]
+  const privateRoles = [2, 3];
   const { auth } = useAuthContext();
+  const isAllowed = !!auth?.token && !!auth?.user;
 
   return (
     <BrowserRouter>
@@ -26,7 +27,7 @@ const App = () => {
         </Route>
 
         <Route element={(<HomeNavigation />)}>
-          <Route element={<ProtectedRoutes isAllowed={!!auth.token && !!auth.user} redirectTo='/inicio' />}>
+          <Route element={<ProtectedRoutes isAllowed={isAllowed} redirectTo='/inicio' />}>
             {/* dashboard */}
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/almacen' element={<Storage />} />
@@ -47,7 +48,7 @@ const App = () => {
             <Route path='/reportes' element={<Reports />} />
             {/* management */}
             <Route path='/registro' element={
-              <ProtectedRoutes isAllowed={!!auth.token && !!auth.user && privateRoles.includes(auth.user.fk_perfil)} redirectTo='/401'>
+              <ProtectedRoutes isAllowed={isAllowed && privateRoles.includes(auth.user.fk_perfil)} redirectTo='/401'>
                 <Register />
               </ProtectedRoutes>
             } />
@@ -57,9 +58,11 @@ const App = () => {
 
             <Route path='/ayuda' element={<Help />} />
             <Route path='/401' element={<Unauthorized />} />
+
           </Route>
         </Route>
 
+        <Route path='/ups' element={<NotValid />} />
         <Route path='/404' element={<NotFound />} />
         <Route path='*' element={<Navigate to='/404' />} />
 

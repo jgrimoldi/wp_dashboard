@@ -38,7 +38,7 @@ const Header = () => {
     <div className='flex justify-between p-2 md:mx-6 relative'>
       <NavButton title="Menu" customFunction={() => setActiveMenu((prevActiveMenu) => !prevActiveMenu)} color={themeColors?.primary} icon={<BsList />} ></NavButton>
       <div className='flex items-center gap-2 cursor-pointer p-1'>
-        <h1 className='text-2xl font-extrabold'>AG Stock</h1>
+        <h1 className='text-2xl font-extrabold dark:text-white'>AG Stock</h1>
       </div>
       <div className='flex'>
       </div>

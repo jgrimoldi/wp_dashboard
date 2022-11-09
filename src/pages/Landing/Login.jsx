@@ -21,17 +21,18 @@ const Login = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || '/dashboard';
+    const validToken = location.state?.from?.pathname || '/dashboard';
+    const from = location.state?.from?.pathname || '/ups';
 
     useEffect(() => {
         setLoginNavbar(false);
         setUser(JSON.parse(localStorage.getItem('_fDataUser')));
         if (user !== null) {
             setAuth(user);
-            navigate(from, { replace: true });
+            navigate(validToken, { replace: true });
         }
         return () => { setLoginNavbar(null); setUser(null); };
-    }, [setLoginNavbar, from, navigate, setAuth, user]);
+    }, [setLoginNavbar, validToken, navigate, setAuth, user]);
 
     const handleLogin = async () => {
         if (captcha.current.getValue()) {
@@ -39,10 +40,15 @@ const Login = () => {
                 setLoading(true);
                 await loginUser(email.value, password.value)
                     .then(response => {
-                        setAuth(response.data);
-                        localStorage.setItem('_fDataUser', JSON.stringify(response.data));
-                        setValidForm({ ...validForm, error: false });
-                        navigate(from, { replace: true });
+                        if (response?.data?.user?.validateAccount === false) {
+                            setAuth(response.data.user);
+                            navigate(from, { replace: true });
+                        } else {
+                            setAuth(response.data);
+                            localStorage.setItem('_fDataUser', JSON.stringify(response.data));
+                            setValidForm({ ...validForm, error: false });
+                            navigate(validToken, { replace: true });
+                        }
                     })
                     .catch(() => {
                         setValidForm({ ...validForm, value: 'Correo o contraseña incorrectos. Intenta de nuevo.', error: true });

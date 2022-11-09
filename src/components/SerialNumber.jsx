@@ -174,7 +174,7 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                             })}
                         </div>
                         <div className='w-1/2 flex gap-1'>
-                            <Button customFunction={handleClose} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' text='Cerrar' width='1/2' />
+                            <Button customFunction={handleClose} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' text='Cerrar' width='1/2' tabindex='-1' />
                             {edit === true ? <Button customFunction={updateSerialNumbers} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='1/2' text='Editar numero de serie' />
                                 : <Button customFunction={addSerialNumber} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Guardar' width='1/2' />}
                         </div>
