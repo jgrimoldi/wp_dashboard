@@ -21,7 +21,7 @@ const Products = () => {
   const [productID, setProductID] = useState('');
   const [openBarcode, setOpenBarcode] = useState(null);
   const inputConfig = [
-    { field: 'nombre', id: 'product', useRef: refFocus, label: 'Nuevo producto', state: newProduct, setState: setNewProduct, expression: 'notEmpty', css: 'w-5/6 sm:w-1/3' },
+    { field: 'nombre', id: 'product', useRef: refFocus, label: 'Nombre producto', state: newProduct, setState: setNewProduct, expression: 'notEmpty', css: 'w-5/6 sm:w-1/3' },
     { getter: 'nombre',url: URL_PRODUCTTYPE, id: 'type', label: 'Tipo de producto', state: newProductType, setState: setNewProductType, expression: 'notEmpty', css: 'w-5/6 sm:w-1/4' },
     { field: 'cantidad', id: 'quantity', type: 'number', label: 'Unidades', state: newQuantity, setState: setNewQuantity, expression: 'digitsRegExp', css: 'w-1/4' },
     { getter: 'magnitud',url: URL_UNIT, id: 'unit', label: 'Unidad de medida', state: newUnit, setState: setNewUnit, expression: 'notEmpty', css: 'w-1/8' },

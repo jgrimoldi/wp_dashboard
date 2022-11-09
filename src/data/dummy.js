@@ -271,12 +271,12 @@ export const backupGrid = [
 export const productsGrid = [
     { name: 'Producto', field: 'nombre', mobile: 'nombre', },
     { name: 'Tipo de Producto', field: 'tipoproducto', mobile: 'tipoproducto', },
-    { name: 'Unidad de medida', field: 'abreviatura', mobile: 'abreviatura', },
-    { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
-    { name: 'Alicuota', field: 'alicuota', mobile: 'alicuota', },
     { name: 'Unidades', field: 'cantidad', mobile: 'cantidad', },
-    { name: 'Stock Mínimo', field: 'stockmin', mobile: 'stockmax', },
-    { name: 'Stock Máximo', field: 'stockmax', mobile: 'stockmin', },
+    { name: 'Unidad de medida', field: 'abreviatura', mobile: 'abreviatura', },
+    { name: 'Stock Mínimo', field: 'stockmin', mobile: 'stockmin', },
+    { name: 'Stock Máximo', field: 'stockmax', mobile: 'stockmax', },
+    { name: 'Alicuota', field: 'alicuota', mobile: 'alicuota', },
+    { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
 ];
 
 export const productsTypeGrid = [

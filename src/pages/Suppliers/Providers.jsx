@@ -21,11 +21,11 @@ const Products = () => {
   const [details, setDetails] = useState(initialState);
   const inputConfig = [
     { field: 'id', id: 'id', useRef: addFocus, type: 'number', label: 'CUIT/CUIL', disabled: true, state: newId, setState: setNewId, expression: 'notEmpty', css: 'w-1/6' },
-    { field: 'nombre', id: 'supplier', useRef: editFocus, label: 'Nombre proveedor', state: newSupplier, setState: setNewSupplier, expression: 'notEmpty', css: 'w-5/6 sm:w-1/3' },
+    { field: 'nombre', id: 'supplier', useRef: editFocus, label: 'Razón Social/Nombre', state: newSupplier, setState: setNewSupplier, expression: 'notEmpty', css: 'w-5/6 sm:w-1/3' },
     { url: URL_CATEGORY, id: 'category', label: 'Categoría proveedor', state: newCategory, setState: setNewCategory, expression: 'notEmpty', css: 'w-4/6 sm:w-1/4' },
     { field: 'tel', id: 'phone', type: 'number', label: 'Número de teléfono', state: newPhone, setState: setNewPhone, expression: 'digitsRegExp', css: 'w-3/6 sm:w-1/4' },
     { field: 'email', id: 'email', type: 'email', label: 'Correo eléctronico', state: newEmail, setState: setNewEmail, expression: 'email', css: 'w-5/6 sm:w-1/4' },
-    { field: 'cp', id: 'zip', label: 'Código postal/Ciudad', state: newZip, setState: setNewZip, expression: 'notEmpty', css: 'w-2/6 sm:w-1/4' },
+    { field: 'cp', id: 'zip', label: 'Código Postal/Ciudad', state: newZip, setState: setNewZip, expression: 'notEmpty', css: 'w-2/6 sm:w-1/4' },
     { field: 'direccion', id: 'address', label: 'Dirección', state: newAddress, setState: setNewAddress, expression: 'notEmpty', css: 'w-5/6 sm:w-1/4' },
     { field: 'observaciones', id: 'comments', label: 'Observaciones', state: details, setState: setDetails, expression: 'notEmpty', css: 'w-5/6 sm:w-1/4' },
   ];
