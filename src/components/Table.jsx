@@ -33,10 +33,10 @@ export const Radio = ({ data, state, setState }) => {
     return (
         <input
             className='w-4 h-4 text-blue-600 dark:text-purple-300 dark:accent-purple-300 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-purple-300 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
-            defaultValue={data.id}
+            defaultValue={Number(data.id)}
             onChange={handleChange}
             type='checkbox' name='table'
-            checked={Number(state) === data.id}
+            checked={Number(state) === Number(data.id)}
         />
     )
 };

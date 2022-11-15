@@ -1,7 +1,7 @@
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import React, { useState, useRef } from 'react';
 import { useEffect } from 'react';
-import { BsPencil, BsTrash, BsXCircle } from 'react-icons/bs';
+import { BsPencil, BsTrash, BsXCircle, BsArrowDownShort, BsArrowUpShort } from 'react-icons/bs';
 
 import { Button, Input, Modal, Banner, Table } from '.';
 import { useAuthContext } from '../contexts/ContextAuth';
@@ -15,11 +15,12 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
     const refFocus = useRef(null);
     const { auth } = useAuthContext();
     const initialState = { value: '', error: null };
-    const createBanner = { text: '¡Series agregadas exitosamente!', background: 'green' }
-    const errorBanner = { text: '¡Ups! El número de serie existe o es incorrecto.', background: 'red' }
-    const updateBanner = { text: '¡Registro editado exitosamente!', background: 'green' }
-    const deleteBanner = { text: 'Serie eliminada del producto exitosamente!', background: 'green' }
-    const [recordsData, setRecordsData] = useState([]);
+    const createBanner = { text: '¡Serie agregadas exitosamente!', background: themeColors.confirm }
+    const errorBanner = { text: '¡Ups! El número de serie existe o es incorrecto.', background: themeColors.error }
+    const invalidSeries = { text: '¡Ups! Las series no estan completas', background: '#FFC300' }
+    const updateBanner = { text: '¡Registro editado exitosamente!', background: themeColors.confirm }
+    const deleteBanner = { text: 'Serie eliminada del producto exitosamente!', background: themeColors.confirm }
+    const [openMacs, setOpenMacs] = useState(false);
     const [newSerialNumber, setNewSerialNumber] = useState(initialState);
     const [newMac1, setNewMac1] = useState({ value: '', error: false });
     const [newMac2, setNewMac2] = useState({ value: '', error: false });
@@ -29,13 +30,15 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
     const [openModal, setOpenModal] = useState(initialState);
     const [idSelected, setIdSelected] = useState('');
     const [edit, setEdit] = useState(null);
-    const disabled = recordsData.length === Number(product.quantity);
+    const completeSeries = state.filter(object => Number(object.fk_producto) === Number(product.id)).length === Number(product.quantity);
     const inputConfig = [
-        { field: 'sn', id: 'serial', useRef: refFocus, label: 'Número de serie (Alfanumérico)', disabled: disabled && !edit, state: newSerialNumber, setState: setNewSerialNumber, expression: 'alphanumeric', css: 'w-1/3' },
-        { field: 'mac1', id: 'mac1', label: 'mac1', disabled: disabled && !edit, state: newMac1, setState: setNewMac1, expression: 'alphanumericHyphen', css: 'w-1/3', tooltip: 'Formatos: (11:22:33:44:55:66 o 1122.3344.5566 o 1122-3344-5566)' },
-        { field: 'mac2', id: 'mac2', label: 'mac2', disabled: disabled && !edit, state: newMac2, setState: setNewMac2, expression: 'alphanumericHyphen', css: 'w-1/3', tooltip: 'Formatos: (11:22:33:44:55:66 o 1122.3344.5566 o 1122-3344-5566)' },
-        { field: 'mac3', id: 'mac3', label: 'mac3', disabled: disabled && !edit, state: newMac3, setState: setNewMac3, expression: 'alphanumericHyphen', css: 'w-1/3', tooltip: 'Formatos: (11:22:33:44:55:66 o 1122.3344.5566 o 1122-3344-5566)' },
-        { field: 'en', id: 'en', label: 'en (Alfanumérico)', disabled: disabled && !edit, state: newEn, setState: setNewEn, expression: 'alphanumeric', css: 'w-1/4' },
+        { field: 'sn', id: 'sn', useRef: refFocus, label: 'Número de serie (Alfanumérico)', disabled: completeSeries && !edit, state: newSerialNumber, setState: setNewSerialNumber, expression: 'alphanumeric', css: 'w-1/2' },
+        { field: 'en', id: 'en', label: 'en (Alfanumérico)', disabled: completeSeries && !edit, state: newEn, setState: setNewEn, expression: 'alphanumeric', css: 'w-1/2' },
+    ]
+    const inputMac = [
+        { field: 'mac1', id: 'mac1', label: 'mac1', disabled: completeSeries && !edit, state: newMac1, setState: setNewMac1, expression: 'alphanumericHyphen', css: 'w-full', tooltip: 'Formatos: (11:22:33:44:55:66 o 1122.3344.5566 o 1122-3344-5566)' },
+        { field: 'mac2', id: 'mac2', label: 'mac2', disabled: completeSeries && !edit, state: newMac2, setState: setNewMac2, expression: 'alphanumericHyphen', css: 'w-full', tooltip: 'Formatos: (11:22:33:44:55:66 o 1122.3344.5566 o 1122-3344-5566)' },
+        { field: 'mac3', id: 'mac3', label: 'mac3', disabled: completeSeries && !edit, state: newMac3, setState: setNewMac3, expression: 'alphanumericHyphen', css: 'w-full', tooltip: 'Formatos: (11:22:33:44:55:66 o 1122.3344.5566 o 1122-3344-5566)' },
     ]
 
     useEffect(() => {
@@ -43,16 +46,14 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
         return () => { clearTimeout(shadowBanner) };
     });
 
-    useEffect(() => {
-        if (state.length !== 0) {
-            const serialsPushed = state.filter(object => object.fk_producto === Number(product.id))
-            if (serialsPushed !== 0) {
-                setRecordsData(serialsPushed);
-            }
+    const handleClose = () => {
+        if (!completeSeries) {
+            setBanner({ ...banner, value: invalidSeries, error: true });
+            setTimeout(() => setClose(false), 2000)
+        } else {
+            setClose(false)
         }
-    }, [state, product.id]);
-
-    const handleClose = () => setClose(false);
+    }
 
     const clearInputs = () => {
         inputConfig.forEach(input => {
@@ -67,82 +68,85 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
         setIdSelected('');
         setEdit(false);
     }
-    const addSerialNumber = async () => {
-        const objectSN = {
-            id: (Math.ceil(Math.random() * 10000)),
-            fk_producto: product.id,
-            fk_almacen: warehouse,
-            sn: newSerialNumber.value,
-            mac1: newMac1.value,
-            mac2: newMac2.value,
-            mac3: newMac3.value,
-            en: newEn.value,
-        };
-        try {
-            let response = await getDataByIdFrom(URL_SN, Number(newSerialNumber.value), auth.token);
-            if (response.data === null) {
-                if (!!newSerialNumber.value && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
-                    setRecordsData((prevState) => [...prevState, objectSN]);
-                    clearInputs();
-                    refFocus.current.focus();
-                    if (edit) {
-                        deleteDataById()
+
+    const generateObject = (data) => {
+        const formData = new FormData(data);
+        formData.append('id', (Math.ceil(Math.random() * 10000)));
+        formData.append('fk_producto', product.id);
+        formData.append('fk_almacen', warehouse);
+
+        return Object.fromEntries(formData)
+    }
+
+    const addSerialNumber = async (event) => {
+        event.preventDefault();
+        await getDataByIdFrom(URL_SN, Number(newSerialNumber.value), auth.token)
+            .then(response => {
+                if (response.data === null) {
+                    if (!!newSerialNumber.value && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
+                        setState((prevState) => [...prevState, generateObject(event.target)]);
+                        clearInputs();
+                        setBanner({ ...banner, value: createBanner, error: false });
+                        refFocus.current.focus();
+                    } else {
+                        setBanner({ ...banner, value: errorBanner, error: true });
                     }
                 } else {
                     setBanner({ ...banner, value: errorBanner, error: true });
                 }
-            } else {
-                setBanner({ ...banner, value: errorBanner, error: true });
-            }
-        } catch (error) {
-            setBanner({ ...banner, value: errorBanner, error: true })
-        }
+            })
+            .catch(() => {
+                setBanner({ ...banner, value: errorBanner, error: true })
+            })
     }
 
     const deleteDataById = () => {
-        setRecordsData(current => current.filter(record => record.id !== Number(openModal.value)));
-        if (!edit)
-            setBanner({ ...banner, value: deleteBanner, error: false });
+        setState((prevState) => prevState.filter(object => Number(object.id) !== Number(idSelected)));
         clearInputs();
+        setBanner({ ...banner, value: deleteBanner, error: false });
         setOpenModal(initialState);
     }
 
     const confirmDelete = () => {
-        const objectsId = recordsData.map(({ id }) => id);
-        if (!!idSelected && objectsId.includes(Number(idSelected)))
+        const objectsId = state.map(({ id }) => id);
+        if (!!idSelected && objectsId.includes(idSelected))
             setOpenModal({ ...openModal, value: idSelected, error: false });
     }
 
-    const editInputs = async () => {
-        const objectsId = recordsData.map(({ id }) => id);
-        let response = recordsData.find(object => object.id === Number(idSelected));
-        const fields = inputConfig.map(input => input.field);
-        const setStates = inputConfig.map(input => input.setState);
-        !Array.isArray(response) && (response = [response])
-
-        if (!!idSelected && objectsId.includes(Number(idSelected)))
-            setOpenModal({ ...openModal, value: idSelected });
-
-        setStates.forEach((setState, index) => {
-            setState((prevState) => { return { ...prevState, value: response[0][fields[index]], error: false } })
-        })
+    const editInputs = () => {
+        const objectToEdit = state.find(object => object.id === idSelected);
+        setNewSerialNumber({ value: objectToEdit.sn, error: false })
+        setNewMac1({ value: objectToEdit.mac1 === undefined ? '' : objectToEdit.mac1, error: false })
+        setNewMac2({ value: objectToEdit.mac2 === undefined ? '' : objectToEdit.mac2, error: false })
+        setNewMac3({ value: objectToEdit.mac3 === undefined ? '' : objectToEdit.mac3, error: false })
+        setNewEn({ value: objectToEdit.en, error: false })
         refFocus.current.focus();
+        setOpenMacs(true);
         setEdit(true);
     }
 
-    const updateSerialNumbers = () => {
-        addSerialNumber()
-        setBanner({ ...banner, value: updateBanner, error: false });
-        clearInputs();
-    }
+    const updateSerialNumbers = async (event) => {
+        event.preventDefault();
 
-    const handleSubmit = () => {
-        const values = recordsData.values();
-        for (const objects of values) {
-            setState((prevState) => [...prevState, objects]);
-        }
-        setBanner({ ...banner, value: createBanner, error: false });
-        setTimeout(() => handleClose(), 1000)
+        await getDataByIdFrom(URL_SN, Number(newSerialNumber.value), auth.token)
+            .then(response => {
+                if (response.data === null && !!newSerialNumber.value && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
+                    const newState = state.map(object => {
+                        if (Number(object.id) === Number(idSelected)) {
+                            setBanner({ ...banner, value: updateBanner, error: false });
+                            return { ...object, sn: newSerialNumber.value, en: newEn.value, mac1: newMac1.value, mac2: newMac2.value, mac3: newMac3.value }
+                        }
+                        return object
+                    })
+                    setState(newState)
+                    clearInputs();
+                } else {
+                    setBanner({ ...banner, value: errorBanner, error: true });
+                }
+            })
+            .catch(() => {
+                setBanner({ ...banner, value: errorBanner, error: true })
+            })
     }
 
     return (
@@ -157,30 +161,49 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
             {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner(initialState)} />}
             <div className='h-screen flex items-center justify-center'>
                 <div className='flex flex-col item gap-5 bg-white dark:bg-secondary-dark-bg w-11/12 sm:w-4/5 lg:w-3/5 p-5 rounded-3xl'>
-                    <form onSubmit={addSerialNumber} className='w-full flex flex-col justify-center items-center gap-2'>
+                    <form onSubmit={edit ? updateSerialNumbers : addSerialNumber} className='w-full flex flex-col justify-center items-center gap-2'>
                         <div className='self-start text-lg'>Números de serie para {product.product}</div>
-                        <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
+                        <div className='w-4/5 flex justify-center gap-5'>
                             {inputConfig.map((input, index) => {
+                                const { id, useRef, type, label, disabled, state, setState, expression, helperText, css } = input;
+                                return (
+                                    <span className={css} key={index}>
+                                        <Input id={id} useRef={useRef} type={type} label={label} size='small'
+                                            required={true} disabled={disabled}
+                                            state={state} setState={setState} regEx={regEx[expression]} helperText={helperText} />
+                                    </span>
+                                )
+                            })}
+                        </div>
+                        <div className='w-4/5 flex justify-center'>
+                            <Button
+                                type='button' customFunction={() => setOpenMacs(!openMacs)}
+                                borderColor='transparent' text='Agrega MACs' tabindex='-1'
+                                icon={openMacs ? <BsArrowUpShort /> : <BsArrowDownShort />}
+                            />
+                        </div>
+                        {openMacs && <div className='w-4/5 grid grid-cols-3 gap-5 pb-5'>
+                            {inputMac.map((input, index) => {
                                 const { id, useRef, type, label, disabled, state, setState, expression, helperText, css, tooltip } = input;
                                 return (
-                                    <TooltipComponent content={tooltip} position="TopCenter">
-                                        <span className={css} key={index}>
+                                    <TooltipComponent key={index} content={tooltip} position="TopCenter">
+                                        <span className={css} >
                                             <Input id={id} useRef={useRef} type={type} label={label} size='small'
-                                                required={true} disabled={disabled}
+                                                required={false} disabled={disabled}
                                                 state={state} setState={setState} regEx={regEx[expression]} helperText={helperText} />
                                         </span>
                                     </TooltipComponent>
                                 )
                             })}
-                        </div>
+                        </div>}
                         <div className='w-1/2 flex gap-1'>
                             <Button customFunction={handleClose} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' text='Cerrar' width='1/2' tabindex='-1' />
-                            {edit === true ? <Button customFunction={updateSerialNumbers} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='1/2' text='Editar numero de serie' />
-                                : <Button customFunction={addSerialNumber} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Guardar' width='1/2' />}
+                            {edit === true ? <Button type='submit' borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='1/2' text='Editar numero de serie' />
+                                : <Button type='submit' borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Guardar' width='1/2' />}
                         </div>
                     </form>
                     <div className='w-full'>
-                        <Table header={serialNumberGrid} data={recordsData} filterTitle='Mis Números de Serie'
+                        <Table header={serialNumberGrid} data={state.filter(object => Number(object.fk_producto) === Number(product.id))} filterTitle='Mis Números de Serie'
                             checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected} />
                     </div>
                     {!!idSelected &&
@@ -189,9 +212,6 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                             <Button customFunction={editInputs} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='12/6' height='normal' text='Editar registro' icon={<BsPencil />} />
                             <Button customFunction={confirmDelete} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='12/6' height='normal' text='Eliminar registro' icon={<BsTrash />} />
                         </div>}
-                    <div className='w-1/3 m-auto'>
-                        {disabled && !edit && <Button customFunction={handleSubmit} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='12/6' height='normal' text='Agregar números de serie' />}
-                    </div>
                 </div>
             </div>
         </div>

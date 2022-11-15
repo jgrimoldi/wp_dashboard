@@ -22,7 +22,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     const themes = { 1: 'light', 2: 'dark' };
-    const userThemeMode = themes[auth.user.fk_theme];
+    const userThemeMode = themes[auth?.user?.fk_theme];
     return () => {
       if (themeOnScreen !== true) {
         setMode(userThemeMode);
