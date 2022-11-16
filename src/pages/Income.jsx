@@ -34,6 +34,7 @@ const Income = () => {
   const formatedDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
   const initialState = { value: '', error: null };
   const createBanner = { text: '¡Compra registrada exitosamente!', background: themeColors?.confirm }
+  const invalidSeries = { text: '¡Ups! Las series no estan completas', background: '#FFC300' }
   const errorBanner = { text: '¡Ups! No se pudo realizar la acción.', background: themeColors?.error }
   const updateBanner = { text: '¡Registro editado exitosamente!', background: themeColors?.confirm }
   const deleteBanner = { text: 'Producto eliminado de la compra exitosamente!', background: themeColors?.confirm }
@@ -102,8 +103,6 @@ const Income = () => {
       setTotalPrice((prevState) => prevState += Number(objectsCart.subTotal));
       setRecordsData((prevState) => [...prevState, objectsCart]);
       clearInputs();
-      if (edit)
-        deleteDataById();
     } else {
       setBanner({ ...banner, value: errorBanner, error: true });
     }
@@ -116,8 +115,7 @@ const Income = () => {
     setTotalPrice((prevState) => prevState -= Number(objectDeleted.subTotal));
     setRecordsData(current => current.filter(record => record.id !== Number(openModal.value)));
     setOpenModal(initialState);
-    if (!edit)
-      setBanner({ ...banner, value: deleteBanner, error: false });
+    setBanner({ ...banner, value: deleteBanner, error: false });
   }
 
   const confirmDelete = () => {
@@ -127,28 +125,51 @@ const Income = () => {
   }
 
   const editInputs = async () => {
-    const objectsId = recordsData.map(({ id }) => id);
-    let response = recordsData.find(object => object.id === Number(idSelected));
-    const fields = inputsDetails.map(input => input.field);
-    const setStates = inputsDetails.map(input => input.setState);
-    !Array.isArray(response) && (response = [response])
-
-    if (!!idSelected && objectsId.includes(Number(idSelected)))
-      setOpenModal({ ...openModal, value: idSelected });
-
-    await getDataByIdFrom(URL_PRODUCT, response[0].id, auth.token)
+    const objectToEdit = recordsData.find(object => Number(object.id) === Number(idSelected));
+    await getDataByIdFrom(URL_PRODUCT, objectToEdit.id, auth.token)
       .then(res => setDetailsProduct(res.data[0]))
 
-    setStates.forEach((setState, index) => {
-      setState((prevState) => { return { ...prevState, value: response[0][fields[index]] } })
-    })
+    setDetailsQuantity({ value: objectToEdit.quantity, error: false })
+    setDetailsPrice({ value: objectToEdit.unitPrice, error: false })
     setEdit(true);
   }
 
   const updateCartRecord = () => {
-    addToCart();
-    setBanner({ ...banner, value: updateBanner, error: false });
-    clearInputs();
+    const objectToEdit = recordsData.find(object => Number(object.id) === Number(idSelected));
+
+    const objectsCart = new function () {
+      this.id = detailsProduct.id;
+      this.product = detailsProduct.nombre;
+      this.quantity = detailsQuantity.value;
+      this.units = detailsProduct.abreviatura;
+      this.unitPrice = detailsPrice.value;
+      this.price = calculatePrice(detailsQuantity.value, detailsPrice.value);
+      this.alicuota = detailsProduct.alicuota;
+      this.VAT = calculateIVA(this.price, detailsProduct.alicuota);
+      this.subTotal = calculateSubTotal(this.VAT, this.price);
+    };
+
+    const newState = recordsData.map(object => {
+      if (Number(object.id) === Number(idSelected)) {
+        setBanner({ ...banner, value: updateBanner, error: false });
+        return objectsCart
+      }
+      return object
+    })
+
+    if (!!detailsProduct && detailsQuantity.error === false && detailsPrice.error === false) {
+      setSubTotalPrice((prevState) => prevState -= Number(objectToEdit.price));
+      setTotalVATPrice((prevState) => prevState -= Number(objectToEdit.VAT));
+      setTotalPrice((prevState) => prevState -= Number(objectToEdit.subTotal));
+      setSubTotalPrice((prevState) => prevState += Number(objectsCart.price));
+      setTotalVATPrice((prevState) => prevState += Number(objectsCart.VAT));
+      setTotalPrice((prevState) => prevState += Number(objectsCart.subTotal));
+      setRecordsData(newState)
+      setBanner({ ...banner, value: updateBanner, error: false });
+      clearInputs();
+    } else {
+      setBanner({ ...banner, value: errorBanner, error: true });
+    }
   }
 
   const generatePurchase = () => {
@@ -185,19 +206,35 @@ const Income = () => {
     })
   }
 
-  const generateIncome = async () => {
-    generateSerials();
+  const areSerialsComplete = (aSerials) => {
+    const idFromSerials = new Set(aSerials.map(serial => serial.fk_producto))
+    const productsWithSerials = recordsData.filter(record => idFromSerials.has(String(record.id)))
+    const lengthOfSerials = aSerials.length
+    const lengthOfProductsWithSeries = productsWithSerials.map(product => Number(product.quantity)).reduce((a, b) => a + b, 0)
 
-    await insertNewIncome(generatePurchase(), generateDetails(), incomeSerialNumbers, auth.token)
-      .then(() => {
-        setBanner({ ...banner, value: createBanner, error: false });
-        clearInputs();
-        setRecordsData([]);
-        setSubTotalPrice(0);
-        setTotalVATPrice(0);
-        setTotalPrice(0);
-      })
-      .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
+    return lengthOfProductsWithSeries === lengthOfSerials
+  }
+
+  const generateIncome = async () => {
+
+    if (areSerialsComplete(incomeSerialNumbers)) {
+      generateSerials();
+      await insertNewIncome(generatePurchase(), generateDetails(), incomeSerialNumbers, auth.token)
+        .then(() => {
+          setBanner({ ...banner, value: createBanner, error: false });
+          clearInputs();
+          setRecordsData([]);
+          setSubTotalPrice(0);
+          setTotalVATPrice(0);
+          setTotalPrice(0);
+        })
+        .catch(error => {
+          console.log(JSON.parse(error.response.config.data))
+          setBanner({ ...banner, value: errorBanner, error: true })
+        })
+    } else {
+      setBanner({ ...banner, value: invalidSeries, error: true })
+    }
   }
 
   return (

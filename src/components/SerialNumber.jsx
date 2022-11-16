@@ -22,9 +22,9 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
     const deleteBanner = { text: 'Serie eliminada del producto exitosamente!', background: themeColors.confirm }
     const [openMacs, setOpenMacs] = useState(false);
     const [newSerialNumber, setNewSerialNumber] = useState(initialState);
-    const [newMac1, setNewMac1] = useState({ value: '', error: false });
-    const [newMac2, setNewMac2] = useState({ value: '', error: false });
-    const [newMac3, setNewMac3] = useState({ value: '', error: false });
+    const [newMac1, setNewMac1] = useState({ value: ' ', error: false });
+    const [newMac2, setNewMac2] = useState({ value: ' ', error: false });
+    const [newMac3, setNewMac3] = useState({ value: ' ', error: false });
     const [newEn, setNewEn] = useState({ value: '', error: false });
     const [banner, setBanner] = useState(initialState);
     const [openModal, setOpenModal] = useState(initialState);
@@ -32,8 +32,8 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
     const [edit, setEdit] = useState(null);
     const completeSeries = state.filter(object => Number(object.fk_producto) === Number(product.id)).length === Number(product.quantity);
     const inputConfig = [
-        { field: 'sn', id: 'sn', useRef: refFocus, label: 'Número de serie (Alfanumérico)', disabled: completeSeries && !edit, state: newSerialNumber, setState: setNewSerialNumber, expression: 'alphanumeric', css: 'w-1/2' },
-        { field: 'en', id: 'en', label: 'en (Alfanumérico)', disabled: completeSeries && !edit, state: newEn, setState: setNewEn, expression: 'alphanumeric', css: 'w-1/2' },
+        { field: 'sn', id: 'sn', useRef: refFocus, label: 'Número de serie (Alfanumérico)', disabled: completeSeries && !edit, state: newSerialNumber, setState: setNewSerialNumber, expression: 'alphanumeric', css: 'w-1/2', required: true },
+        { field: 'en', id: 'en', label: 'en (Alfanumérico)', disabled: completeSeries && !edit, state: newEn, setState: setNewEn, expression: 'alphanumeric', css: 'w-1/2', required: false },
     ]
     const inputMac = [
         { field: 'mac1', id: 'mac1', label: 'mac1', disabled: completeSeries && !edit, state: newMac1, setState: setNewMac1, expression: 'alphanumericHyphen', css: 'w-full', tooltip: 'Formatos: (11:22:33:44:55:66 o 1122.3344.5566 o 1122-3344-5566)' },
@@ -74,6 +74,15 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
         formData.append('id', (Math.ceil(Math.random() * 10000)));
         formData.append('fk_producto', product.id);
         formData.append('fk_almacen', warehouse);
+        if (!!newMac1.value) {
+            formData.append('mac1', 0);
+        }
+        if (!!newMac2.value) {
+            formData.append('mac2', 0);
+        }
+        if (!!newMac3.value) {
+            formData.append('mac3', 0);
+        }
 
         return Object.fromEntries(formData)
     }
@@ -154,7 +163,7 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
             {openModal.error === false &&
                 <Modal
                     title='¿Está seguro que quiere eliminar este registro?'
-                    text={`El siguiente elemento (id: ${idSelected}) esta a punto de ser eliminado, ¿Desea continuar?`}
+                    text={`El número de serie esta a punto de ser eliminado, ¿Desea continuar?`}
                     buttonText='Eliminar registro' color='red' icon={<BsXCircle />}
                     setFunction={clearInputs} redirect='' customFunction={deleteDataById}
                 />}
@@ -162,14 +171,14 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
             <div className='h-screen flex items-center justify-center'>
                 <div className='flex flex-col item gap-5 bg-white dark:bg-secondary-dark-bg w-11/12 sm:w-4/5 lg:w-3/5 p-5 rounded-3xl'>
                     <form onSubmit={edit ? updateSerialNumbers : addSerialNumber} className='w-full flex flex-col justify-center items-center gap-2'>
-                        <div className='self-start text-lg'>Números de serie para {product.product}</div>
+                        <div className='self-start text-lg dark:text-slate-100'>Números de serie para {product.product}</div>
                         <div className='w-4/5 flex justify-center gap-5'>
                             {inputConfig.map((input, index) => {
-                                const { id, useRef, type, label, disabled, state, setState, expression, helperText, css } = input;
+                                const { id, useRef, type, label, disabled, state, setState, expression, helperText, css, required } = input;
                                 return (
                                     <span className={css} key={index}>
                                         <Input id={id} useRef={useRef} type={type} label={label} size='small'
-                                            required={true} disabled={disabled}
+                                            required={required} disabled={disabled}
                                             state={state} setState={setState} regEx={regEx[expression]} helperText={helperText} />
                                     </span>
                                 )
@@ -178,7 +187,7 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                         <div className='w-4/5 flex justify-center'>
                             <Button
                                 type='button' customFunction={() => setOpenMacs(!openMacs)}
-                                borderColor='transparent' text='Agrega MACs' tabindex='-1'
+                                color={themeColors?.highEmphasis} borderColor='transparent' text='Agrega MACs' tabindex='-1'
                                 icon={openMacs ? <BsArrowUpShort /> : <BsArrowDownShort />}
                             />
                         </div>
@@ -197,9 +206,9 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                             })}
                         </div>}
                         <div className='w-1/2 flex gap-1'>
-                            <Button customFunction={handleClose} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' text='Cerrar' width='1/2' tabindex='-1' />
-                            {edit === true ? <Button type='submit' borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='1/2' text='Editar numero de serie' />
-                                : <Button type='submit' borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Guardar' width='1/2' />}
+                            <Button customFunction={handleClose} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' text={completeSeries > 0 ? 'Guardar y salir' : 'Salir'} width='1/2' tabindex='-1' />
+                            {edit === true ? <Button type='submit' borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='1/2' text='Editar número de serie' />
+                                : <Button type='submit' borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Cargar número de serie' width='1/2' />}
                         </div>
                     </form>
                     <div className='w-full'>
