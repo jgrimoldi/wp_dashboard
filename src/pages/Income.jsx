@@ -224,6 +224,7 @@ const Income = () => {
           setBanner({ ...banner, value: createBanner, error: false });
           clearInputs();
           setRecordsData([]);
+          setIncomeSerialNumbers([])
           setSubTotalPrice(0);
           setTotalVATPrice(0);
           setTotalPrice(0);
