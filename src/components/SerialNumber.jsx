@@ -85,8 +85,6 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
             formData.append('mac3', "");
         }
 
-        console.log(Object.fromEntries(formData))
-
         return Object.fromEntries(formData)
     }
 

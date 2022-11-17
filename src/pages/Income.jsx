@@ -201,9 +201,13 @@ const Income = () => {
   }
 
   const generateSerials = () => {
-    incomeSerialNumbers.forEach(object => {
+    const aux = incomeSerialNumbers
+
+    aux.forEach(object => {
       delete object.id
     })
+
+    return aux
   }
 
   const areSerialsComplete = (aSerials) => {
@@ -218,8 +222,7 @@ const Income = () => {
   const generateIncome = async () => {
 
     if (areSerialsComplete(incomeSerialNumbers)) {
-      generateSerials();
-      await insertNewIncome(generatePurchase(), generateDetails(), incomeSerialNumbers, auth.token)
+      await insertNewIncome(generatePurchase(), generateDetails(), generateSerials(), auth.token)
         .then(() => {
           setBanner({ ...banner, value: createBanner, error: false });
           clearInputs();
@@ -229,10 +232,7 @@ const Income = () => {
           setTotalVATPrice(0);
           setTotalPrice(0);
         })
-        .catch(error => {
-          console.log(JSON.parse(error.response.config.data))
-          setBanner({ ...banner, value: errorBanner, error: true })
-        })
+        .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
     } else {
       setBanner({ ...banner, value: invalidSeries, error: true })
     }
