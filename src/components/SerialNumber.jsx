@@ -74,15 +74,18 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
         formData.append('id', (Math.ceil(Math.random() * 10000)));
         formData.append('fk_producto', product.id);
         formData.append('fk_almacen', warehouse);
-        if (!!newMac1.value) {
-            formData.append('mac1', 0);
+
+        if (!newMac1.value) {
+            formData.append('mac1', "");
         }
-        if (!!newMac2.value) {
-            formData.append('mac2', 0);
+        if (!newMac2.value) {
+            formData.append('mac2', "");
         }
-        if (!!newMac3.value) {
-            formData.append('mac3', 0);
+        if (!newMac3.value) {
+            formData.append('mac3', "");
         }
+
+        console.log(Object.fromEntries(formData))
 
         return Object.fromEntries(formData)
     }
