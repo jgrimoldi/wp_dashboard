@@ -272,6 +272,15 @@ export const incomeListGrid = [
     { name: 'Total Compra', field: 'total', mobile: 'total', },
 ];
 
+export const incomeDetailsGrid = [
+    { name: 'Almacen', field: 'nombre_almacen', mobile: 'nombre_almacen', },
+    { name: 'Productos', field: 'nombre_producto', mobile: 'nombre_producto', },
+    { name: 'Unidades', field: 'cantidad', mobile: 'cantidad', },
+    { name: 'Precio', field: 'precio', mobile: 'precio', },
+    { name: 'Subtotal', field: 'subtotal', mobile: 'subtotal', },
+    { name: 'Importe IVA', field: 'importeiva', mobile: 'importeiva', },
+];
+
 export const backupGrid = [
     { name: 'Creado por', field: 'createdBy', mobile: 'createdBy', },
     { name: 'Fecha', field: 'createdAt', mobile: 'createdAt', },

@@ -27,6 +27,7 @@ const Dates = ({ date }) => {
 };
 
 export const Radio = ({ data, state, setState }) => {
+    console.log(data, state, setState)
 
     const handleChange = (event) => setState(event.target.value);
 

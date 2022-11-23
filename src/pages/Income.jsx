@@ -113,6 +113,7 @@ const Income = () => {
     setSubTotalPrice((prevState) => prevState -= Number(objectDeleted.price));
     setTotalVATPrice((prevState) => prevState -= Number(objectDeleted.VAT));
     setTotalPrice((prevState) => prevState -= Number(objectDeleted.subTotal));
+    setIncomeSerialNumbers(current => current.filter(record => record.fk_producto !== Number(openModal.value)));
     setRecordsData(current => current.filter(record => record.id !== Number(openModal.value)));
     setOpenModal(initialState);
     setBanner({ ...banner, value: deleteBanner, error: false });
