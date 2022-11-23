@@ -264,7 +264,7 @@ const Income = () => {
           </>
         }
         <Table
-          header={incomeGrid} data={recordsData} filterTitle='Mis Compras'
+          header={incomeGrid} data={recordsData} filterTitle='Mis Items'
           checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected}
           barcode={true} setOpenBarcode={setOpenSerialNumber} setProductID={setProductID}
         />

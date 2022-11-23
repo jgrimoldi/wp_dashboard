@@ -32,6 +32,7 @@ export { default as Tiles } from './Tiles';
 export { default as LineChart } from './LineChart';
 export { default as BarCode } from './BarCode';
 export { default as SerialNumber } from './SerialNumber';
+export { default as Details } from './Details';
 export { default as LastLogin } from './LastLogin';
 export { default as Searcher } from './Searcher';
 export { default as ThemeSettings } from './ThemeSettings';

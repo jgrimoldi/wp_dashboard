@@ -12,6 +12,7 @@ export { default as Clients } from './Clients';
 export { default as Category } from './Suppliers/Category';
 export { default as Providers } from './Suppliers/Providers';
 export { default as Income } from './Income';
+export { default as IncomeList } from './IncomeList';
 export { default as Expenses } from './Expenses';
 export { default as Transfer } from './Transfer';
 export { default as Stats } from './Stats';

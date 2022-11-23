@@ -41,7 +41,7 @@ export const Radio = ({ data, state, setState }) => {
     )
 };
 
-const AddBarCode = ({ data, setOpen, setProductID }) => {
+const AddBarCode = ({ data, setOpen, setProductID, field }) => {
     const { themeColors } = useStateContext();
 
     const handleClick = (id) => {
@@ -51,7 +51,7 @@ const AddBarCode = ({ data, setOpen, setProductID }) => {
 
     return (
         <button type='button' onClick={() => handleClick(data.id)} style={{ backgroundColor: themeColors?.primary }} className='flex gap-2 items-center border p-1.5 rounded-xl text-white dark:text-black hover:shadow-lg'>
-            Agregar <span className='text-xl'><BsPlus></BsPlus></span>
+            {field} <span className='text-xl'><BsPlus></BsPlus></span>
         </button>
     )
 }
@@ -191,10 +191,10 @@ const FormatMobile = ({ data, property }) => {
     return (<>{data[property.mobile]}</>);
 }
 
-const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbox, setStateCheckbox, barcode, setOpenBarcode, setProductID }) => {
+const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbox, setStateCheckbox, barcode, setOpenBarcode, fieldName = 'Agregar', setProductID }) => {
     const { themeColors } = useStateContext();
     const [page, setPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(50);
     const { slice, range } = useTable(data, page, rowsPerPage, sortFunction);
     const [filteredValue, setFilteredValue] = useState({ value: '', error: null });
     const [mobileData, setMobileData] = useState([]);
@@ -244,7 +244,7 @@ const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbo
             </div>
             <div className='overflow-auto rounded-lg shadow hidden md:block'>
                 <table className='w-full table-auto'>
-                    <TableHead headSource={header} checkbox={checkbox} barcode={barcode} />
+                    <TableHead headSource={header} checkbox={checkbox} barcode={barcode} field={fieldName} />
                     <tbody>
                         {data.length !== 0 ?
                             slice.filter(ifIncludes).map((data, index) =>
@@ -255,7 +255,7 @@ const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbo
                                             <FormatDesktop data={data} property={property} />
                                         </td>
                                     )}
-                                    {barcode && <td className='w-fit p-3 text-sm text-center text-gray-700 dark:text-gray-100 whitespace-nowrap'><AddBarCode data={data} setOpen={setOpenBarcode} setProductID={setProductID} /></td>}
+                                    {barcode && <td className='w-fit p-3 text-sm text-center text-gray-700 dark:text-gray-100 whitespace-nowrap'><AddBarCode data={data} setOpen={setOpenBarcode} setProductID={setProductID} field={fieldName} /></td>}
                                 </tr>
                             )
                             : <tr className='text-center bg-white dark:bg-secondary-dark-bg'><td className='p-3 text-sm text-gray-700 dark:text-gray-100 whitespace-nowrap'>No hay entradas para mostrar</td></tr>
@@ -281,7 +281,7 @@ const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbo
                                     ))}
                                 </div>
                             ))}
-                            {barcode && <div><AddBarCode data={data} setOpen={setOpenBarcode} setProductID={setProductID} /></div>}
+                            {barcode && <div><AddBarCode data={data} setOpen={setOpenBarcode} setProductID={setProductID} field={fieldName} /></div>}
                         </div>
                     )
                     )

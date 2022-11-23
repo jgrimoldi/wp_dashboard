@@ -1,6 +1,6 @@
 import React from 'react'
 
-const TableHead = ({ headSource, checkbox, barcode }) => {
+const TableHead = ({ headSource, checkbox, barcode, field }) => {
   return (
     <thead className='bg-gray-50 dark:bg-secondary-dark-bg dark:text-gray-100 border-b-2 border-gray-200 dark:border-black'>
       <tr>
@@ -9,7 +9,7 @@ const TableHead = ({ headSource, checkbox, barcode }) => {
           <th key={index} className='p-3 text-sm font-semibold tracking-wide text-left'>{item.name}</th>
         ))
         }
-        {barcode && <th className='p-3 text-sm font-semibold tracking-wide text-left'>Agregar</th>}
+        {barcode && <th className='p-3 text-sm font-semibold tracking-wide text-left'>{field}</th>}
       </tr>
     </thead>
   )

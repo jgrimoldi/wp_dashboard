@@ -111,6 +111,11 @@ export const sidebar = [
                 icon: <BsPiggyBank />,
             },
             {
+                name: 'Lista de compras',
+                url: 'lista-de-ingresos',
+                icon: <BsPiggyBank />,
+            },
+            {
                 name: 'Egreso de productos',
                 url: 'egresos',
                 icon: <BsWallet2 />,
@@ -258,6 +263,13 @@ export const incomeGrid = [
     { name: 'Alicuota', field: 'alicuota', mobile: 'alicuota', },
     { name: 'Importe IVA', field: 'VAT', mobile: 'VAT', },
     { name: 'SubTotal', field: 'subTotal', mobile: 'subTotal', },
+];
+
+export const incomeListGrid = [
+    { name: 'Proveedor', field: 'nombre', mobile: 'nombre', },
+    { name: 'CUIT/CUIL Proveedor', field: 'id_proveedor', mobile: 'id_proveedor', },
+    { name: 'Fecha de Compra', field: 'fechacompra', mobile: 'fechacompra', },
+    { name: 'Total Compra', field: 'total', mobile: 'total', },
 ];
 
 export const backupGrid = [

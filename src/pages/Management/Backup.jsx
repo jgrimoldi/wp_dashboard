@@ -54,9 +54,7 @@ const Backup = () => {
       })
   }
 
-  const sortByLastCreated = (data, anotherData) => new Date(anotherData['Fecha Creación']) < new Date(data['Fecha Creación']) ? -1 : 1
-
-  console.log(backupData)
+  const sortByLastCreated = (data, anotherData) => new Date(anotherData['createdAt']) < new Date(data['createdAt']) ? -1 : 1
 
   return (
     <>
