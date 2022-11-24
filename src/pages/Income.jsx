@@ -201,11 +201,11 @@ const Income = () => {
     return array;
   }
 
-  const generateSerials = () => {
-    const aux = incomeSerialNumbers
+  const GenerateSerials = () => {
+    const aux = [];
 
-    aux.forEach(object => {
-      delete object.id
+    incomeSerialNumbers.forEach(object => {
+      aux.push({ fk_almacen: object.fk_almacen, fk_producto: object.fk_producto, sn: object.sn, en: object.en, mac1: object.mac1, mac2: object.mac2, mac3: object.mac3 })
     })
 
     return aux
@@ -220,10 +220,11 @@ const Income = () => {
     return lengthOfProductsWithSeries === lengthOfSerials
   }
 
+
   const generateIncome = async () => {
 
     if (areSerialsComplete(incomeSerialNumbers)) {
-      await insertNewIncome(generatePurchase(), generateDetails(), generateSerials(), auth.token)
+      await insertNewIncome(generatePurchase(), generateDetails(), GenerateSerials(), auth.token)
         .then(() => {
           setBanner({ ...banner, value: createBanner, error: false });
           clearInputs();

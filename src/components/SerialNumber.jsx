@@ -22,9 +22,9 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
     const deleteBanner = { text: 'Serie eliminada del producto exitosamente!', background: themeColors.confirm }
     const [openMacs, setOpenMacs] = useState(false);
     const [newSerialNumber, setNewSerialNumber] = useState(initialState);
-    const [newMac1, setNewMac1] = useState({ value: ' ', error: false });
-    const [newMac2, setNewMac2] = useState({ value: ' ', error: false });
-    const [newMac3, setNewMac3] = useState({ value: ' ', error: false });
+    const [newMac1, setNewMac1] = useState({ value: '', error: false });
+    const [newMac2, setNewMac2] = useState({ value: '', error: false });
+    const [newMac3, setNewMac3] = useState({ value: '', error: false });
     const [newEn, setNewEn] = useState({ value: '', error: false });
     const [banner, setBanner] = useState(initialState);
     const [openModal, setOpenModal] = useState(initialState);
@@ -96,7 +96,6 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
         event.preventDefault();
         await getDataByIdFrom(URL_SN, newSerialNumber.value, auth.token)
             .then(response => {
-                console.log(response.data)
                 if (response.data === null) {
                     if (!!newSerialNumber.value && notExistsInState(newSerialNumber.value) && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
                         setState((prevState) => [...prevState, generateObject(event.target)]);
