@@ -6,6 +6,7 @@ export { default as Input } from './Input';
 export { default as Password } from './Password';
 export { default as GroupValidator } from './GroupValidator';
 export { default as Dropdown } from './Dropdown';
+export { default as Select } from './Select';
 export { default as ErrorLabel } from './ErrorLabel';
 export { default as Modal } from './Modal';
 export { default as LoadingSpinner } from './LoadingSpinner';

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BsXCircle, BsTrash, BsPencil } from 'react-icons/bs';
 
-import { SEO, Title, Table, Input, Searcher, Button, Modal, Banner, SerialNumber } from '../components';
+import { SEO, Title, Table, Input, Button, Modal, Banner, SerialNumber, Select } from '../components';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { useStateContext } from '../contexts/ContextProvider';
 import { incomeGrid, regEx } from '../data/dummy';
@@ -19,7 +19,7 @@ const MakeInputs = ({ configInputs }) => (
             ? <Input id={id} useRef={useRef} type={type} label={label} size='small'
               required={true} disabled={disabled}
               state={state} setState={setState} regEx={regEx[expression]} helperText={helperText} />
-            : <Searcher id={id} label={label} url={url} state={state} setState={setState} getter={getter} disabled={disabled} />}
+            : <Select id={id} label={label} url={url} state={state} setState={setState} getter={getter} />}
         </span>
       )
     })}
@@ -66,6 +66,9 @@ const Income = () => {
     { field: 'unitPrice', id: 'price', type: 'number', label: 'Precio', state: detailsPrice, setState: setDetailsPrice, expression: 'digitsRegExp', css: 'w-1/6' },
   ]
 
+  // console.log(supplier)
+
+
   useEffect(() => {
     let shadowBanner = setTimeout(() => setBanner({ error: null }), 2000);
     return () => { clearTimeout(shadowBanner) };
@@ -76,6 +79,7 @@ const Income = () => {
       if (input.field)
         input.setState(initialState);
     });
+    setDetailsProduct({ nombre: '' });
     setOpenModal(initialState);
     setIdSelected('');
     setEdit(false);
@@ -227,6 +231,8 @@ const Income = () => {
       await insertNewIncome(generatePurchase(), generateDetails(), GenerateSerials(), auth.token)
         .then(() => {
           setBanner({ ...banner, value: createBanner, error: false });
+          setSupplier({ nombre: '' });
+          setWarehouse({ nombre: '' });
           clearInputs();
           setRecordsData([]);
           setIncomeSerialNumbers([])

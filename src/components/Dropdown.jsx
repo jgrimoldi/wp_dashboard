@@ -24,10 +24,11 @@ const Dropdown = ({ id, label, size, state, setState, options, getter, helperTex
             <FormControl fullWidth required={required}>
                 <Autocomplete
                     id={id} name={id}
-                    value={state.value}
+                    value={state?.value}
                     onChange={(_, newValue) => handleChange(newValue)}
                     onBlur={handleValidation} onKeyUp={handleValidation}
                     options={options}
+                    filterSelectedOptions
                     getOptionLabel={(option) => option[getter] || ''}
                     isOptionEqualToValue={(option, value) => option[getter] === value[getter]}
                     disabled={disabled}
@@ -48,7 +49,7 @@ const Dropdown = ({ id, label, size, state, setState, options, getter, helperTex
                             }
                         }
                     }}
-                    renderInput={(params) => <TextField {...params} error={state.error} label={label} placeholder={label} size={size ? size : 'normal'} variant='outlined' helperText={state.error && helperText} className='bg-white dark:bg-secondary-dark-bg rounded-md' />}
+                    renderInput={(params) => <TextField {...params} error={state?.error} label={label} placeholder={label} size={size ? size : 'normal'} variant='outlined' helperText={state?.error && helperText} className='bg-white dark:bg-secondary-dark-bg rounded-md' />}
                 />
             </FormControl>
             {tooltip

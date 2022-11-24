@@ -7,6 +7,10 @@ module.exports = {
             body: ['Montserrat', 'sans-serif'],
         },
         extend: {
+            colors: {
+                'secondary-purple': '#C4A2FA',
+                'secondary-blue': '#571CDD',
+            },
             fontSize: {
                 14: '14px',
             },
