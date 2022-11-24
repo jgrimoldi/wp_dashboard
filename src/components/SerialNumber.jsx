@@ -88,12 +88,17 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
         return Object.fromEntries(formData)
     }
 
+    const notExistsInState = (aValue) => {
+        return state.filter(object => object.sn === aValue).length === 0
+    }
+
     const addSerialNumber = async (event) => {
         event.preventDefault();
-        await getDataByIdFrom(URL_SN, Number(newSerialNumber.value), auth.token)
+        await getDataByIdFrom(URL_SN, newSerialNumber.value, auth.token)
             .then(response => {
+                console.log(response.data)
                 if (response.data === null) {
-                    if (!!newSerialNumber.value && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
+                    if (!!newSerialNumber.value && notExistsInState(newSerialNumber.value) && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
                         setState((prevState) => [...prevState, generateObject(event.target)]);
                         clearInputs();
                         setBanner({ ...banner, value: createBanner, error: false });
@@ -138,9 +143,9 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
     const updateSerialNumbers = async (event) => {
         event.preventDefault();
 
-        await getDataByIdFrom(URL_SN, Number(newSerialNumber.value), auth.token)
+        await getDataByIdFrom(URL_SN, newSerialNumber.value, auth.token)
             .then(response => {
-                if (response.data === null && !!newSerialNumber.value && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
+                if (response.data === null && notExistsInState(newSerialNumber.value) && !!newSerialNumber.value && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
                     const newState = state.map(object => {
                         if (Number(object.id) === Number(idSelected)) {
                             setBanner({ ...banner, value: updateBanner, error: false });
