@@ -79,9 +79,9 @@ export const updatePasswordByEmail = (email, password, token) => {
     )
 }
 
-export const updatePassword = (email, password, token) => {
+export const updatePassword = (email, passwordOld, password, token) => {
     return (
-        API.put(URL_AUTH + 'updatePassword', { email, password }, header(token))
+        API.put(URL_AUTH + 'updatePassword', { email, passwordOld, password }, header(token))
             .then(response => {
                 return response.data;
             })

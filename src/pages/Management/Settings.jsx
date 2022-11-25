@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
 import avatar from '../../data/avatar.png';
-import { SEO, Title, Button, Input, Password, GroupValidator, ErrorLabel } from '../../components';
+import { SEO, Title, Button, Input, Password, GroupValidator, ErrorLabel, Banner } from '../../components';
 import { regEx } from '../../data/dummy';
 import { useStateContext } from '../../contexts/ContextProvider';
 import { getDataByIdFrom } from '../../services/GdrService';
 import { URL_PROFILE, URL_COMPANY } from '../../services/Api';
 import { useAuthContext } from '../../contexts/ContextAuth';
+import { updatePassword, updateUserById } from '../../services/AuthService';
 
-const UpdatePassword = ({ email, setClose }) => {
+const UpdatePassword = ({ email, token, setClose, setOpenBanner }) => {
   const { themeColors } = useStateContext();
   const [oldPassword, setOldPassword] = useState({ value: '', error: null });
   const [password, setPassword] = useState({ value: '', error: null });
@@ -25,8 +26,29 @@ const UpdatePassword = ({ email, setClose }) => {
     }
   }
 
-  const handleUpdate = () => {
-
+  const handleUpdate = (event) => {
+    event.preventDefault();
+    if (oldPassword.value !== password.value) {
+      if (oldPassword.error === false && password.error === false && passwordVerify.error === false && password.value === passwordVerify.value) {
+        updatePassword(email, oldPassword.value, password.value, token)
+          .then(() => {
+            setOpenBanner(true)
+            setClose(false)
+            setErrorForm({ ...errorForm, value: '', error: false })
+          })
+          .catch(error => {
+            if (error.response.data.error === "OLD_PASSWORD_INVALID") {
+              setErrorForm({ ...errorForm, value: 'Ups! Parece que la constraeña anterior no es correcta', error: true })
+            } else {
+              setErrorForm({ ...errorForm, value: 'Ocurrió un error! Vuelva a intentar.', error: true })
+            }
+          })
+      } else {
+        setErrorForm({ ...errorForm, value: 'Revise si los campos son correctos.', error: true });
+      }
+    } else {
+      setErrorForm({ ...errorForm, value: 'La nueva contraseña no debe ser igual a la anterior.', error: true });
+    }
   }
 
   return (
@@ -39,7 +61,7 @@ const UpdatePassword = ({ email, setClose }) => {
             <Password id='password' label='Nueva Contraseña' color={themeColors?.secondary} state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' css='w-full' />
             {!!password.value && <GroupValidator password={password.value} />}
             <Password id='passwordVerify' label='Confirmar Nueva Contraseña' color={themeColors?.secondary} state={passwordVerify} setState={setPasswordVerify} customFunction={handleValidatePassword} helperText='Las contraseñas no coinciden' css='w-full' />
-            {!!errorForm.value && <ErrorLabel color='red'>{errorForm.value}</ErrorLabel>}
+            {!!errorForm.value && <ErrorLabel color={themeColors?.error}>{errorForm.value}</ErrorLabel>}
             <div className='w-1/2 flex gap-1'>
               <Button customFunction={() => { setClose(false) }} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' text='Cerrar' width='1/2' tabindex='-1' />
               <Button type='submit' borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Actualizar contraseña' width='1/2' />
@@ -55,12 +77,20 @@ const UpdatePassword = ({ email, setClose }) => {
 const Settings = () => {
   const { themeColors } = useStateContext();
   const { auth, handleErrors } = useAuthContext();
-  const [name, setName] = useState({ value: auth.user.nombre, error: null });
-  const [surname, setSurname] = useState({ value: auth.user.apellido, error: null });
+  const createBanner = { text: '¡Perfil actualizado exitosamente!', background: themeColors?.confirm }
+  const [name, setName] = useState({ value: auth.user.nombre, error: false });
+  const [surname, setSurname] = useState({ value: auth.user.apellido, error: false });
   const [email, setEmail] = useState({ value: auth.user.email, error: null });
   const [profile, setProfile] = useState({ value: '', error: null });
   const [company, setCompany] = useState({ value: '', error: null });
   const [openPassword, setOpenPassword] = useState(null);
+  const [openBanner, setOpenBanner] = useState(null);
+  const [errorForm, setErrorForm] = useState({ value: '', error: null });
+
+  useEffect(() => {
+    let shadowBanner = setTimeout(() => setOpenBanner(null), 2000);
+    return () => { clearTimeout(shadowBanner) };
+  });
 
   useEffect(() => {
     const getDataById = async (URL, ID, setState, getter) => {
@@ -75,13 +105,25 @@ const Settings = () => {
   }, [auth, handleErrors])
 
   const handleSave = () => {
-
+    if (name.error === false && surname.error === false) {
+      updateUserById(auth.user.id, email.value, name.value, surname.value, auth.user.fk_perfil, auth.user.fk_empresa, auth.user.fk_theme, auth.token)
+        .then(response => {
+          if (response.data.message === "UPDATE_USER_OK") {
+            setErrorForm({ ...errorForm, value: '', error: false })
+            setOpenBanner(true)
+          }
+        })
+        .catch(() => setErrorForm({ ...errorForm, value: 'Ocurrió un error! Vuelva a intentar.', error: true }))
+    } else {
+      setErrorForm({ ...errorForm, value: 'Revise si los campos son correctos.', error: true });
+    }
   }
 
   return (
     <>
       <SEO title='Mi perfil' />
-      {openPassword === true && <UpdatePassword email={auth.user.email} setClose={setOpenPassword} />}
+      {openBanner === true && <Banner text={createBanner.text} backgroundColor={createBanner.background} setState={() => setOpenBanner(null)} />}
+      {openPassword === true && <UpdatePassword email={email.value} setClose={setOpenPassword} token={auth?.token} setOpenBanner={setOpenBanner} />}
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>
         <Title category="Mi" title="Perfil" />
         <div className='flex md:flex-row-reverse flex-col gap-3'>
@@ -96,6 +138,7 @@ const Settings = () => {
             <Input id='role' label='Perfil' state={profile} setState={setProfile} disabled={true} />
             <Input id='company' label='Empresa' state={company} setState={setCompany} disabled={true} />
             <Button customFunction={() => { setOpenPassword(true) }} borderColor={themeColors?.primary} color={themeColors?.primary} backgroundColor='transparent' text='Cambiar contraseña' />
+            {!!errorForm.value && <ErrorLabel color={themeColors?.error}>{errorForm.value}</ErrorLabel>}
             <div className='w-full flex py-8'>
               <Button customFunction={handleSave} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Actualizar perfil' />
             </div>

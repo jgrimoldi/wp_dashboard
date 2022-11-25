@@ -87,8 +87,8 @@ const Register = () => {
   return (
     <>
       <SEO title='Registro de usuarios' />
-      {errorForm.error === false && <Banner text='Registro exitoso!' backgroundColor='green' setState={() => setErrorForm({ ...errorForm, error: null })} />}
-      {errorForm.error === true && <Banner text='¡Ups! El registro no pudo realizarse' backgroundColor='red' setState={() => setErrorForm({ ...errorForm, error: null })} />}
+      {errorForm.error === false && <Banner text='Registro exitoso!' backgroundColor={themeColors?.confirm} setState={() => setErrorForm({ ...errorForm, error: null })} />}
+      {errorForm.error === true && <Banner text='¡Ups! El registro no pudo realizarse' backgroundColor={themeColors?.error} setState={() => setErrorForm({ ...errorForm, error: null })} />}
       <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>
         <Title category="Registro de" title="Empleados" />
         <div className='w-full md:w-4/5 flex flex-col gap-5 m-auto'>
@@ -100,7 +100,7 @@ const Register = () => {
           <Password id='password' label='Contraseña' color={themeColors?.secondary} state={password} setState={setPassword} regEx={regEx.password} helperText='No es una contraseña válida' />
           {!!password.value && <GroupValidator password={password.value} />}
           <Password id='passwordVerify' label='Confirmar contraseña' color={themeColors?.secondary} state={passwordVerify} setState={setPasswordVerify} customFunction={handleValidatePassword} helperText='Las contraseñas no coinciden' />
-          {!!errorForm.value && <ErrorLabel color='red'>{errorForm.value}</ErrorLabel>}
+          {!!errorForm.value && <ErrorLabel color={themeColors?.error}>{errorForm.value}</ErrorLabel>}
         </div>
         <div className='w-full md:w-4/5 flex gap-1 justify-end m-auto pt-5'>
           <Button customFunction={setEmpty} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' text='Vaciar entradas' height={true} />
