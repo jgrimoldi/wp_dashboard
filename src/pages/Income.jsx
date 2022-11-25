@@ -66,9 +66,6 @@ const Income = () => {
     { field: 'unitPrice', id: 'price', type: 'number', label: 'Precio', state: detailsPrice, setState: setDetailsPrice, expression: 'digitsRegExp', css: 'w-1/6' },
   ]
 
-  // console.log(supplier)
-
-
   useEffect(() => {
     let shadowBanner = setTimeout(() => setBanner({ error: null }), 2000);
     return () => { clearTimeout(shadowBanner) };

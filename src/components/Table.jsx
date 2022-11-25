@@ -193,7 +193,7 @@ const FormatMobile = ({ data, property }) => {
 const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbox, setStateCheckbox, barcode, setOpenBarcode, fieldName = 'Agregar', setProductID }) => {
     const { themeColors } = useStateContext();
     const [page, setPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(50);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const { slice, range } = useTable(data, page, rowsPerPage, sortFunction);
     const [filteredValue, setFilteredValue] = useState({ value: '', error: null });
     const [mobileData, setMobileData] = useState([]);
