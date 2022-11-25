@@ -46,7 +46,14 @@ const Input = ({ id, useRef = null, type, label, size, tooltip, customFunction, 
                         '&.Mui-focused': {
                             color: themeColors?.secondary,
                         }
-                    }
+                    },
+                    "& .MuiInputBase-input.Mui-disabled": {
+                        WebkitTextFillColor: themeColors?.disabled,
+                        color: themeColors?.disabled,
+                    },
+                    '& label.Mui-disabled': {
+                        color: themeColors?.disabled,
+                    },
                 }}
 
             />

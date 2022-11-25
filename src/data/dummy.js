@@ -169,7 +169,7 @@ export const sidebar = [
         links: [
             {
                 name: 'Configuración',
-                url: '/', //perfil
+                url: 'perfil',
                 icon: <BsGear />,
             },
             {
