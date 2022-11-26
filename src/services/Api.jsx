@@ -7,6 +7,7 @@ export const header = (token) => ({ headers: { Authorization: `JWT ${token}` } }
 export const URL_DASHBOARD = 'dashboard/';
 export const URL_STORAGE = 'almacen/';
 export const URL_WAREHOUSE = 'almacenestablecimiento/';
+export const URL_WAREHOUSEPRODUCT = 'almacenproducto/';
 export const URL_AUTH = 'auth/';
 export const URL_BACKUP = 'backup/';
 export const URL_CATEGORY = 'categoriaProveedor/';

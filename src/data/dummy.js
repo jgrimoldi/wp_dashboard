@@ -111,11 +111,6 @@ export const sidebar = [
                 icon: <BsPiggyBank />,
             },
             {
-                name: 'Lista de compras',
-                url: 'lista-de-ingresos',
-                icon: <BsPiggyBank />,
-            },
-            {
                 name: 'Egreso de productos',
                 url: 'egresos',
                 icon: <BsWallet2 />,
@@ -123,6 +118,26 @@ export const sidebar = [
             {
                 name: 'Transferencia entre almacenes',
                 url: 'transferencia-entre-almacenes',
+                icon: <BsArrowLeftRight />,
+            },
+        ],
+    },
+    {
+        title: 'Lista de Movimientos',
+        links: [
+            {
+                name: 'Lista de compras',
+                url: 'lista-de-ingresos',
+                icon: <BsPiggyBank />,
+            },
+            {
+                name: 'Lista de egresos',
+                url: '/',
+                icon: <BsWallet2 />,
+            },
+            {
+                name: 'Lista de transferencias',
+                url: '/',
                 icon: <BsArrowLeftRight />,
             },
         ],
@@ -370,4 +385,18 @@ export const serialNumberGrid = [
     { name: 'mac2', field: 'mac2', mobile: 'mac2' },
     { name: 'mac3', field: 'mac3', mobile: 'mac3' },
     { name: 'en', field: 'en', mobile: 'en' },
+];
+
+export const expenseGrid = [
+    { name: 'Producto', field: 'product', mobile: 'product', },
+    { name: 'Unidades', field: 'quantity', mobile: 'quantity', },
+    { name: 'U.Med', field: 'units', mobile: 'units', },
+    { name: 'Precio', field: 'price', mobile: 'price', },
+];
+
+export const expenseListGrid = [
+    { name: 'Proveedor', field: 'nombre', mobile: 'nombre', },
+    { name: 'CUIT/CUIL Proveedor', field: 'id_proveedor', mobile: 'id_proveedor', },
+    { name: 'Fecha de Compra', field: 'fechacompra', mobile: 'fechacompra', },
+    { name: 'Total Compra', field: 'total', mobile: 'total', },
 ];

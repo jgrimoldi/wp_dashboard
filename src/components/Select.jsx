@@ -54,8 +54,8 @@ const Select = ({ id, label, state, setState, url, getter }) => {
         <select style={{ color: themeColors?.highEmphasis }} className={classSelect}
             id={id} onChange={handleChange}
             onBlur={handleValidation} onKeyUp={handleValidation}
-            defaultValue='' value={state.nombre} >
-            <option style={{ color: '#c4c4c4' }} value='' disabled>Elija una opcion</option>
+            defaultValue='' value={state.id} >
+            <option style={{ color: '#c4c4c4' }} value='' disabled>Elija un {label}</option>
             {
                 data.map((opcion, index) =>
                     <option key={index} value={opcion.id}>{opcion.nombre}</option>

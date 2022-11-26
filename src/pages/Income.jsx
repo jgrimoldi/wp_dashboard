@@ -76,7 +76,7 @@ const Income = () => {
       if (input.field)
         input.setState(initialState);
     });
-    setDetailsProduct({ nombre: '' });
+    setDetailsProduct({ id: '' });
     setOpenModal(initialState);
     setIdSelected('');
     setEdit(false);
@@ -98,7 +98,7 @@ const Income = () => {
       this.VAT = calculateIVA(this.price, detailsProduct.alicuota);
       this.subTotal = calculateSubTotal(this.VAT, this.price);
     };
-    if (!!detailsProduct && detailsQuantity.error === false && detailsPrice.error === false) {
+    if (!!detailsProduct && detailsQuantity.error === false && detailsPrice.error === false && Number(detailsQuantity.value) > 0) {
       setSubTotalPrice((prevState) => prevState += Number(objectsCart.price));
       setTotalVATPrice((prevState) => prevState += Number(objectsCart.VAT));
       setTotalPrice((prevState) => prevState += Number(objectsCart.subTotal));
@@ -159,7 +159,7 @@ const Income = () => {
       return object
     })
 
-    if (!!detailsProduct && detailsQuantity.error === false && detailsPrice.error === false) {
+    if (!!detailsProduct && detailsQuantity.error === false && detailsPrice.error === false && Number(detailsQuantity.value) > 0) {
       setSubTotalPrice((prevState) => prevState -= Number(objectToEdit.price));
       setTotalVATPrice((prevState) => prevState -= Number(objectToEdit.VAT));
       setTotalPrice((prevState) => prevState -= Number(objectToEdit.subTotal));
@@ -228,8 +228,8 @@ const Income = () => {
       await insertNewIncome(generatePurchase(), generateDetails(), GenerateSerials(), auth.token)
         .then(() => {
           setBanner({ ...banner, value: createBanner, error: false });
-          setSupplier({ nombre: '' });
-          setWarehouse({ nombre: '' });
+          setSupplier({ id: '' });
+          setWarehouse({ id: '' });
           clearInputs();
           setRecordsData([]);
           setIncomeSerialNumbers([])
@@ -249,7 +249,7 @@ const Income = () => {
       {openModal.error === false &&
         <Modal
           title='¿Está seguro que quiere eliminar este registro?'
-          text={`El siguiente elemento (id: ${idSelected}) esta a punto de ser eliminado, ¿Desea continuar?`}
+          text={`El siguiente elemento esta a punto de ser eliminado, ¿Desea continuar?`}
           buttonText='Eliminar registro' color={themeColors?.error} icon={<BsXCircle />}
           setFunction={clearInputs} redirect='' customFunction={deleteDataById}
         />}
