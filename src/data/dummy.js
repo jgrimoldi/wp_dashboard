@@ -174,7 +174,7 @@ export const sidebar = [
             },
             {
                 name: 'Ayuda',
-                url: '/', //ayuda
+                url: 'ayuda',
                 icon: <BsQuestionCircle />,
             },
         ],
