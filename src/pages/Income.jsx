@@ -86,6 +86,11 @@ const Income = () => {
   const calculateSubTotal = (IVA, price) => (Number(IVA) + Number(price)).toFixed(2);
   const calculateIVA = (price, alicuota) => (Number(price) * (Number(alicuota) / 100)).toFixed(2);
 
+  function validateIfExists(product) {
+    const datos = recordsData.map(item => item.id);
+    return datos.includes(product.id)
+  }
+
   const addToCart = () => {
     const objectsCart = new function () {
       this.id = detailsProduct.id;
@@ -98,7 +103,7 @@ const Income = () => {
       this.VAT = calculateIVA(this.price, detailsProduct.alicuota);
       this.subTotal = calculateSubTotal(this.VAT, this.price);
     };
-    if (!!detailsProduct && detailsQuantity.error === false && detailsPrice.error === false && Number(detailsQuantity.value) > 0) {
+    if (!!detailsProduct && detailsQuantity.error === false && detailsPrice.error === false && Number(detailsQuantity.value) > 0 && !validateIfExists(detailsProduct)) {
       setSubTotalPrice((prevState) => prevState += Number(objectsCart.price));
       setTotalVATPrice((prevState) => prevState += Number(objectsCart.VAT));
       setTotalPrice((prevState) => prevState += Number(objectsCart.subTotal));

@@ -75,33 +75,40 @@ const Expenses = () => {
     setEdit(null);
   }
 
+  function validateIfExists(product) {
+    const datos = recordsData.map(item => item.fk_producto);
+    if (datos.includes(product.id_producto)) {
+      const error = { text: `Ups! El producto ya se encuentra en la lista`, background: themeColors?.error }
+      throw error;
+    }
+  }
+
   function validateQuantity(quantityToExpense) {
     return Number(detailsQuantity.value) <= quantityToExpense
   }
 
-  function checkStockOn(productID) {
-    if (productID === detailsProduct.id) {
-      const quantityOnProduct = detailsProduct.cantidad - Number(detailsQuantity.value);
+  function checkStockOn(aProduct) {
+    if (aProduct.id_producto === detailsProduct.id) {
+      const quantityOnProduct = aProduct.cantidad - Number(detailsQuantity.value);
       const stockMin = detailsProduct.stockmin >= quantityOnProduct;
 
-      if (quantityOnProduct < 0) {
-        const error = { text: `Ups! La cantidad supera las unidades del producto. Unidades del producto: ${detailsProduct.cantidad}`, background: themeColors?.error }
-        throw error;
-      }
       if (stockMin) {
-        setBanner({ ...banner, value: { text: `Atención! Producto por debajo del stock. Stock mínimo: ${detailsProduct.stockmin}`, background: '#FFC300' }, error: true })
+        setBanner({ ...banner, value: { text: `Atención! Producto por debajo del stock. Stock mínimo: ${detailsProduct.stockmin}. Unidades en el almacén: ${quantityOnProduct}`, background: '#FFC300' }, error: true })
       }
+
       if (quantityOnProduct === 0) {
-        setBanner({ ...banner, value: { text: 'Atención! Todas las unidades faltantes fueron seleccionadas', background: '#FFC300' }, error: true })
+        setBanner({ ...banner, value: { text: `Atención! Todas las unidades faltantes fueron seleccionadas. Unidades en el almacén: ${quantityOnProduct}`, background: '#FFC300' }, error: true })
       }
+
     } else {
-      setBanner({ ...banner, value: errorBanner, error: true })
+      const error = { text: `Ups! Ocurrió un error al seleccionar el producto`, background: themeColors?.error }
+      throw error;
     }
   }
 
   function validateAdd(productInfo) {
     if (validateQuantity(productInfo.cantidad)) {
-      checkStockOn(productInfo.id_producto)
+      checkStockOn(productInfo)
     } else {
       const error = { text: `Ups! La cantidad a egresar es mayor a la cantidad en almacén. Cantidad en almacén: ${productInfo.cantidad}`, background: themeColors?.error }
       throw error;
@@ -131,6 +138,7 @@ const Expenses = () => {
     if (warehouse.error === false && detailsProduct.error === false && detailsQuantity.error === false && detailsQuantity.value > 0) {
       getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', detailsProduct.id, auth.token)
         .then(async response => {
+          validateIfExists(response.data[0])
           validateAdd(response.data[0])
           addNewProduct(response.data[0], detailsProduct, detailsQuantity.value)
           await new Promise(r => setTimeout(r, 2000));
@@ -213,7 +221,7 @@ const Expenses = () => {
     }
   }
 
-  async function areSerialsComplete() {
+  async function getSerials() {
     const products = [];
     await Promise.all(recordsData.map(obj =>
       getDataByIdFrom(`${URL_SN}q/productoalmacen/${obj.fk_producto}/${warehouse.id}/`, 0, auth.token)
@@ -222,6 +230,19 @@ const Expenses = () => {
         })
     ));
     return products;
+  }
+
+  async function areSerialsComplete() {
+    const totalSerials = (await getSerials()).flat().map(item => item.sn);
+    const fkProducts = (await getSerials()).flat().map(item => item.id_producto)
+    const prods = recordsData.filter(item => fkProducts.includes(item.fk_producto)).reduce((a, b) => a.quantity + b.quantity)
+    let areIncluded = true;
+
+    expenseSerials.forEach(item => {
+      areIncluded = areIncluded && totalSerials.includes(item.sn)
+    })
+
+    return areIncluded && prods === expenseSerials.length
   }
 
 
@@ -240,8 +261,7 @@ const Expenses = () => {
   }
 
   const generateExpense = async () => {
-
-    if ((await areSerialsComplete()).flat().length === expenseSerials.length) {
+    if (areSerialsComplete()) {
       insertNewExpense(generateNewExpense(), generateDetails(), expenseSerials, auth.token)
         .then(() => {
           setBanner({ ...banner, value: createBanner, error: false });
@@ -252,7 +272,7 @@ const Expenses = () => {
           setExpenseSerials([])
           setTotalPrice(0);
         })
-        .catch(error => console.log(error.response.config.data)) //setBanner({ ...banner, value: errorBanner, error: true })
+        .catch(error => console.log(error.response)) //setBanner({ ...banner, value: errorBanner, error: true })
     } else {
       setBanner({ ...banner, value: invalidSeries, error: true })
     }

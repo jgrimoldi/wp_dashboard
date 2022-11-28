@@ -45,9 +45,13 @@ const ExpenseSerial = ({ warehouse, product, state, setState, setClose }) => {
     const handleAdd = (event) => {
         event.preventDefault()
         const input = new FormData(event.target).get('serials')
-        if (!state.includes(input) && input !== '') {
-            setState([...state, { fk_producto: product.fk_producto, fk_almacen: warehouse, sn: input }])
-            setBanner({ value: { text: `Serial: ${input} seleccionado`, background: themeColors?.primary }, error: false })
+        if (records.map(item => item.sn).includes(input)) {
+            if (!state.includes(input) && input !== '') {
+                setState([...state, { fk_producto: product.fk_producto, fk_almacen: warehouse, sn: input }])
+                setBanner({ value: { text: `Serial: ${input} seleccionado`, background: themeColors?.primary }, error: false })
+            }
+        } else {
+            setBanner({ value: { text: `Serial: ${input} no se encuentra en la lista`, background: '#FFC300' }, error: false })
         }
         setSerial({ ...serial, value: '' })
     }
@@ -61,9 +65,9 @@ const ExpenseSerial = ({ warehouse, product, state, setState, setClose }) => {
                         <Input id='serials' useRef={refFocus} label='Ingrese los números de serie' css='w-full' state={serial} setState={setSerial} regEx={regEx.alphanumeric} disabled={disabled} helperText='El campo no puede estar vacío' />
                         <Button type='submit' borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} height='normal' text='Cargar número de serie' width='1/2' />
                     </form>
-                    <div>
+                    <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
                         {records.map((serial, index) => (
-                            <div key={index} className='flex'>
+                            <div key={index} className='w-full flex items-center gap-2 p-4 border rounded-full shadow dark:text-slate-100'>
                                 <input type='checkbox' id={`serial-${index}`} name={serial.sn} value={serial.sn} checked={state.some(item => item.sn === serial.sn)} onChange={handleCheck} disabled={!state.find(item => item.sn === serial.sn) && disabled} />
                                 {serial.sn}
                             </div>
