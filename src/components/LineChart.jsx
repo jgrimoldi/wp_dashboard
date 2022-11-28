@@ -17,7 +17,7 @@ const LineChart = () => {
     const sumDoubleDates = (array) => {
         for (let i = 0; i < array.length; i++) {
             for (let j = 0; j < array.length; j++) {
-                if (i !== j && array[i].fecha.getTime() === array[j].fecha.getTime()) {
+                if (i !== j && array[i]?.fecha?.getTime() === array[j]?.fecha?.getTime()) {
                     array[i] = { fecha: new Date(array[i].fecha), total: array[i].total += array[j].total };
                     array.splice(j, 1);
                 }

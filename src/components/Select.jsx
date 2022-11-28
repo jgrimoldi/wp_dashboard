@@ -5,7 +5,7 @@ import { useAuthContext } from '../contexts/ContextAuth'
 import { useStateContext } from '../contexts/ContextProvider';
 import { getDataByIdFrom, getDataFrom } from '../services/GdrService'
 
-const Select = ({ id, label, state, setState, url, getter }) => {
+const Select = ({ id, label, state, setState, url, disabled, getter }) => {
     const { themeColors } = useStateContext();
     const { auth } = useAuthContext();
     const [data, setData] = useState([]);
@@ -54,7 +54,7 @@ const Select = ({ id, label, state, setState, url, getter }) => {
         <select style={{ color: themeColors?.highEmphasis }} className={classSelect}
             id={id} onChange={handleChange}
             onBlur={handleValidation} onKeyUp={handleValidation}
-            defaultValue='' value={state.id} >
+            defaultValue='' value={state.id} disabled={disabled} >
             <option style={{ color: '#c4c4c4' }} value='' disabled>Elija un {label}</option>
             {
                 data.map((opcion, index) =>

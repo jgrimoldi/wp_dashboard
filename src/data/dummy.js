@@ -392,6 +392,7 @@ export const expenseGrid = [
     { name: 'Unidades', field: 'quantity', mobile: 'quantity', },
     { name: 'U.Med', field: 'units', mobile: 'units', },
     { name: 'Precio', field: 'price', mobile: 'price', },
+    { name: 'SubTotal', field: 'subTotal', mobile: 'subTotal', },
 ];
 
 export const expenseListGrid = [

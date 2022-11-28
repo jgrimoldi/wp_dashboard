@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { BsXCircle, BsTrash, BsPencil } from 'react-icons/bs';
 
-import { SEO, Title, Table, Input, Button, Modal, Banner, SerialNumber, Select } from '../components';
+import { SEO, Title, Table, Input, Button, Modal, Banner, ExpenseSerial, Select } from '../components';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { useStateContext } from '../contexts/ContextProvider';
 import { expenseGrid, regEx } from '../data/dummy';
-import { URL_CLIENT, URL_PRODUCT, URL_STORAGE, URL_WAREHOUSEPRODUCT } from '../services/Api';
+import { URL_CLIENT, URL_PRODUCT, URL_SN, URL_STORAGE, URL_WAREHOUSEPRODUCT } from '../services/Api';
 import { getDataByIdFrom } from '../services/GdrService';
+import { insertNewExpense } from '../services/MovsService';
 
 const MakeInputs = ({ configInputs }) => (
   <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
@@ -18,7 +19,7 @@ const MakeInputs = ({ configInputs }) => (
             ? <Input id={id} useRef={useRef} type={type} label={label} size='small'
               required={true} disabled={disabled}
               state={state} setState={setState} regEx={regEx[expression]} helperText={helperText} />
-            : <Select id={id} label={label} url={url} state={state} setState={setState} getter={getter} />}
+            : <Select id={id} label={label} url={url} state={state} setState={setState} disabled={disabled} getter={getter} />}
         </span>
       )
     })}
@@ -34,8 +35,6 @@ const Expenses = () => {
   const initialState = { value: '', error: null };
   const createBanner = { text: 'Egreso registrado exitosamente!', background: themeColors?.confirm }
   const invalidSeries = { text: '¡Ups! Las series no estan completas.', background: '#FFC300' }
-  const warningQuantity = { text: 'Atención! No hay unidades del producto', background: '#FFC300' }
-  const warningStock = { text: 'Atención! Producto por debajo del stock.', background: '#FFC300' }
   const errorBanner = { text: '¡Ups! No se pudo realizar la acción.', background: themeColors?.error }
   const updateBanner = { text: '¡Registro editado exitosamente!', background: themeColors?.confirm }
   const deleteBanner = { text: 'Producto eliminado del egreso exitosamente!', background: themeColors?.confirm }
@@ -45,10 +44,8 @@ const Expenses = () => {
   const [purchaseDate, setPurchaseDate] = useState({ value: formatedDate, error: false });
   const [detailsProduct, setDetailsProduct] = useState('');
   const [detailsQuantity, setDetailsQuantity] = useState(initialState);
-  const [incomeSerialNumbers, setIncomeSerialNumbers] = useState([]);
-  // const [subTotalPrice, setSubTotalPrice] = useState(0);
-  // const [totalVATPrice, setTotalVATPrice] = useState(0);
-  // const [totalPrice, setTotalPrice] = useState(0);
+  const [expenseSerials, setExpenseSerials] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [productID, setProductID] = useState('');
   const [openSerialNumber, setOpenSerialNumber] = useState(null);
   const [banner, setBanner] = useState(initialState);
@@ -57,7 +54,7 @@ const Expenses = () => {
   const [edit, setEdit] = useState(null);
   const inputPurchase = [
     { getter: 'nombre', url: URL_CLIENT, id: 'client', label: 'Cliente', state: client, setState: setClient, expression: 'notEmpty', css: 'w-1/6' },
-    { getter: 'nombre', url: URL_STORAGE, id: 'warehouse', label: 'Almacén', state: warehouse, setState: setWarehouse, expression: 'notEmpty', css: 'w-1/6' },
+    { getter: 'nombre', url: URL_STORAGE, id: 'warehouse', label: 'Almacén', state: warehouse, setState: setWarehouse, expression: 'notEmpty', disabled: recordsData.length > 0, css: 'w-1/6' },
     { field: 'date', id: 'date', type: 'date', state: purchaseDate, setState: setPurchaseDate, expression: 'notEmpty', css: 'w-1/6' },
   ];
   const inputsDetails = [
@@ -88,14 +85,14 @@ const Expenses = () => {
       const stockMin = detailsProduct.stockmin >= quantityOnProduct;
 
       if (quantityOnProduct < 0) {
-        const error = { text: 'Ups! La cantidad supera las unidades del producto.', background: themeColors?.error }
+        const error = { text: `Ups! La cantidad supera las unidades del producto. Unidades del producto: ${detailsProduct.cantidad}`, background: themeColors?.error }
         throw error;
       }
       if (stockMin) {
-        setBanner({ ...banner, value: warningStock, error: true })
+        setBanner({ ...banner, value: { text: `Atención! Producto por debajo del stock. Stock mínimo: ${detailsProduct.stockmin}`, background: '#FFC300' }, error: true })
       }
       if (quantityOnProduct === 0) {
-        setBanner({ ...banner, value: warningQuantity, error: true })
+        setBanner({ ...banner, value: { text: 'Atención! Todas las unidades faltantes fueron seleccionadas', background: '#FFC300' }, error: true })
       }
     } else {
       setBanner({ ...banner, value: errorBanner, error: true })
@@ -106,7 +103,7 @@ const Expenses = () => {
     if (validateQuantity(productInfo.cantidad)) {
       checkStockOn(productInfo.id_producto)
     } else {
-      const error = { text: 'Ups! La cantidad a egresar es mayor a la cantidad en almacén.', background: themeColors?.error }
+      const error = { text: `Ups! La cantidad a egresar es mayor a la cantidad en almacén. Cantidad en almacén: ${productInfo.cantidad}`, background: themeColors?.error }
       throw error;
     }
   }
@@ -116,15 +113,17 @@ const Expenses = () => {
       this.fk_producto = fk_producto;
       this.fk_almacen = fk_almacen;
       this.product = product;
-      this.quantity = quantity;
+      this.quantity = Number(quantity);
       this.units = units;
-      this.price = price;
+      this.price = Number(price);
+      this.subTotal = (Number(this.quantity) * Number(this.price)).toFixed(2);
     }
     id = Math.ceil(Math.random() * 10000);
   }
 
   function addNewProduct(expenseInfo, productObject, quantityToAdd) {
-    const newProduct = new ProductExpense(expenseInfo.id_producto, expenseInfo.id_almacen, expenseInfo.nom_producto, quantityToAdd, productObject.abreviatura, expenseInfo.precio);
+    const newProduct = new ProductExpense(expenseInfo.id_producto, expenseInfo.id_alamcen, expenseInfo.nom_producto, quantityToAdd, productObject.abreviatura, expenseInfo.precio);
+    setTotalPrice((prevState) => prevState += Number(newProduct.subTotal))
     setRecordsData([...recordsData, newProduct])
   }
 
@@ -151,10 +150,9 @@ const Expenses = () => {
   }
 
   const deleteDataById = () => {
-    // const objectDeleted = recordsData.find(object => object.id === Number(openModal.value));
-    // setSubTotalPrice((prevState) => prevState -= Number(objectDeleted.price));
-    // setTotalVATPrice((prevState) => prevState -= Number(objectDeleted.VAT));
-    // setTotalPrice((prevState) => prevState -= Number(objectDeleted.subTotal));
+    const objectDeleted = recordsData.find(object => object.id === Number(openModal.value));
+    setTotalPrice((prevState) => prevState -= Number(objectDeleted.subTotal));
+    setExpenseSerials(current => current.filter(record => record.fk_producto !== Number(objectDeleted.fk_producto)))
     setRecordsData(current => current.filter(record => record.id !== Number(openModal.value)));
     setOpenModal(initialState);
     setBanner({ ...banner, value: deleteBanner, error: false });
@@ -176,7 +174,7 @@ const Expenses = () => {
   }
 
   function editProduct(expenseInfo, productObject, quantityToAdd) {
-    const editedProduct = new ProductExpense(expenseInfo.id_producto, expenseInfo.id_almacen, expenseInfo.nom_producto, quantityToAdd, productObject.abreviatura, expenseInfo.precio);
+    const editedProduct = new ProductExpense(expenseInfo.id_producto, expenseInfo.id_alamcen, expenseInfo.nom_producto, quantityToAdd, productObject.abreviatura, expenseInfo.precio);
     const newState = recordsData.map(object => {
       if (Number(object.id) === Number(idSelected)) {
         return editedProduct
@@ -184,6 +182,7 @@ const Expenses = () => {
       return object
     })
 
+    setTotalPrice((prevState) => prevState += Number(editedProduct.subTotal))
     setRecordsData(newState)
   }
 
@@ -191,7 +190,12 @@ const Expenses = () => {
     if (warehouse.error === false && detailsProduct.error === false && detailsQuantity.error === false && detailsQuantity.value > 0) {
       getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', detailsProduct.id, auth.token)
         .then(async response => {
+          const objectToEdit = recordsData.find(object => Number(object.id) === Number(idSelected));
           validateAdd(response.data[0])
+          setTotalPrice((prevState) => prevState -= Number(objectToEdit.subTotal));
+          if (detailsQuantity.value < objectToEdit.quantity && expenseSerials.find(item => item.fk_producto === detailsProduct.id)) {
+            setBanner({ ...banner, value: { text: `Atención! Nueva cantidad menor a la anterior. Verifique los números de serie.`, background: '#FFC300' }, error: true })
+          }
           editProduct(response.data[0], detailsProduct, detailsQuantity.value)
           await new Promise(r => setTimeout(r, 2000));
           setBanner({ ...banner, value: updateBanner, error: false });
@@ -209,13 +213,54 @@ const Expenses = () => {
     }
   }
 
+  async function areSerialsComplete() {
+    const products = [];
+    await Promise.all(recordsData.map(obj =>
+      getDataByIdFrom(`${URL_SN}q/productoalmacen/${obj.fk_producto}/${warehouse.id}/`, 0, auth.token)
+        .then(response => {
+          products.push(response.data);
+        })
+    ));
+    return products;
+  }
+
+
+  function generateNewExpense() {
+    return { fk_cliente: client.id, fechaegreso: purchaseDate.value, total: totalPrice }
+  }
+
+  function generateDetails() {
+    const aux = []
+
+    recordsData.forEach(record => {
+      aux.push({ fk_producto: record.fk_producto, fk_almacen: warehouse.id, cantidad: record.quantity, precio: record.price, subtotal: record.subTotal })
+    })
+
+    return aux
+  }
+
   const generateExpense = async () => {
 
+    if ((await areSerialsComplete()).flat().length === expenseSerials.length) {
+      insertNewExpense(generateNewExpense(), generateDetails(), expenseSerials, auth.token)
+        .then(() => {
+          setBanner({ ...banner, value: createBanner, error: false });
+          setClient({ id: '' });
+          setWarehouse({ id: '' });
+          clearInputs();
+          setRecordsData([]);
+          setExpenseSerials([])
+          setTotalPrice(0);
+        })
+        .catch(error => console.log(error.response.config.data)) //setBanner({ ...banner, value: errorBanner, error: true })
+    } else {
+      setBanner({ ...banner, value: invalidSeries, error: true })
+    }
   }
   return (
     <>
       <>
-        {openSerialNumber === true && <SerialNumber warehouse={warehouse.id} product={recordsData.find(object => object.id === productID)} state={incomeSerialNumbers} setState={setIncomeSerialNumbers} setClose={setOpenSerialNumber} />}
+        {openSerialNumber === true && <ExpenseSerial warehouse={warehouse.id} product={recordsData.find(object => object.id === productID)} state={expenseSerials} setState={setExpenseSerials} setClose={setOpenSerialNumber} />}
         {openModal.error === false &&
           <Modal
             title='¿Está seguro que quiere eliminar este registro?'
@@ -253,20 +298,12 @@ const Expenses = () => {
             </div>
           }
           <div style={{ color: themeColors?.highEmphasis }} className='w-full flex flex-col gap-2 pt-8'>
-            {/* <div className='flex justify-end items-center gap-2 text-2xl'>
-              <span className='font-semibold tracking-wide uppercase'>SubTotal:</span>
-              <span className='font-[monospace] text-3xl'>$ {subTotalPrice.toFixed(2)}</span>
-            </div>
-            <div className='flex justify-end items-center gap-2 text-2xl'>
-              <span className='font-semibold tracking-wide uppercase'>Total IVA:</span>
-              <span className='font-[monospace] text-3xl'>$ {totalVATPrice.toFixed(2)}</span>
-            </div>
             <div className='flex justify-end items-center gap-2 text-2xl'>
               <span className='font-semibold tracking-wide uppercase'>Total:</span>
               <span className='font-[monospace] text-3xl'>$ {totalPrice.toFixed(2)}</span>
-            </div> */}
+            </div>
             <div className='w-full flex justify-center'>
-              <Button customFunction={generateExpense} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='1/4' text='Generar greso' />
+              <Button customFunction={generateExpense} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='1/4' text='Generar egreso' />
             </div>
           </div>
         </div>

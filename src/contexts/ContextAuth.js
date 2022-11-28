@@ -6,7 +6,7 @@ export const ContextAuth = ({ children }) => {
     const [auth, setAuth] = useState({ token: '', user: {} });
 
     const handleErrors = (error) => {
-        const getError = error.response.data.error;
+        const getError = error.response?.data?.error;
         if (getError === 'NOT_PAYLOAD_DATA_JWT') {
             setAuth({});
             localStorage.removeItem('_fDataUser')
