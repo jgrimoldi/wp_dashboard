@@ -32,6 +32,16 @@ const ExpenseSerial = ({ warehouse, product, state, setState, setClose }) => {
 
     }, [URL, auth, handleErrors])
 
+    const handleClose = async () => {
+        if (!disabled) {
+            setBanner({ value: { text: `¡Ups! Las series no estan completas. Series faltantes ${product.quantity - state.filter(item => item.fk_producto === product.fk_producto).length}`, background: '#FFC300' }, error: false })
+        } else {
+            setBanner({ value: { text: `Todas las series fueron seleccionadas`, background: themeColors?.confirm }, error: false })
+        }
+        await new Promise(r => setTimeout(r, 1500));
+        setClose(false)
+    }
+
     const handleCheck = (event) => {
         if (event.target.checked) {
             setState([...state, { fk_producto: product.fk_producto, fk_almacen: warehouse, sn: event.target.value }])
@@ -74,7 +84,7 @@ const ExpenseSerial = ({ warehouse, product, state, setState, setClose }) => {
                         ))}
                     </div>
                     <div className='flex gap-2 justify-center pt-5'>
-                        <Button customFunction={() => { setClose(false) }} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='12/6' height='normal' text='Guardar y continuar' />
+                        <Button customFunction={handleClose} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='12/6' height='normal' text='Guardar y continuar' />
                     </div>
                 </div>
             </div>

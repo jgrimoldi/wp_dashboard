@@ -1,7 +1,8 @@
+import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import React, { useState, useEffect } from 'react';
-import { BsXCircle, BsTrash, BsPencil } from 'react-icons/bs';
+import { BsXCircle, BsTrash, BsPencil, BsSearch } from 'react-icons/bs';
 
-import { SEO, Title, Table, Input, Button, Modal, Banner, ExpenseSerial, Select } from '../components';
+import { SEO, Title, Table, Input, Button, Modal, Banner, ExpenseSerial, Select, ProductSearcher } from '../components';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { useStateContext } from '../contexts/ContextProvider';
 import { expenseGrid, regEx } from '../data/dummy';
@@ -9,22 +10,37 @@ import { URL_CLIENT, URL_PRODUCT, URL_SN, URL_STORAGE, URL_WAREHOUSEPRODUCT } fr
 import { getDataByIdFrom } from '../services/GdrService';
 import { insertNewExpense } from '../services/MovsService';
 
-const MakeInputs = ({ configInputs }) => (
-  <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
-    {configInputs.map((input, index) => {
-      const { getter, url, field, id, useRef, type, label, disabled, state, setState, expression, helperText, css } = input;
-      return (
-        <span className={css} key={index}>
-          {field
-            ? <Input id={id} useRef={useRef} type={type} label={label} size='small'
-              required={true} disabled={disabled}
-              state={state} setState={setState} regEx={regEx[expression]} helperText={helperText} />
-            : <Select id={id} label={label} url={url} state={state} setState={setState} disabled={disabled} getter={getter} />}
-        </span>
-      )
-    })}
-  </div>
-)
+const MakeInputs = ({ configInputs }) => {
+  const { themeColors } = useStateContext();
+
+  return (
+    <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
+      {configInputs.map((input, index) => {
+        const { getter, url, field, id, useRef, type, label, disabled, state, setState, expression, helperText, css, tooltip, customFunction } = input;
+        return (
+          <span className={css} key={index}>
+            {field
+              ? <Input id={id} useRef={useRef} type={type} label={label} size='small'
+                required={true} disabled={disabled}
+                state={state} setState={setState} regEx={regEx[expression]} helperText={helperText} />
+              :
+              <div className='flex gap-2'>
+                <Select id={id} label={label} url={url} state={state} setState={setState} disabled={disabled} getter={getter} />
+                {tooltip &&
+                  <TooltipComponent content={tooltip} position="TopCenter">
+                    <button type='button' onClick={customFunction} style={{ backgroundColor: themeColors?.secondary }} className='relative p-2 text-white dark:text-black text-2xl rounded-md'>
+                      <BsSearch />
+                    </button>
+                  </TooltipComponent>
+                }
+              </div>
+            }
+          </span>
+        )
+      })}
+    </div>
+  )
+}
 
 const Expenses = () => {
   const { themeColors } = useStateContext();
@@ -52,13 +68,14 @@ const Expenses = () => {
   const [openModal, setOpenModal] = useState(initialState);
   const [idSelected, setIdSelected] = useState('');
   const [edit, setEdit] = useState(null);
+  const [openSearcher, setOpenSearcher] = useState(false);
   const inputPurchase = [
     { getter: 'nombre', url: URL_CLIENT, id: 'client', label: 'Cliente', state: client, setState: setClient, expression: 'notEmpty', css: 'w-1/6' },
     { getter: 'nombre', url: URL_STORAGE, id: 'warehouse', label: 'Almacén', state: warehouse, setState: setWarehouse, expression: 'notEmpty', disabled: recordsData.length > 0, css: 'w-1/6' },
     { field: 'date', id: 'date', type: 'date', state: purchaseDate, setState: setPurchaseDate, expression: 'notEmpty', css: 'w-1/6' },
   ];
   const inputsDetails = [
-    { getter: 'nombre', url: URL_PRODUCT, id: 'product', label: 'Producto', state: detailsProduct, setState: setDetailsProduct, expression: 'notEmpty', css: 'w-2/6' },
+    { getter: 'nombre', url: URL_PRODUCT, id: 'product', label: 'Producto', state: detailsProduct, setState: setDetailsProduct, expression: 'notEmpty', css: 'w-2/6', tooltip: 'Abrir buscador', customFunction: () => setOpenSearcher(!openSearcher) },
     { field: 'quantity', id: 'quantity', type: 'number', label: 'Unidades', state: detailsQuantity, setState: setDetailsQuantity, expression: 'digitsRegExp', css: 'w-1/6' },
   ]
 
@@ -142,7 +159,7 @@ const Expenses = () => {
           validateAdd(response.data[0])
           addNewProduct(response.data[0], detailsProduct, detailsQuantity.value)
           await new Promise(r => setTimeout(r, 2000));
-          setBanner({ ...banner, value: createBanner, error: true })
+          setBanner({ ...banner, value: { text: 'Item agregado correctamente!', background: themeColors?.confirm }, error: true })
           clearInputs()
         })
         .catch(error => {
@@ -272,11 +289,12 @@ const Expenses = () => {
           setExpenseSerials([])
           setTotalPrice(0);
         })
-        .catch(error => console.log(error.response)) //setBanner({ ...banner, value: errorBanner, error: true })
+        .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
     } else {
       setBanner({ ...banner, value: invalidSeries, error: true })
     }
   }
+
   return (
     <>
       <>
@@ -296,6 +314,7 @@ const Expenses = () => {
           {purchaseDate.error === false && !!client.nombre && !!warehouse.nombre &&
             <>
               <MakeInputs configInputs={inputsDetails} />
+              {openSearcher === true && <ProductSearcher title={`Productos en ${warehouse.nombre}`} product={detailsProduct} setProduct={setDetailsProduct} warehouse={warehouse.id} />}
               <div className='w-full flex justify-center pb-4'>
                 {edit === true
                   ? <Button customFunction={updateCartRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Editar registro' />

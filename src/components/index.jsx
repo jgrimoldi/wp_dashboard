@@ -34,6 +34,7 @@ export { default as LineChart } from './LineChart';
 export { default as BarCode } from './BarCode';
 export { default as SerialNumber } from './SerialNumber';
 export { default as ExpenseSerial } from './ExpenseSerial';
+export { default as ProductSearcher } from './ProductSearcher';
 export { default as Details } from './Details';
 export { default as LastLogin } from './LastLogin';
 export { default as Searcher } from './Searcher';
