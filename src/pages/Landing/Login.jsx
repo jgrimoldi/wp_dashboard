@@ -86,7 +86,7 @@ const Login = () => {
                         </div>
                     </Form>
                 </div>
-            </div >
+            </div>
         </>
     )
 }
