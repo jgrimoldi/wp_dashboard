@@ -17,7 +17,7 @@ const ProductSearcher = ({ title, product, setProduct, warehouse }) => {
     const handleClick = (event) => {
         const id_product = event.target.getAttribute('value');
         getDataByIdFrom(URL_PRODUCT, id_product, auth.token)
-            .then(response => setProduct(response.data[0]))
+            .then(response => setProduct(Object.assign(response.data[0], { error: false })))
             .catch(error => handleErrors(error))
     }
 
