@@ -7,7 +7,7 @@ import { Button, SEO } from '../components';
 const NotFound = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || '/dashboard';
+    const from = location.state?.from?.pathname || '/';
 
     return (
         <>
