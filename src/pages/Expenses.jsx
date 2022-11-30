@@ -180,6 +180,7 @@ const Expenses = () => {
     setExpenseSerials(current => current.filter(record => record.fk_producto !== Number(objectDeleted.fk_producto)))
     setRecordsData(current => current.filter(record => record.id !== Number(openModal.value)));
     setOpenModal(initialState);
+    clearInputs();
     setBanner({ ...banner, value: deleteBanner, error: false });
   }
 
