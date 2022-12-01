@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { HomeNavigation, HomeTemplate, ProtectedRoutes } from './components';
-import { Dashboard, Storage, Clients, Products, ProductType, Units, Providers, Category, Income, IncomeList, Expenses, Transfer, Stats, Reports, Register, Settings, Backup, Help, Login, ForgotPassword, ResetPassword, AccountValidation, Unauthorized, NotFound, Employees, NotValid } from './pages';
+import { Dashboard, Storage, Clients, Products, ProductType, Units, Providers, Category, Income, IncomeList, Expenses, Transfer, Stats, Reports, Register, Settings, Backup, Help, Login, ForgotPassword, ResetPassword, AccountValidation, Unauthorized, NotFound, Employees, NotValid, ExpensesList } from './pages';
 import './App.css';
 
 import { useAuthContext } from './contexts/ContextAuth';
@@ -46,9 +46,11 @@ const App = () => {
             <Route path='/categoria-de-proveedores' element={<Category />} />
             {/* moves */}
             <Route path='/ingresos' element={<Income />} />
-            <Route path='/lista-de-ingresos' element={<IncomeList />} />
             <Route path='/egresos' element={<Expenses />} />
             <Route path='/transferencia-entre-almacenes' element={<Transfer />} />
+            {/* moves-list */}
+            <Route path='/lista-de-ingresos' element={<IncomeList />} />
+            <Route path='/lista-de-egresos' element={<ExpensesList />} />
             {/* reports */}
             <Route path='/estadisticas' element={<Stats />} />
             <Route path='/reportes' element={<Reports />} />

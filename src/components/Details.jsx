@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { Table, Button } from './';
 import { incomeDetailsGrid, serialNumberGrid } from '../data/dummy';
-import { URL_INCOME } from '../services/Api';
 import { getDataByIdFrom, getDataFrom } from '../services/GdrService';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { useStateContext } from '../contexts/ContextProvider';
@@ -22,7 +21,7 @@ const ButtonToSn = ({ income, product, warehouse, setOpen, setID }) => {
     )
 }
 
-const ShowSn = ({ id, setOpen }) => {
+const ShowSn = ({ URL, id, setOpen }) => {
     const { themeColors } = useStateContext();
     const { auth, handleErrors } = useAuthContext();
     const [records, setRecords] = useState([]);
@@ -30,9 +29,9 @@ const ShowSn = ({ id, setOpen }) => {
     useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
-        const URL = URL_INCOME + 'q/ns/' + id.income + '/' + id.product + '/' + id.warehouse;
+        const fullURL = URL + 'q/ns/' + id.income + '/' + id.product + '/' + id.warehouse;
         const getSn = async () => {
-            await getDataFrom(URL, signal, auth.token)
+            await getDataFrom(fullURL, signal, auth.token)
                 .then(response => setRecords(response.data))
                 .catch(error => handleErrors(error))
         }
@@ -55,12 +54,14 @@ const ShowSn = ({ id, setOpen }) => {
     )
 }
 
-const Details = ({ setOpen, incomeID }) => {
+const Details = ({ URL, setOpen, incomeID }) => {
     const { themeColors } = useStateContext();
     const { auth, handleErrors } = useAuthContext();
     const [detailsData, setDetailsData] = useState([]);
     const [openSN, setOpenSN] = useState(null)
     const [idToSN, setIdToSn] = useState({ income: '', product: '', warehouse: '' })
+    const obURL = { 'compraproducto/': 'detallecompra/', 'egresoproducto/': 'detalleegreso/' };
+    const fullURL = `${URL}q/${obURL[URL]}`
 
     useEffect(() => {
         const saveResponse = (data) => {
@@ -72,7 +73,7 @@ const Details = ({ setOpen, incomeID }) => {
         }
 
         const getRecords = async () => {
-            await getDataByIdFrom(URL_INCOME + 'q/detallecompra/', incomeID, auth.token)
+            await getDataByIdFrom(fullURL, incomeID, auth.token)
                 .then(response => saveResponse(response.data))
                 .catch(error => handleErrors(error))
         }
@@ -81,7 +82,7 @@ const Details = ({ setOpen, incomeID }) => {
 
     return (
         <div className='bg-half-transparent w-screen fixed nav-item top-0 right-0 overflow-hidden'>
-            {openSN === true && <ShowSn id={idToSN} setOpen={setOpenSN} />}
+            {openSN === true && <ShowSn URL={URL} id={idToSN} setOpen={setOpenSN} />}
             <div className='h-screen flex items-center justify-center'>
                 <div className='flex flex-col item gap-5 bg-white w-11/12 dark:bg-secondary-dark-bg sm:w-4/5 lg:w-3/5 p-5 rounded-3xl'>
                     <div className='dark:text-slate-100'>Detalle de compra</div>

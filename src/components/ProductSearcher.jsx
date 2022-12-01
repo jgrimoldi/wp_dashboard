@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { BsSearch } from 'react-icons/bs';
 
 import { Input } from './';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { URL_PRODUCT, URL_WAREHOUSEPRODUCT } from '../services/Api';
 import { getDataByIdFrom } from '../services/GdrService';
-import { useStateContext } from '../contexts/ContextProvider';
 
 const ProductSearcher = ({ title, product, setProduct, warehouse }) => {
-    const { themeColors } = useStateContext();
     const { auth, handleErrors } = useAuthContext();
     const [records, setRecords] = useState([]);
     const [filteredValue, setFilteredValue] = useState({ value: '', error: null });

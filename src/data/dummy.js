@@ -132,7 +132,7 @@ export const sidebar = [
             },
             {
                 name: 'Lista de egresos',
-                url: '/',
+                url: 'lista-de-egresos',
                 icon: <BsWallet2 />,
             },
             {
@@ -293,7 +293,6 @@ export const incomeDetailsGrid = [
     { name: 'Unidades', field: 'cantidad', mobile: 'cantidad', },
     { name: 'Precio', field: 'precio', mobile: 'precio', },
     { name: 'Subtotal', field: 'subtotal', mobile: 'subtotal', },
-    { name: 'Importe IVA', field: 'importeiva', mobile: 'importeiva', },
 ];
 
 export const backupGrid = [
@@ -396,8 +395,8 @@ export const expenseGrid = [
 ];
 
 export const expenseListGrid = [
-    { name: 'Proveedor', field: 'nombre', mobile: 'nombre', },
-    { name: 'CUIT/CUIL Proveedor', field: 'id_proveedor', mobile: 'id_proveedor', },
-    { name: 'Fecha de Compra', field: 'fechacompra', mobile: 'fechacompra', },
-    { name: 'Total Compra', field: 'total', mobile: 'total', },
+    { name: 'Cliente', field: 'nombre', mobile: 'nombre', },
+    { name: 'CUIT/CUIL Cliente', field: 'id_cliente', mobile: 'id_cliente', },
+    { name: 'Fecha de Egreso', field: 'fechaegreso', mobile: 'fechaegreso', },
+    { name: 'Total Egreso', field: 'total', mobile: 'total', },
 ];
