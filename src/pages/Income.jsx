@@ -1,30 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { BsXCircle, BsTrash, BsPencil } from 'react-icons/bs';
+import { TooltipComponent } from '@syncfusion/ej2-react-popups';
+import { BsXCircle, BsTrash, BsPencil, BsSearch } from 'react-icons/bs';
 
-import { SEO, Title, Table, Input, Button, Modal, Banner, SerialNumber, Select } from '../components';
+import { SEO, Title, Table, Input, Button, Modal, Banner, SerialNumber, Select, SelectProduct } from '../components';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { useStateContext } from '../contexts/ContextProvider';
 import { incomeGrid, regEx } from '../data/dummy';
-import { URL_PRODUCT, URL_STORAGE, URL_SUPPLIER } from '../services/Api';
+import { URL_PRODUCT, URL_STORAGE, URL_SUPPLIER, URL_WAREHOUSEPRODUCT } from '../services/Api';
 import { getDataByIdFrom } from '../services/GdrService';
 import { insertNewIncome } from '../services/MovsService';
 
-const MakeInputs = ({ configInputs }) => (
-  <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
-    {configInputs.map((input, index) => {
-      const { getter, url, field, id, useRef, type, label, disabled, state, setState, expression, helperText, css } = input;
-      return (
-        <span className={css} key={index}>
-          {field
-            ? <Input id={id} useRef={useRef} type={type} label={label} size='small'
-              required={true} disabled={disabled}
-              state={state} setState={setState} regEx={regEx[expression]} helperText={helperText} />
-            : <Select id={id} label={label} url={url} state={state} setState={setState} getter={getter} />}
-        </span>
-      )
-    })}
-  </div>
-)
+const MakeInputs = ({ configInputs }) => {
+  const { themeColors } = useStateContext();
+
+  return (
+    <div className='w-full flex flex-wrap justify-center gap-5 pb-5'>
+      {configInputs.map((input, index) => {
+        const { getter, url, field, id, useRef, type, label, disabled, state, setState, expression, helperText, css, tooltip, customFunction } = input;
+        return (
+          <span className={css} key={index}>
+            {field
+              ? <Input id={id} useRef={useRef} type={type} label={label} size='small'
+                required={true} disabled={disabled}
+                state={state} setState={setState} regEx={regEx[expression]} helperText={helperText} />
+              :
+              <div className='flex gap-2'>
+                <Select id={id} label={label} url={url} state={state} setState={setState} disabled={disabled} getter={getter} />
+                {tooltip &&
+                  <TooltipComponent content={tooltip} position="TopCenter">
+                    <button type='button' onClick={customFunction} style={{ backgroundColor: themeColors?.secondary }} className='relative p-2 text-white dark:text-black text-2xl rounded-md'>
+                      <BsSearch />
+                    </button>
+                  </TooltipComponent>
+                }
+              </div>
+            }
+          </span>
+        )
+      })}
+    </div>
+  )
+}
 
 const Income = () => {
   const { themeColors } = useStateContext();
@@ -55,13 +71,14 @@ const Income = () => {
   const [openModal, setOpenModal] = useState(initialState);
   const [idSelected, setIdSelected] = useState('');
   const [edit, setEdit] = useState(null);
+  const [openSearcher, setOpenSearcher] = useState(false);
   const inputPurchase = [
     { getter: 'nombre', url: URL_SUPPLIER, id: 'supplier', label: 'Proveedor', state: supplier, setState: setSupplier, expression: 'notEmpty', css: 'w-1/6' },
     { getter: 'nombre', url: URL_STORAGE, id: 'warehouse', label: 'Almacén', state: warehouse, setState: setWarehouse, expression: 'notEmpty', css: 'w-1/6' },
     { field: 'date', id: 'date', type: 'date', state: purchaseDate, setState: setPurchaseDate, expression: 'notEmpty', css: 'w-1/6' },
   ];
   const inputsDetails = [
-    { getter: 'nombre', url: URL_PRODUCT, id: 'product', label: 'Producto', state: detailsProduct, setState: setDetailsProduct, expression: 'notEmpty', css: 'w-1/6' },
+    { getter: 'nombre', url: URL_PRODUCT, id: 'product', label: 'Producto', state: detailsProduct, setState: setDetailsProduct, expression: 'notEmpty', css: 'w-1/6', tooltip: 'Abrir buscador', customFunction: () => setOpenSearcher(!openSearcher) },
     { field: 'quantity', id: 'quantity', type: 'number', label: 'Unidades', state: detailsQuantity, setState: setDetailsQuantity, expression: 'digitsRegExp', css: 'w-1/6' },
     { field: 'unitPrice', id: 'price', type: 'number', label: 'Precio', state: detailsPrice, setState: setDetailsPrice, expression: 'digitsRegExp', css: 'w-1/6' },
   ]
@@ -86,6 +103,25 @@ const Income = () => {
   const calculateSubTotal = (IVA, price) => (Number(IVA) + Number(price)).toFixed(2);
   const calculateIVA = (price, alicuota) => (Number(price) * (Number(alicuota) / 100)).toFixed(2);
 
+  function checkStockOn(aProduct) {
+    if (aProduct.id === detailsProduct.id) {
+      getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', aProduct.id, auth.token)
+        .then(response => {
+          const quantityOnProduct = aProduct.cantidad + Number(detailsQuantity.value);
+          const stockMax = detailsProduct.stockmax <= quantityOnProduct;
+          setBanner({ ...banner, value: { text: `Atención! Producto por encima del stock. Stock máximo: ${detailsProduct.stockmax}. Unidades en el almacén: ${quantityOnProduct}`, background: '#FFC300' }, error: false })
+          if (stockMax) {
+            setBanner({ ...banner, value: { text: `Atención! Producto por encima del stock. Stock máximo: ${detailsProduct.stockmax}. Unidades en el almacén: ${quantityOnProduct}`, background: '#FFC300' }, error: false })
+          }
+        })
+        .catch(error => {
+          setBanner({ ...banner, value: error, error: true })
+        })
+    } else {
+      console.log("aca")
+    }
+  }
+
   function validateIfExists(product) {
     const datos = recordsData.map(item => item.id);
     return datos.includes(product.id)
@@ -108,6 +144,7 @@ const Income = () => {
       setTotalVATPrice((prevState) => prevState += Number(objectsCart.VAT));
       setTotalPrice((prevState) => prevState += Number(objectsCart.subTotal));
       setRecordsData((prevState) => [...prevState, objectsCart]);
+      checkStockOn(objectsCart)
       clearInputs();
     } else {
       setBanner({ ...banner, value: errorBanner, error: true });
@@ -122,6 +159,7 @@ const Income = () => {
     setIncomeSerialNumbers(current => current.filter(record => record.fk_producto !== Number(openModal.value)));
     setRecordsData(current => current.filter(record => record.id !== Number(openModal.value)));
     setOpenModal(initialState);
+    clearInputs();
     setBanner({ ...banner, value: deleteBanner, error: false });
   }
 
@@ -266,6 +304,7 @@ const Income = () => {
         {purchaseDate.error === false && !!supplier.nombre && !!warehouse.nombre &&
           <>
             <MakeInputs configInputs={inputsDetails} />
+            {openSearcher === true && <SelectProduct title={`Buscar en mis Productos`} product={detailsProduct} setProduct={setDetailsProduct} />}
             <div className='w-full flex justify-center pb-4'>
               {edit === true
                 ? <Button customFunction={updateCartRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Editar registro' />

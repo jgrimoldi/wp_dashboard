@@ -3,21 +3,27 @@ import { BsSearch } from 'react-icons/bs';
 
 import { Input } from './';
 import { useAuthContext } from '../contexts/ContextAuth';
-import { URL_PRODUCT, URL_WAREHOUSEPRODUCT } from '../services/Api';
-import { getDataByIdFrom } from '../services/GdrService';
+import { URL_PRODUCT } from '../services/Api';
+import { getDataFrom, getDataByIdFrom } from '../services/GdrService';
 import { useStateContext } from '../contexts/ContextProvider';
 
-const ProductSearcher = ({ title, product, setProduct, warehouse }) => {
+const ProductSearcher = ({ title, product, setProduct }) => {
     const { themeColors } = useStateContext();
     const { auth, handleErrors } = useAuthContext();
     const [records, setRecords] = useState([]);
     const [filteredValue, setFilteredValue] = useState({ value: '', error: null });
 
     useEffect(() => {
-        getDataByIdFrom(`${URL_WAREHOUSEPRODUCT}/q/poralmacen/`, warehouse, auth.token)
-            .then(response => setRecords(response.data))
-            .catch(error => handleErrors(error.response))
-    }, [auth, handleErrors, warehouse])
+        const controller = new AbortController();
+        const signal = controller.signal;
+        const getRecords = async () => {
+            await getDataFrom(URL_PRODUCT, signal, auth.token)
+                .then(response => setRecords(response.data))
+                .catch(error => handleErrors(error))
+        }
+        getRecords();
+        return () => { controller.abort(); };
+    }, [auth, handleErrors])
 
     const filterBy = (object) => {
         for (const key in object) {
@@ -49,11 +55,11 @@ const ProductSearcher = ({ title, product, setProduct, warehouse }) => {
             </div>
             <div className='max-w-md h-48 flex flex-col gap-2 overflow-y-auto pt-2 text-lg'>
                 {records.filter(filterBy).map((item, index) => (
-                    <button key={index} id={`button-${index}`} className='w-full flex justify-between border-b-2 border-slate-900 dark:border-slate-200 last:border-0' value={item.id_producto} onClick={handleClick}>
-                        <span value={item.id_producto} onClick={handleClick} title={item.nom_producto} className='w-1/2 truncate text-left'>
-                            <input type='radio' id={`product-${index}`} name='product' onChange={handleClick} value={item.id_producto} checked={item.id_producto === product.id} /> {item.nom_producto}
+                    <button key={index} id={`button-${index}`} className='flex justify-between border-b-2 border-slate-900 dark:border-slate-200 last:border-0' value={item.id} onClick={handleClick}>
+                        <span value={item.id} onClick={handleClick} title={item.nombre} className='w-1/2 truncate text-left'>
+                            <input type='radio' id={`product-${index}`} name='product' onChange={handleClick} value={item.id} checked={item.id === product.id} /> {item.nombre}
                         </span>
-                        <span value={item.id_producto} onClick={handleClick} className='w-1/2 ml-8 text-left'>U. Almacén: {item.cantidad}</span>
+                        <span value={item.id} onClick={handleClick} className='w-5/12 text-left'>Stock Máximo: {item.stockmax}</span>
                     </button>
                 ))}
             </div>
