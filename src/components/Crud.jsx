@@ -23,6 +23,11 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
     const [edit, setEdit] = useState(null);
 
     useEffect(() => {
+        let shadowBanner = setTimeout(() => setBanner({ error: null }), 2000);
+        return () => { clearTimeout(shadowBanner) };
+    });
+
+    useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
         const getRecords = async () => {

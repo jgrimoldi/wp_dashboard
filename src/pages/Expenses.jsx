@@ -80,7 +80,7 @@ const Expenses = () => {
   ]
 
   useEffect(() => {
-    let shadowBanner = setTimeout(() => setBanner({ error: null }), 4000);
+    let shadowBanner = setTimeout(() => setBanner({ error: null }), 2000);
     return () => { clearTimeout(shadowBanner) };
   });
 
@@ -298,56 +298,54 @@ const Expenses = () => {
 
   return (
     <>
-      <>
-        {openSerialNumber === true && <ExpenseSerial warehouse={warehouse.id} product={recordsData.find(object => object.id === productID)} state={expenseSerials} setState={setExpenseSerials} setClose={setOpenSerialNumber} />}
-        {openModal.error === false &&
-          <Modal
-            title='¿Está seguro que quiere eliminar este registro?'
-            text={`El siguiente elemento esta a punto de ser eliminado, ¿Desea continuar?`}
-            buttonText='Eliminar registro' color={themeColors?.error} icon={<BsXCircle />}
-            setFunction={clearInputs} redirect='' customFunction={deleteDataById}
-          />}
-        {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner(initialState)} />}
-        <SEO title='Egreso de productos' />
-        <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>
-          <Title category='Egreso de' title='Productos' />
-          <MakeInputs configInputs={inputPurchase} />
-          {purchaseDate.error === false && !!client.nombre && !!warehouse.nombre &&
-            <>
-              <MakeInputs configInputs={inputsDetails} />
-              {openSearcher === true && <ProductSearcher title={`Productos en ${warehouse.nombre}`} product={detailsProduct} setProduct={setDetailsProduct} warehouse={warehouse.id} />}
-              <div className='w-full flex justify-center pb-4'>
-                {edit === true
-                  ? <Button customFunction={updateCartRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Editar registro' />
-                  : <Button customFunction={addToExpense} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Agregar registro' />}
-              </div>
-            </>
-          }
-          <Table
-            header={expenseGrid} data={recordsData} filterTitle='Mis Items'
-            checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected}
-            barcode={true} setOpenBarcode={setOpenSerialNumber} setProductID={setProductID}
-          />
-          {!!idSelected &&
-            <div className='w-full flex sm:justify-end mt-5'>
-              <div className='w-full sm:w-3/5 grid grid-cols-3 gap-1 '>
-                <Button customFunction={clearInputs} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' width='full' text='Cancelar' />
-                <Button customFunction={editInputs} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full' text='Editar' icon={<BsPencil />} />
-                <Button customFunction={confirmDelete} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full' text='Eliminar' icon={<BsTrash />} />
-              </div>
+      {openSerialNumber === true && <ExpenseSerial warehouse={warehouse.id} product={recordsData.find(object => object.id === productID)} state={expenseSerials} setState={setExpenseSerials} setClose={setOpenSerialNumber} />}
+      {openModal.error === false &&
+        <Modal
+          title='¿Está seguro que quiere eliminar este registro?'
+          text={`El siguiente elemento esta a punto de ser eliminado, ¿Desea continuar?`}
+          buttonText='Eliminar registro' color={themeColors?.error} icon={<BsXCircle />}
+          setFunction={clearInputs} redirect='' customFunction={deleteDataById}
+        />}
+      {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner(initialState)} />}
+      <SEO title='Egreso de productos' />
+      <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>
+        <Title category='Egreso de' title='Productos' />
+        <MakeInputs configInputs={inputPurchase} />
+        {purchaseDate.error === false && !!client.nombre && !!warehouse.nombre &&
+          <>
+            <MakeInputs configInputs={inputsDetails} />
+            {openSearcher === true && <ProductSearcher title={`Productos en ${warehouse.nombre}`} product={detailsProduct} setProduct={setDetailsProduct} warehouse={warehouse.id} />}
+            <div className='w-full flex justify-center pb-4'>
+              {edit === true
+                ? <Button customFunction={updateCartRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Editar registro' />
+                : <Button customFunction={addToExpense} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Agregar registro' />}
             </div>
-          }
-          <div style={{ color: themeColors?.highEmphasis }} className='w-full flex flex-col gap-2 pt-8'>
-            <div className='flex justify-end items-center gap-2 text-2xl'>
-              <span className='font-semibold tracking-wide uppercase'>Total:</span>
-              <span className='font-[monospace] text-3xl'>$ {totalPrice.toFixed(2)}</span>
-            </div>
-            <div className='w-full flex justify-center'>
-              <Button customFunction={generateExpense} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='1/4' text='Generar egreso' />
+          </>
+        }
+        <Table
+          header={expenseGrid} data={recordsData} filterTitle='Mis Items'
+          checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected}
+          barcode={true} setOpenBarcode={setOpenSerialNumber} setProductID={setProductID}
+        />
+        {!!idSelected &&
+          <div className='w-full flex sm:justify-end mt-5'>
+            <div className='w-full sm:w-3/5 grid grid-cols-3 gap-1 '>
+              <Button customFunction={clearInputs} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' width='full' text='Cancelar' />
+              <Button customFunction={editInputs} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full' text='Editar' icon={<BsPencil />} />
+              <Button customFunction={confirmDelete} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full' text='Eliminar' icon={<BsTrash />} />
             </div>
           </div>
+        }
+        <div style={{ color: themeColors?.highEmphasis }} className='w-full flex flex-col gap-2 pt-8'>
+          <div className='flex justify-end items-center gap-2 text-2xl'>
+            <span className='font-semibold tracking-wide uppercase'>Total:</span>
+            <span className='font-[monospace] text-3xl'>$ {totalPrice.toFixed(2)}</span>
+          </div>
+          <div className='w-full flex justify-center'>
+            <Button customFunction={generateExpense} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='1/4' text='Generar egreso' />
+          </div>
         </div>
-      </>
+      </div>
     </>
   )
 }

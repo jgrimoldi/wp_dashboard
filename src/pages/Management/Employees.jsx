@@ -34,6 +34,11 @@ const Employees = () => {
     ];
 
     useEffect(() => {
+        let shadowBanner = setTimeout(() => setBanner({ error: null }), 2000);
+        return () => { clearTimeout(shadowBanner) };
+    });
+
+    useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
         const getEmployees = async () => {

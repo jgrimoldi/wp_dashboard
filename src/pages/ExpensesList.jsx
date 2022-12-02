@@ -22,8 +22,6 @@ const IncomeList = () => {
     const [banner, setBanner] = useState({ value: '', error: null });
     const sortByLastCreated = (data, anotherData) => new Date(anotherData.createdAt) < new Date(data.createdAt) ? -1 : 1
 
-    // console.log(recordsData)
-
     useEffect(() => {
         let shadowBanner = setTimeout(() => setBanner({ error: null }), 2000);
         return () => { clearTimeout(shadowBanner) };
