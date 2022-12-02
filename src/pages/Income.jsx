@@ -97,6 +97,7 @@ const Income = () => {
     setOpenModal(initialState);
     setIdSelected('');
     setEdit(false);
+    setOpenSearcher(false)
   }
 
   const calculatePrice = (quantity, price) => Number(quantity) * Number(price);

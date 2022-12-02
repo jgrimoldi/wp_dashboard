@@ -68,7 +68,9 @@ const ExpenseSerial = ({ warehouse, product, state, setState, setClose }) => {
 
     return (
         <div className='bg-half-transparent w-screen fixed nav-item top-0 right-0 overflow-hidden'>
-            {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner({ value: '', error: null })} />}
+            <div className='mt-20'>
+                {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner({ value: '', error: null })} />}
+            </div>
             <div className='h-screen flex items-center justify-center'>
                 <div className='flex flex-col item gap-5 bg-white dark:bg-secondary-dark-bg w-11/12 sm:w-4/5 lg:w-3/5 p-5 rounded-3xl'>
                     <form onSubmit={handleAdd} className='w-full flex  justify-center items-center gap-2'>

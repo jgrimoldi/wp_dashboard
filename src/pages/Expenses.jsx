@@ -80,7 +80,7 @@ const Expenses = () => {
   ]
 
   useEffect(() => {
-    let shadowBanner = setTimeout(() => setBanner({ error: null }), 2000);
+    let shadowBanner = setTimeout(() => setBanner({ error: null }), 4000);
     return () => { clearTimeout(shadowBanner) };
   });
 
@@ -89,6 +89,7 @@ const Expenses = () => {
     setDetailsQuantity(initialState)
     setOpenModal(initialState);
     setIdSelected('');
+    setOpenSearcher(false)
     setEdit(null);
   }
 
