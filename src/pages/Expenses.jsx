@@ -105,16 +105,18 @@ const Expenses = () => {
     return Number(detailsQuantity.value) <= quantityToExpense
   }
 
-  function checkStockOn(aProduct) {
+  async function checkStockOn(aProduct) {
     if (aProduct.id_producto === detailsProduct.id) {
       const quantityOnProduct = aProduct.cantidad - Number(detailsQuantity.value);
       const stockMin = detailsProduct.stockmin >= quantityOnProduct;
 
       if (stockMin) {
+        await new Promise(r => setTimeout(r, 2500));
         setBanner({ ...banner, value: { text: `Atención! Producto por debajo del stock. Stock mínimo: ${detailsProduct.stockmin}. Unidades en el almacén: ${quantityOnProduct}`, background: '#FFC300' }, error: true })
       }
 
       if (quantityOnProduct === 0) {
+        await new Promise(r => setTimeout(r, 3000));
         setBanner({ ...banner, value: { text: `Atención! Todas las unidades faltantes fueron seleccionadas. Unidades en el almacén: ${quantityOnProduct}`, background: '#FFC300' }, error: true })
       }
 
@@ -158,10 +160,10 @@ const Expenses = () => {
         .then(async response => {
           validateIfExists(response.data[0])
           validateAdd(response.data[0])
-          addNewProduct(response.data[0], detailsProduct, detailsQuantity.value)
-          await new Promise(r => setTimeout(r, 2000));
-          setBanner({ ...banner, value: { text: 'Item agregado correctamente!', background: themeColors?.confirm }, error: true })
           clearInputs()
+          await new Promise(r => setTimeout(r, 500));
+          addNewProduct(response.data[0], detailsProduct, detailsQuantity.value)
+          setBanner({ ...banner, value: { text: 'Item agregado correctamente!', background: themeColors?.confirm }, error: true })
         })
         .catch(error => {
           if (!!error?.text) {
@@ -223,10 +225,10 @@ const Expenses = () => {
           if (detailsQuantity.value < objectToEdit.quantity && expenseSerials.find(item => item.fk_producto === detailsProduct.id)) {
             setBanner({ ...banner, value: { text: `Atención! Nueva cantidad menor a la anterior. Verifique los números de serie.`, background: '#FFC300' }, error: true })
           }
-          editProduct(response.data[0], detailsProduct, detailsQuantity.value)
-          await new Promise(r => setTimeout(r, 2000));
-          setBanner({ ...banner, value: updateBanner, error: false });
           clearInputs()
+          await new Promise(r => setTimeout(r, 500));
+          setBanner({ ...banner, value: updateBanner, error: false });
+          editProduct(response.data[0], detailsProduct, detailsQuantity.value)
         })
         .catch(error => {
           if (!!error?.text) {

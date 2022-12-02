@@ -16,6 +16,7 @@ export { default as IncomeList } from './IncomeList';
 export { default as Expenses } from './Expenses';
 export { default as ExpensesList } from './ExpensesList';
 export { default as Transfer } from './Transfer';
+export { default as TransferList } from './TransferList';
 export { default as Stats } from './Stats';
 export { default as Reports } from './Reports';
 export { default as Help } from './Help';

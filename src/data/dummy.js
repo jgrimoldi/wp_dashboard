@@ -137,7 +137,7 @@ export const sidebar = [
             },
             {
                 name: 'Lista de transferencias',
-                url: '/',
+                url: 'lista-de-movimientos',
                 icon: <BsArrowLeftRight />,
             },
         ],
@@ -399,4 +399,18 @@ export const expenseListGrid = [
     { name: 'CUIT/CUIL Cliente', field: 'id_cliente', mobile: 'id_cliente', },
     { name: 'Fecha de Egreso', field: 'fechaegreso', mobile: 'fechaegreso', },
     { name: 'Total Egreso', field: 'total', mobile: 'total', },
+];
+
+export const transferListGrid = [
+    { name: 'Almacén Origen', field: 'nombre_almacen_origen', mobile: 'nombre_almacen_origen', },
+    { name: 'Almacén Destino', field: 'nombre_almacen_destino', mobile: 'nombre_almacen_destino', },
+    { name: 'Fecha de Transferencia', field: 'fechamovimiento', mobile: 'fechamovimiento', },
+    { name: 'Detalle', field: 'detalle', mobile: 'detalle', },
+]
+
+export const transferDetailsGrid = [
+    { name: 'Productos', field: 'nombre_producto', mobile: 'nombre_producto', },
+    { name: 'Unidades', field: 'cantidad', mobile: 'cantidad', },
+    { name: 'Precio', field: 'cmp', mobile: 'cmp', },
+    { name: 'Subtotal', field: 'total', mobile: 'total', },
 ];

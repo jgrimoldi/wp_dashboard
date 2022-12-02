@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { BsXCircle, BsTrash } from 'react-icons/bs';
 
-import { Details, SEO, Table, Title, Button, Modal, Banner } from '../components';
-import { expenseListGrid } from '../data/dummy';
-import { URL_EXPENSES } from '../services/Api';
+import { TransferDetails, SEO, Table, Title, Button, Modal, Banner } from '../components';
+import { transferListGrid } from '../data/dummy';
+import { URL_TRANSFER } from '../services/Api';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { deleteDataByIdFrom, getDataFrom } from '../services/GdrService';
 import { useStateContext } from '../contexts/ContextProvider';
 
-const IncomeList = () => {
+const TransferList = () => {
     const { themeColors } = useStateContext();
     const { auth, handleErrors } = useAuthContext();
     const errorBanner = { text: '¡Ups! No se pudo realizar la acción.', background: themeColors?.error }
     const permissionsBanner = { text: '¡Ups! No tienes los permisos necesarios.', background: themeColors?.error }
-    const deleteBanner = { text: 'Egreso eliminado exitosamente!', background: themeColors?.confirm }
+    const deleteBanner = { text: 'Movimiento eliminado exitosamente!', background: themeColors?.confirm }
     const [recordsData, setRecordsData] = useState([])
     const [openDetails, setOpenDetails] = useState(null);
     const [expenseId, setExpenseId] = useState('');
@@ -31,7 +31,7 @@ const IncomeList = () => {
         const controller = new AbortController();
         const signal = controller.signal;
         const getIncomes = async () => {
-            await getDataFrom(URL_EXPENSES, signal, auth.token)
+            await getDataFrom(URL_TRANSFER, signal, auth.token)
                 .then(response => setRecordsData(response.data))
                 .catch(error => handleErrors(error))
         }
@@ -52,7 +52,7 @@ const IncomeList = () => {
 
     const deleteDataById = () => {
         setOpenModal({ value: '', error: null });
-        deleteDataByIdFrom(URL_EXPENSES, openModal.value, auth.token)
+        deleteDataByIdFrom(URL_TRANSFER, openModal.value, auth.token)
             .then(() => {
                 setRecordsData(current => current.filter(record => record.id !== Number(openModal.value)));
                 setBanner({ ...banner, value: deleteBanner, error: false })
@@ -69,8 +69,8 @@ const IncomeList = () => {
 
     return (
         <>
-            <SEO title='Lista de egresos' />
-            {openDetails === true && <Details URL={URL_EXPENSES} setOpen={setOpenDetails} incomeID={expenseId} />}
+            <SEO title='Lista de movimientos' />
+            {openDetails === true && <TransferDetails URL={URL_TRANSFER} setOpen={setOpenDetails} incomeID={expenseId} />}
             {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner({ value: '', error: null })} />}
             {openModal.error === false &&
                 <Modal
@@ -80,9 +80,9 @@ const IncomeList = () => {
                     setFunction={clearInputs} redirect='' customFunction={deleteDataById}
                 />}
             <div className='m-2 md:m-10 mt-24 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>
-                <Title category="Lista de" title="Egresos" />
+                <Title category="Lista de" title="Movimientos" />
                 <Table
-                    header={expenseListGrid} data={recordsData} filterTitle='Mis egresos'
+                    header={transferListGrid} data={recordsData} filterTitle='Mis transferencias'
                     sortFunction={sortByLastCreated} checkbox={true} stateCheckbox={expenseCheck} setStateCheckbox={setExpenseCheck}
                     barcode={true} setOpenBarcode={setOpenDetails} fieldName='Ver detalles' setProductID={setExpenseId}
                 />
@@ -99,4 +99,4 @@ const IncomeList = () => {
     )
 }
 
-export default IncomeList
+export default TransferList

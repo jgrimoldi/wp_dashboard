@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Table, Button } from './';
-import { incomeDetailsGrid, serialNumberGrid } from '../data/dummy';
+import { transferDetailsGrid, serialNumberGrid } from '../data/dummy';
 import { getDataByIdFrom, getDataFrom } from '../services/GdrService';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { useStateContext } from '../contexts/ContextProvider';
@@ -54,14 +54,13 @@ const ShowSn = ({ URL, id, setOpen }) => {
     )
 }
 
-const Details = ({ URL, setOpen, incomeID }) => {
+const TransferDetails = ({ URL, setOpen, incomeID }) => {
     const { themeColors } = useStateContext();
     const { auth, handleErrors } = useAuthContext();
     const [detailsData, setDetailsData] = useState([]);
     const [openSN, setOpenSN] = useState(null)
     const [idToSN, setIdToSn] = useState({ income: '', product: '', warehouse: '' })
-    const obURL = { 'compraproducto/': 'detallecompra/', 'egresoproducto/': 'detalleegreso/', 'movimiento/': 'detallemovimiento/' };
-    const fullURL = `${URL}q/${obURL[URL]}`
+    const fullURL = `${URL}q/detallemovimiento/`
 
     useEffect(() => {
         const saveResponse = (data) => {
@@ -88,13 +87,13 @@ const Details = ({ URL, setOpen, incomeID }) => {
                     <div className='dark:text-slate-100'>Detalle de compra</div>
                     <div>
                         <div className='flex justify-between gap-2 dark:text-slate-100 pb-2 border-b-2 dark:border-b-gray-200 border-b-black'>
-                            {incomeDetailsGrid.map((head, index) => <span key={index} className='w-40 text-center text-sm font-semibold tracking-wide' >{head.name}</span>)}
+                            {transferDetailsGrid.map((head, index) => <span key={index} className='w-40 text-center text-sm font-semibold tracking-wide' >{head.name}</span>)}
                             <span className='w-40 text-center text-sm font-semibold tracking-wide' >Series</span>
                         </div>
                         {detailsData.map((data, index) => (
                             <div key={index} className='flex justify-between gap-2 pt-2'>
                                 {
-                                    incomeDetailsGrid.map((grid, index) =>
+                                    transferDetailsGrid.map((grid, index) =>
                                         <div key={index} className='w-40 text-center text-sm text-gray-700 dark:text-gray-100 whitespace-nowrap'>
                                             {data[grid.field]}
                                         </div>
@@ -113,4 +112,4 @@ const Details = ({ URL, setOpen, incomeID }) => {
     )
 }
 
-export default Details
+export default TransferDetails

@@ -37,6 +37,7 @@ export { default as ExpenseSerial } from './ExpenseSerial';
 export { default as ProductSearcher } from './ProductSearcher';
 export { default as SelectProduct } from './SelectProduct';
 export { default as Details } from './Details';
+export { default as TransferDetails } from './TransferDetails';
 export { default as LastLogin } from './LastLogin';
 export { default as Searcher } from './Searcher';
 export { default as ThemeSettings } from './ThemeSettings';
