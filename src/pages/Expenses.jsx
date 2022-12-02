@@ -254,7 +254,7 @@ const Expenses = () => {
   async function areSerialsComplete() {
     const totalSerials = (await getSerials()).flat().map(item => item.sn);
     const fkProducts = (await getSerials()).flat().map(item => item.id_producto)
-    const prods = recordsData.filter(item => fkProducts.includes(item.fk_producto)).reduce((a, b) => a.quantity + b.quantity)
+    const prods = recordsData.filter(item => fkProducts.includes(item.fk_producto)).reduce((a, b) => a.quantity + b.quantity, 0)
     let areIncluded = true;
 
     expenseSerials.forEach(item => {

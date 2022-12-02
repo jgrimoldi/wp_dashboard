@@ -106,17 +106,16 @@ const Transfer = () => {
     return Number(detailsQuantity.value) <= quantityToExpense
   }
 
-  function checkStockOn(aProduct) {
+  async function checkStockOn(aProduct) {
     if (aProduct.id_producto === detailsProduct.id) {
       const quantityOnProduct = aProduct.cantidad - Number(detailsQuantity.value);
       const stockMin = detailsProduct.stockmin >= quantityOnProduct;
-
       if (stockMin) {
-        setBanner({ ...banner, value: { text: `Atención! Producto por debajo del stock. Stock mínimo: ${detailsProduct.stockmin}. Unidades en el almacén: ${quantityOnProduct}`, background: '#FFC300' }, error: true })
+        setBanner({ ...banner, value: { text: `Atención! Producto por debajo del stock. Stock mínimo: ${detailsProduct.stockmin}. Unidades en el ${sourceWarehouse.nombre}: ${quantityOnProduct}`, background: '#FFC300' }, error: false })
       }
-
+      await new Promise(r => setTimeout(r, 4000));
       if (quantityOnProduct === 0) {
-        setBanner({ ...banner, value: { text: `Atención! Todas las unidades faltantes fueron seleccionadas. Unidades en el almacén: ${quantityOnProduct}`, background: '#FFC300' }, error: true })
+        setBanner({ ...banner, value: { text: `Atención! Todas las unidades faltantes fueron seleccionadas. Unidades en el almacén: ${quantityOnProduct}`, background: '#FFC300' }, error: false })
       }
 
     } else {
@@ -125,9 +124,31 @@ const Transfer = () => {
     }
   }
 
-  function validateAdd(productInfo) {
+  function checkMaxStock(aProduct) {
+    if (aProduct.id_producto === detailsProduct.id) {
+      getDataByIdFrom(URL_WAREHOUSEPRODUCT + destinationWarehouse.id + '/', aProduct.id_producto, auth.token)
+        .then(async response => {
+          const quantityOnProduct = response.data[0].cantidad + Number(detailsQuantity.value);
+          const stockMax = detailsProduct.stockmax <= quantityOnProduct;
+          if (stockMax) {
+            setBanner({ ...banner, value: { text: `Atención! Producto por encima del stock. Stock máximo: ${detailsProduct.stockmax}. Unidades en el ${destinationWarehouse.nombre}: ${quantityOnProduct}`, background: '#FFC300' }, error: false })
+          }
+        })
+        .catch(() => {
+          const error = { text: `Ups! Ocurrió un error al seleccionar el producto`, background: themeColors?.error }
+          throw error;
+        })
+    } else {
+      const error = { text: `Ups! Ocurrió un error al seleccionar el producto`, background: themeColors?.error }
+      throw error;
+    }
+  }
+
+  async function validateAdd(productInfo) {
     if (validateQuantity(productInfo.cantidad)) {
       checkStockOn(productInfo)
+      await new Promise(r => setTimeout(r, 2000));
+      checkMaxStock(productInfo)
     } else {
       const error = { text: `Ups! La cantidad a egresar es mayor a la cantidad en almacén. Cantidad en almacén: ${productInfo.cantidad}`, background: themeColors?.error }
       throw error;
@@ -159,7 +180,7 @@ const Transfer = () => {
           validateIfExists(response.data[0])
           validateAdd(response.data[0])
           addNewProduct(response.data[0], detailsProduct, detailsQuantity.value)
-          await new Promise(r => setTimeout(r, 2000));
+          await new Promise(r => setTimeout(r, 6000));
           setBanner({ ...banner, value: { text: 'Item agregado correctamente!', background: themeColors?.confirm }, error: true })
           clearInputs()
         })
@@ -251,7 +272,7 @@ const Transfer = () => {
   async function areSerialsComplete() {
     const totalSerials = (await getSerials()).flat().map(item => item.sn);
     const fkProducts = (await getSerials()).flat().map(item => item.id_producto)
-    const prods = recordsData.filter(item => fkProducts.includes(item.fk_producto)).reduce((a, b) => a.quantity + b.quantity)
+    const prods = recordsData.filter(item => fkProducts.includes(item.fk_producto)).reduce((a, b) => a.quantity + b.quantity, 0)
     let areIncluded = true;
 
     expenseSerials.forEach(item => {
@@ -270,7 +291,7 @@ const Transfer = () => {
     const aux = []
 
     recordsData.forEach(record => {
-      aux.push({ fk_producto: record.fk_producto, cantidad: record.quantity, cmp: record.price, subtotal: record.subTotal })
+      aux.push({ fk_producto: record.fk_producto, cantidad: record.quantity, cmp: record.price, total: record.subTotal })
     })
 
     return aux
@@ -288,16 +309,20 @@ const Transfer = () => {
 
   const generateTransfer = async () => {
     if (areSerialsComplete()) {
-      insertNewTransfer(generateNewTransfer(), generateDetails(), generateSerials(), auth.token)
-        .then(() => {
-          setBanner({ ...banner, value: createBanner, error: false });
-          setSourceWarehouse({ id: '' });
-          setDestinationWarehouse({ id: '' });
-          clearInputs();
-          setRecordsData([]);
-          setExpenseSerials([])
-        })
-        .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
+      if (sourceWarehouse.id !== destinationWarehouse && (!!comments.value || comments.error === false) && recordsData.length > 0) {
+        insertNewTransfer(generateNewTransfer(), generateDetails(), generateSerials(), auth.token)
+          .then(() => {
+            setBanner({ ...banner, value: createBanner, error: false });
+            setSourceWarehouse({ id: '' });
+            setDestinationWarehouse({ id: '' });
+            clearInputs();
+            setRecordsData([]);
+            setExpenseSerials([])
+          })
+          .catch(error => console.log(error.response.config.data)) //setBanner({ ...banner, value: errorBanner, error: true }))
+      } else {
+        setBanner({ ...banner, value: { text: `Ups! Ocurrió un error o al menos un campo esta vacío.`, background: themeColors?.error }, error: true })
+      }
     } else {
       setBanner({ ...banner, value: invalidSeries, error: true })
     }
