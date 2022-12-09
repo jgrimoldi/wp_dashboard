@@ -29,7 +29,7 @@ const ShowSn = ({ URL, id, setOpen }) => {
     useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
-        const fullURL = URL + 'q/ns/' + id.income + '/' + id.product + '/' + id.warehouse;
+        const fullURL = URL + 'q/ns/' + id.income + '/' + id.product + '/';
         const getSn = async () => {
             await getDataFrom(fullURL, signal, auth.token)
                 .then(response => setRecords(response.data))

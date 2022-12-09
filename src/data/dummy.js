@@ -17,6 +17,7 @@ import {
     BsArrowRepeat,
     BsQuestionCircle,
     BsPersonLinesFill,
+    BsArrowCounterclockwise,
 } from 'react-icons/bs';
 
 export const regEx = {
@@ -119,6 +120,11 @@ export const sidebar = [
                 name: 'Transferencia entre almacenes',
                 url: 'transferencia-entre-almacenes',
                 icon: <BsArrowLeftRight />,
+            },
+            {
+                name: 'Devolución RMA',
+                url: 'devolucion-productos',
+                icon: <BsArrowCounterclockwise />
             },
         ],
     },

@@ -353,5 +353,3 @@ const Income = () => {
 }
 
 export default Income
-
-// Para la tabla

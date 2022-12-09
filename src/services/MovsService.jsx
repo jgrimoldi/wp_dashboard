@@ -26,3 +26,12 @@ export const insertNewTransfer = (movalmacen, detalle, detnumeroserie, token) =>
             })
     )
 }
+
+export const insertRMA = (devolucion, detalle, detnumeroserie, token) => {
+    return (
+        API.post(URL_TRANSFER, { devolucion, detalle, detnumeroserie }, header(token))
+            .then(response => {
+                return response.data;
+            })
+    )
+}

@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { HomeNavigation, HomeTemplate, ProtectedRoutes } from './components';
-import { Dashboard, Storage, Clients, Products, ProductType, Units, Providers, Category, Income, IncomeList, Expenses, Transfer, Stats, Reports, Register, Settings, Backup, Help, Login, ForgotPassword, ResetPassword, AccountValidation, Unauthorized, NotFound, Employees, NotValid, ExpensesList, TransferList } from './pages';
+import { Dashboard, Storage, Clients, Products, ProductType, Units, Providers, Category, Income, IncomeList, Expenses, Transfer, Stats, Reports, Register, Settings, Backup, Help, Login, ForgotPassword, ResetPassword, AccountValidation, Unauthorized, NotFound, Employees, NotValid, ExpensesList, TransferList, RMA } from './pages';
 import './App.css';
 
 import { useAuthContext } from './contexts/ContextAuth';
@@ -52,6 +52,7 @@ const App = () => {
             <Route path='/lista-de-ingresos' element={<IncomeList />} />
             <Route path='/lista-de-egresos' element={<ExpensesList />} />
             <Route path='/lista-de-movimientos' element={<TransferList />} />
+            <Route path='/devolucion-productos' element={<RMA />} />
             {/* reports */}
             <Route path='/estadisticas' element={<Stats />} />
             <Route path='/reportes' element={<Reports />} />
