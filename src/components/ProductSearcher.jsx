@@ -19,7 +19,7 @@ const ProductSearcher = ({ title, product, setProduct, warehouse }) => {
     const filterBy = (object) => {
         for (const key in object) {
             let newObject = object[key];
-            if (typeof newObject === 'string' && newObject.includes(filteredValue.value))
+            if (typeof newObject === 'string' && newObject.toLowerCase().includes((filteredValue.value).toLowerCase()))
                 return true;
             if (typeof newObject === 'number' && newObject === Number(filteredValue.value))
                 return true;

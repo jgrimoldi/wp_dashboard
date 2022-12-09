@@ -43,6 +43,8 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
         config.forEach(input => {
             if (input.field)
                 input.setState(initialState);
+            if (input.getter)
+                input.setState({ id: '' });
         });
         setOpenModal(initialState);
         setIdSelected('');
@@ -57,7 +59,7 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
                 clearInputs();
             })
             .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
-            .finally(() => ref[0].current.focus())
+            .finally(() => ref.useRef.current.focus())
     }
 
     const confirmDelete = () => {
@@ -71,6 +73,7 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
             .then(() => {
                 setRecordsData(current => current.filter(record => record.id !== Number(openModal.value)));
                 setBanner({ ...banner, value: deleteBanner, error: false });
+                clearInputs()
             })
             .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
             .finally(() => setOpenModal(initialState))

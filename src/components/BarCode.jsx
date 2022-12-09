@@ -137,13 +137,13 @@ const BarCode = ({ productID, setState }) => {
           redirect='' customFunction={deleteDataById}
         />
       }
-      <div className='mt-20'>
-        {banner.edit === true && <Banner text='¡Registro editado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, edit: false })} />}
-        {banner.deleted === true && <Banner text='¡Registro eliminado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, deleted: false })} />}
-        {banner.valid === true && <Banner text='¡Nuevo codigo agregado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} />}
-        {banner.error === true && <Banner text='¡Ups! No se pudo realizar la acción.' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} />}
+      <div className='mt-24'>
+        {banner.edit === true && <Banner text='¡Registro editado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, edit: false })} css='w-full' />}
+        {banner.deleted === true && <Banner text='¡Registro eliminado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, deleted: false })} css='w-full' />}
+        {banner.valid === true && <Banner text='¡Nuevo codigo agregado exitosamente!' backgroundColor='green' setState={() => setBanner({ ...banner, valid: false })} css='w-full' />}
+        {banner.error === true && <Banner text='¡Ups! No se pudo realizar la acción.' backgroundColor='red' setState={() => setBanner({ ...banner, error: false })} css='w-full' />}
       </div>
-      <div className='h-screen flex items-center justify-center'>
+      <div className='h-screen flex items-center justify-center -mt-16'>
         <div className='flex flex-col item gap-5 bg-white dark:bg-secondary-dark-bg w-11/12 sm:w-4/5 lg:w-3/5 p-5 rounded-3xl'>
           <form onSubmit={handleSubmit} className='w-full md:w-2/5 flex flex-col justify-center items-center gap-2'>
             <div className='self-start text-lg dark:text-slate-100'>Códigos de barras para {product.name}</div>

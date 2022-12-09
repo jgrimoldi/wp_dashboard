@@ -41,4 +41,3 @@ export { default as TransferDetails } from './TransferDetails';
 export { default as LastLogin } from './LastLogin';
 export { default as Searcher } from './Searcher';
 export { default as ThemeSettings } from './ThemeSettings';
-export { default as UserProfile } from './UserProfile';

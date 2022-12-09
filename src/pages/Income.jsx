@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { BsXCircle, BsTrash, BsPencil, BsSearch } from 'react-icons/bs';
 
-import { SEO, Title, Table, Input, Button, Modal, Banner, SerialNumber, Select, SelectProduct } from '../components';
+import { SEO, Title, Table, Input, Button, Modal, Banner, SerialNumber, Select, ProductSearcher } from '../components';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { useStateContext } from '../contexts/ContextProvider';
 import { incomeGrid, regEx } from '../data/dummy';
@@ -108,18 +108,21 @@ const Income = () => {
     if (aProduct.id === detailsProduct.id) {
       getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', aProduct.id, auth.token)
         .then(response => {
-          const quantityOnProduct = aProduct.cantidad + Number(detailsQuantity.value);
+          const quantityOnWarehouse = response.data.length !== 0 ? response.data[0].cantidad : 0
+          const quantityOnProduct = Number(quantityOnWarehouse) + Number(detailsQuantity.value);
           const stockMax = detailsProduct.stockmax <= quantityOnProduct;
-          setBanner({ ...banner, value: { text: `Atención! Producto por encima del stock. Stock máximo: ${detailsProduct.stockmax}. Unidades en el almacén: ${quantityOnProduct}`, background: '#FFC300' }, error: false })
+
           if (stockMax) {
             setBanner({ ...banner, value: { text: `Atención! Producto por encima del stock. Stock máximo: ${detailsProduct.stockmax}. Unidades en el almacén: ${quantityOnProduct}`, background: '#FFC300' }, error: false })
           }
         })
-        .catch(error => {
-          setBanner({ ...banner, value: error, error: true })
+        .catch(() => {
+          const error = { text: `Ups! Ocurrió un problema`, background: themeColors?.error }
+          throw error;
         })
     } else {
-      console.log("aca")
+      const error = { text: `Ups! Ocurrió un error al seleccionar el producto`, background: themeColors?.error }
+      throw error;
     }
   }
 
@@ -305,7 +308,7 @@ const Income = () => {
         {purchaseDate.error === false && !!supplier.nombre && !!warehouse.nombre &&
           <>
             <MakeInputs configInputs={inputsDetails} />
-            {openSearcher === true && <SelectProduct title={`Buscar en mis Productos`} product={detailsProduct} setProduct={setDetailsProduct} />}
+            {openSearcher === true && <ProductSearcher title={`Productos en ${warehouse.nombre}`} product={detailsProduct} setProduct={setDetailsProduct} warehouse={warehouse.id} />}
             <div className='w-full flex justify-center pb-4'>
               {edit === true
                 ? <Button customFunction={updateCartRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Editar registro' />

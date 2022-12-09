@@ -110,10 +110,12 @@ const Transfer = () => {
     if (aProduct.id_producto === detailsProduct.id) {
       await getDataByIdFrom(URL_WAREHOUSEPRODUCT + destinationWarehouse.id + '/', aProduct.id_producto, auth.token)
         .then(async response => {
-          const quantityOnProduct = aProduct.cantidad - Number(detailsQuantity.value);
+          const quantityOnProduct = Number(aProduct.cantidad) - Number(detailsQuantity.value);
           const stockMin = detailsProduct.stockmin >= quantityOnProduct;
-          const newQuantity = response.data[0].cantidad + Number(detailsQuantity.value);
+          const newQuantity = Number(response.data[0].cantidad) + Number(detailsQuantity.value);
           const stockMax = detailsProduct.stockmax <= newQuantity;
+
+          console.log(response.data[0].cantidad, detailsQuantity.value, newQuantity)
 
           if (stockMin) {
             await new Promise(r => setTimeout(r, 2500));

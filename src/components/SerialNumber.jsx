@@ -172,10 +172,10 @@ const SerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                     buttonText='Eliminar registro' color='red' icon={<BsXCircle />}
                     setFunction={clearInputs} redirect='' customFunction={deleteDataById}
                 />}
-            <div className='mt-20'>
-                {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner(initialState)} />}
+            <div className='mt-24'>
+                {banner.error !== null && <Banner text={banner.value.text} backgroundColor={banner.value.background} setState={() => setBanner(initialState)} css='w-full' />}
             </div>
-            <div className='h-screen flex items-center justify-center'>
+            <div className='h-screen flex items-center justify-center -mt-16'>
                 <div className='flex flex-col item gap-5 bg-white dark:bg-secondary-dark-bg w-11/12 sm:w-4/5 lg:w-3/5 p-5 rounded-3xl'>
                     <form onSubmit={edit ? updateSerialNumbers : addSerialNumber} className='w-full flex flex-col justify-center items-center gap-2'>
                         <div className='self-start text-lg dark:text-slate-100'>Números de serie para {product.product}</div>
