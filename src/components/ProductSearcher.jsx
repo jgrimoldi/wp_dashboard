@@ -5,7 +5,7 @@ import { useAuthContext } from '../contexts/ContextAuth';
 import { URL_PRODUCT, URL_WAREHOUSEPRODUCT } from '../services/Api';
 import { getDataByIdFrom } from '../services/GdrService';
 
-const ProductSearcher = ({ title, product, setProduct, warehouse }) => {
+const ProductSearcher = ({ title, product, setProduct, warehouse, setClose }) => {
     const { auth, handleErrors } = useAuthContext();
     const [records, setRecords] = useState([]);
     const [filteredValue, setFilteredValue] = useState({ value: '', error: null });
@@ -33,6 +33,7 @@ const ProductSearcher = ({ title, product, setProduct, warehouse }) => {
         getDataByIdFrom(URL_PRODUCT, id_product, auth.token)
             .then(response => setProduct(Object.assign(response.data[0], { error: false })))
             .catch(error => handleErrors(error))
+            .finally(() => setClose(false))
     }
 
     return (

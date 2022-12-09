@@ -342,7 +342,7 @@ const Transfer = () => {
         {purchaseDate.error === false && !!sourceWarehouse.nombre && !!destinationWarehouse.nombre &&
           <>
             <MakeInputs configInputs={inputsDetails} />
-            {openSearcher === true && <ProductSearcher title={`Productos en ${sourceWarehouse.nombre}`} product={detailsProduct} setProduct={setDetailsProduct} warehouse={sourceWarehouse.id} />}
+            {openSearcher === true && <ProductSearcher title={`Productos en ${sourceWarehouse.nombre}`} product={detailsProduct} setProduct={setDetailsProduct} warehouse={sourceWarehouse.id} setClose={setOpenSearcher} />}
             <div className='w-full flex justify-center pb-4'>
               {edit === true
                 ? <Button customFunction={updateCartRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Editar registro' />
