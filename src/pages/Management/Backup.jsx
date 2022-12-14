@@ -40,7 +40,7 @@ const Backup = () => {
   }, [auth, setAuth])
 
   const getNewObject = (object) => {
-    return { createdBy: object.createdBy, createdAt: new Date(object.createdAt), nombre: object.nombre, size: object.size, url: object.url };
+    return { createdAt: new Date(object.createdAt), nombre: object.nombre, size: object.size, url: object.url };
   }
 
   const handleBackup = async () => {
