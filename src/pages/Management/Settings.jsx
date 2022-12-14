@@ -77,7 +77,7 @@ const UpdatePassword = ({ email, token, setClose, setOpenBanner }) => {
             {!!password.value && <GroupValidator password={password.value} />}
             <Password id='passwordVerify' label='Confirmar Nueva Contraseña' color={themeColors?.secondary} state={passwordVerify} setState={setPasswordVerify} customFunction={handleValidatePassword} helperText='Las contraseñas no coinciden' css='w-full' />
             {!!errorForm.value && <ErrorLabel color={themeColors?.error}>{errorForm.value}</ErrorLabel>}
-            <Button customFunction={handleForgot} borderColor={themeColors?.primary} color={themeColors?.primary} text='Recuperar mi contraseña' width='1/2' height='small' />
+            <Button customFunction={handleForgot} borderColor={themeColors?.primary} color={themeColors?.primary} text='¿Olvidaste tu contraseña? Haz click para recuperarla' width='1/2' />
             <div className='w-1/2 flex gap-1'>
               <Button customFunction={() => { setClose(false) }} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' text='Cerrar' width='1/2' tabindex='-1' />
               <Button type='submit' borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Actualizar contraseña' width='1/2' />
