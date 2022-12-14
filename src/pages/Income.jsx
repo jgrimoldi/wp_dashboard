@@ -28,7 +28,7 @@ const MakeInputs = ({ configInputs }) => {
                 <Select id={id} label={label} url={url} state={state} setState={setState} disabled={disabled} getter={getter} />
                 {tooltip &&
                   <TooltipComponent content={tooltip} position="TopCenter">
-                    <button type='button' onClick={customFunction} style={{ backgroundColor: themeColors?.secondary }} className='relative p-2 text-white dark:text-black text-2xl rounded-md'>
+                    <button type='button' onClick={customFunction} onKeyDown={(event) => event.key === 'Escape' && customFunction()} style={{ backgroundColor: themeColors?.secondary }} className='relative p-2 text-white dark:text-black text-2xl rounded-md'>
                       <BsSearch />
                     </button>
                   </TooltipComponent>
@@ -74,7 +74,7 @@ const Income = () => {
   const [openSearcher, setOpenSearcher] = useState(false);
   const inputPurchase = [
     { getter: 'nombre', url: URL_SUPPLIER, id: 'supplier', label: 'Proveedor', state: supplier, setState: setSupplier, expression: 'notEmpty', css: 'w-1/6' },
-    { getter: 'nombre', url: URL_STORAGE, id: 'warehouse', label: 'Almacén', state: warehouse, setState: setWarehouse, expression: 'notEmpty', css: 'w-1/6' },
+    { getter: 'nombre', url: URL_STORAGE, id: 'warehouse', label: 'Almacén', state: warehouse, setState: setWarehouse, expression: 'notEmpty', css: 'w-1/6', disabled: recordsData.length > 0, },
     { field: 'date', id: 'date', type: 'date', state: purchaseDate, setState: setPurchaseDate, expression: 'notEmpty', css: 'w-1/6' },
   ];
   const inputsDetails = [
@@ -141,6 +141,7 @@ const Income = () => {
       this.price = calculatePrice(detailsQuantity.value, detailsPrice.value);
       this.alicuota = detailsProduct.alicuota;
       this.VAT = calculateIVA(this.price, detailsProduct.alicuota);
+      this.controlNS = detailsProduct.controlNS;
       this.subTotal = calculateSubTotal(this.VAT, this.price);
     };
     if (!!detailsProduct && detailsQuantity.error === false && detailsPrice.error === false && Number(detailsQuantity.value) > 0 && !validateIfExists(detailsProduct)) {
@@ -195,6 +196,7 @@ const Income = () => {
       this.price = calculatePrice(detailsQuantity.value, detailsPrice.value);
       this.alicuota = detailsProduct.alicuota;
       this.VAT = calculateIVA(this.price, detailsProduct.alicuota);
+      this.controlNS = detailsProduct.controlNS;
       this.subTotal = calculateSubTotal(this.VAT, this.price);
     };
 
@@ -261,11 +263,12 @@ const Income = () => {
 
   const areSerialsComplete = (aSerials) => {
     const idFromSerials = new Set(aSerials.map(serial => serial.fk_producto))
+    const controlProduct = recordsData.filter(record => record.controlNS === 1)
     const productsWithSerials = recordsData.filter(record => idFromSerials.has(String(record.id)))
     const lengthOfSerials = aSerials.length
     const lengthOfProductsWithSeries = productsWithSerials.map(product => Number(product.quantity)).reduce((a, b) => a + b, 0)
-
-    return lengthOfProductsWithSeries === lengthOfSerials
+    
+    return lengthOfProductsWithSeries === lengthOfSerials && controlProduct.length === productsWithSerials.length
   }
 
 

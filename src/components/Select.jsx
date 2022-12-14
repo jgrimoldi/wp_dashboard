@@ -58,7 +58,7 @@ const Select = ({ id, label, state, setState, url, disabled, getter, customFilte
             <option style={{ color: '#c4c4c4' }} value='' disabled>Elija un {label}</option>
             {
                 data.filter(customFilter).map((opcion, index) =>
-                    <option key={index} value={opcion.id}>{opcion.nombre}</option>
+                    <option key={index} value={opcion.id}>{opcion.nombre === undefined ? opcion.magnitud === undefined ? opcion.alicuota : opcion.magnitud : opcion.nombre}</option>
                 )
             }
         </select>

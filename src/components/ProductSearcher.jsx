@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import { Input } from './';
 import { useAuthContext } from '../contexts/ContextAuth';
@@ -7,8 +7,20 @@ import { getDataByIdFrom } from '../services/GdrService';
 
 const ProductSearcher = ({ title, product, setProduct, warehouse, setClose }) => {
     const { auth, handleErrors } = useAuthContext();
+    const productRef = useRef(null);
     const [records, setRecords] = useState([]);
     const [filteredValue, setFilteredValue] = useState({ value: '', error: null });
+
+    useEffect(() => {
+        const clickAwayListener = (event) => {
+            if (productRef.current && !productRef.current.contains(event.target)) {
+                setClose(false);
+            }
+        }
+        // Bind the event listener
+        document.addEventListener("mousedown", clickAwayListener);
+        return () => { document.removeEventListener("mousedown", clickAwayListener) };
+    })
 
     useEffect(() => {
         getDataByIdFrom(`${URL_WAREHOUSEPRODUCT}/q/poralmacen/`, warehouse, auth.token)
@@ -37,7 +49,7 @@ const ProductSearcher = ({ title, product, setProduct, warehouse, setClose }) =>
     }
 
     return (
-        <div className='absolute left-1/2 border border-slate-900 p-2 bg-white dark:bg-secondary-dark-bg dark:border-white rounded-lg text-slate-900 dark:text-slate-100 z-50'>
+        <div ref={productRef} onKeyDown={(event) => event.key === 'Escape' && setClose(false)} tabIndex='0' className='absolute left-1/2 border border-slate-900 p-2 bg-white dark:bg-secondary-dark-bg dark:border-white rounded-lg text-slate-900 dark:text-slate-100 z-50'>
             <p className='text-2xl font-extrabold tracking-tight pb-2 border-b-1 border-white '>
                 {title}
             </p>

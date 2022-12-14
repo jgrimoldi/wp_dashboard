@@ -1,17 +1,17 @@
 import API, { header, URL_BARCODE, URL_PRODUCT, URL_PRODUCTTYPE, URL_UNIT } from './Api';
 
-export const insertProduct = (fk_tipoproducto, fk_unidad, fk_alicuota, nombre, cantidad, stockmin, stockmax, descripcion, token) => {
+export const insertProduct = (fk_tipoproducto, fk_unidad, fk_alicuota, nombre, cantidad, stockmin, stockmax, controlNS, descripcion, token) => {
     return (
-        API.post(URL_PRODUCT, { fk_tipoproducto, fk_unidad, fk_alicuota, nombre, cantidad, stockmin, stockmax, imagen: 'imagen.jpg', descripcion }, header(token))
+        API.post(URL_PRODUCT, { fk_tipoproducto, fk_unidad, fk_alicuota, nombre, cantidad, controlNS, stockmin, stockmax, imagen: 'imagen.jpg', descripcion }, header(token))
             .then(response => {
                 return response.data;
             })
     )
 }
 
-export const updateProductById = (id, fk_tipoproducto, fk_unidad, fk_alicuota, nombre, cantidad, stockmin, stockmax, descripcion, token) => {
+export const updateProductById = (id, fk_tipoproducto, fk_unidad, fk_alicuota, nombre, cantidad, stockmin, stockmax, controlNS, descripcion, token) => {
     return (
-        API.put(URL_PRODUCT + id, { fk_tipoproducto, fk_unidad, fk_alicuota, nombre, cantidad, stockmin, stockmax, imagen: 'imagen.jpg', descripcion }, header(token))
+        API.put(URL_PRODUCT + id, { fk_tipoproducto, fk_unidad, fk_alicuota, nombre, cantidad, controlNS, stockmin, stockmax, imagen: 'imagen.jpg', descripcion }, header(token))
             .then(response => {
                 return response.data;
             })

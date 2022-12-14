@@ -28,7 +28,7 @@ const MakeInputs = ({ configInputs }) => {
                 <Select id={id} label={label} url={url} state={state} setState={setState} disabled={disabled} getter={getter} />
                 {tooltip &&
                   <TooltipComponent content={tooltip} position="TopCenter">
-                    <button type='button' onClick={customFunction} style={{ backgroundColor: themeColors?.secondary }} className='relative p-2 text-white dark:text-black text-2xl rounded-md'>
+                    <button type='button' onClick={customFunction} onKeyDown={(event) => event.key === 'Escape' && customFunction()} style={{ backgroundColor: themeColors?.secondary }} className='relative p-2 text-white dark:text-black text-2xl rounded-md'>
                       <BsSearch />
                     </button>
                   </TooltipComponent>
@@ -136,20 +136,21 @@ const Expenses = () => {
   }
 
   class ProductExpense {
-    constructor(fk_producto, fk_almacen, product, quantity, units, price) {
+    constructor(fk_producto, fk_almacen, product, quantity, units, price, controlNS) {
       this.fk_producto = fk_producto;
       this.fk_almacen = fk_almacen;
       this.product = product;
       this.quantity = Number(quantity);
       this.units = units;
       this.price = Number(price);
+      this.controlNS = controlNS;
       this.subTotal = (Number(this.quantity) * Number(this.price)).toFixed(2);
     }
     id = Math.ceil(Math.random() * 10000);
   }
 
   function addNewProduct(expenseInfo, productObject, quantityToAdd) {
-    const newProduct = new ProductExpense(expenseInfo.id_producto, expenseInfo.id_alamcen, expenseInfo.nom_producto, quantityToAdd, productObject.abreviatura, expenseInfo.precio);
+    const newProduct = new ProductExpense(expenseInfo.id_producto, expenseInfo.id_alamcen, expenseInfo.nom_producto, quantityToAdd, productObject.abreviatura, expenseInfo.precio, productObject.controlNS);
     setTotalPrice((prevState) => prevState += Number(newProduct.subTotal))
     setRecordsData([...recordsData, newProduct])
   }
@@ -203,7 +204,7 @@ const Expenses = () => {
   }
 
   function editProduct(expenseInfo, productObject, quantityToAdd) {
-    const editedProduct = new ProductExpense(expenseInfo.id_producto, expenseInfo.id_alamcen, expenseInfo.nom_producto, quantityToAdd, productObject.abreviatura, expenseInfo.precio);
+    const editedProduct = new ProductExpense(expenseInfo.id_producto, expenseInfo.id_alamcen, expenseInfo.nom_producto, quantityToAdd, productObject.abreviatura, expenseInfo.precio, productObject.controlNS);
     const newState = recordsData.map(object => {
       if (Number(object.id) === Number(idSelected)) {
         return editedProduct
@@ -254,16 +255,17 @@ const Expenses = () => {
   }
 
   async function areSerialsComplete() {
-    const totalSerials = (await getSerials()).flat().map(item => item.sn);
-    const fkProducts = (await getSerials()).flat().map(item => item.id_producto)
-    const prods = recordsData.filter(item => fkProducts.includes(item.fk_producto)).reduce((a, b) => a.quantity + b.quantity, 0)
-    let areIncluded = true;
+    const serials = await getSerials();
+    const totalSerials = serials.flat().map(item => item.sn);
+    const fkProducts = serials.flat().map(item => item.id_producto)
+    const prods = recordsData.filter(item => fkProducts.includes(item.fk_producto)).reduce((a, b) => a + b.quantity, 0)
 
-    expenseSerials.forEach(item => {
-      areIncluded = areIncluded && totalSerials.includes(item.sn)
-    })
+    const totalControlProduct = recordsData.filter(record => record.controlNS === 1).length
+    const totalProdsWithNS = recordsData.filter(item => fkProducts.includes(item.fk_producto)).length
 
-    return areIncluded && prods === expenseSerials.length
+    let areIncluded = expenseSerials.every(item => totalSerials.includes(item.sn));
+
+    return areIncluded && (prods === expenseSerials.length) && totalControlProduct === totalProdsWithNS
   }
 
 
@@ -282,7 +284,7 @@ const Expenses = () => {
   }
 
   const generateExpense = async () => {
-    if (areSerialsComplete()) {
+    if (await areSerialsComplete()) {
       insertNewExpense(generateNewExpense(), generateDetails(), expenseSerials, auth.token)
         .then(() => {
           setBanner({ ...banner, value: createBanner, error: false });

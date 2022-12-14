@@ -10,9 +10,7 @@ import { reSendValidation } from '../services/AuthService';
 
 const Dates = ({ date }) => {
     const fullDate = new Date(date);
-
     const formatDate = (date) => date < 10 ? `0${date}` : date
-
     const year = formatDate(fullDate.getFullYear());
     const month = formatDate(fullDate.getMonth() + 1);
     const day = formatDate(fullDate.getDate());
@@ -48,8 +46,13 @@ const AddBarCode = ({ data, setOpen, setProductID, field }) => {
         setOpen(true);
     }
 
+    function checkControlNS(data) {
+        return data.hasOwnProperty('controlNS') && !Boolean(data.controlNS)
+    }
+
     return (
-        <button type='button' onClick={() => handleClick(data.id)} style={{ backgroundColor: themeColors?.primary }} className='flex gap-2 items-center border p-1.5 rounded-xl text-white dark:text-black hover:shadow-lg'>
+        <button type='button' onClick={() => handleClick(data.id)} style={{ backgroundColor: field === 'Códigos de Barra' ? themeColors?.primary : checkControlNS(data) ? themeColors?.disabled : themeColors?.primary }}
+            className='flex gap-2 items-center border p-1.5 rounded-xl text-white dark:text-black hover:shadow-lg' disabled={field === 'Códigos de Barra' ? false : checkControlNS(data)}>
             {field} <span className='text-xl'><BsPlus></BsPlus></span>
         </button>
     )
@@ -72,7 +75,6 @@ const FormatDesktop = ({ data, property }) => {
     if (property.field === 'unitPrice' || property.field === 'price' || property.field === 'VAT' || property.field === 'subTotal') {
         return ('$' + data[property.mobile]);
     }
-
 
     // if (property.field === 'imagen') {
     //     return (<img className='w-20 h-20' src={noImage} alt={`ID de producto: ${data.id}`} />);

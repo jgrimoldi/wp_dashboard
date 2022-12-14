@@ -28,7 +28,7 @@ const MakeInputs = ({ configInputs }) => {
                 <Select id={id} label={label} url={url} state={state} setState={setState} disabled={disabled} getter={getter} customFilter={customFilter} />
                 {tooltip &&
                   <TooltipComponent content={tooltip} position="TopCenter">
-                    <button type='button' onClick={customFunction} style={{ backgroundColor: themeColors?.secondary }} className='relative p-2 text-white dark:text-black text-2xl rounded-md'>
+                    <button type='button' onClick={customFunction} onKeyDown={(event) => event.key === 'Escape' && customFunction()} style={{ backgroundColor: themeColors?.secondary }} className='relative p-2 text-white dark:text-black text-2xl rounded-md'>
                       <BsSearch />
                     </button>
                   </TooltipComponent>
@@ -115,8 +115,6 @@ const Transfer = () => {
           const newQuantity = Number(response.data[0].cantidad) + Number(detailsQuantity.value);
           const stockMax = detailsProduct.stockmax <= newQuantity;
 
-          console.log(response.data[0].cantidad, detailsQuantity.value, newQuantity)
-
           if (stockMin) {
             await new Promise(r => setTimeout(r, 2500));
             setBanner({ ...banner, value: { text: `Atención! Producto por debajo del stock. Stock mínimo: ${detailsProduct.stockmin}. Unidades en el ${sourceWarehouse.nombre}: ${quantityOnProduct}`, background: '#FFC300' }, error: false })
@@ -152,20 +150,21 @@ const Transfer = () => {
   }
 
   class ProductExpense {
-    constructor(fk_producto, fk_almacen, product, quantity, units, price) {
+    constructor(fk_producto, fk_almacen, product, quantity, units, price, controlNS) {
       this.fk_producto = fk_producto;
       this.fk_almacen = fk_almacen;
       this.product = product;
       this.quantity = Number(quantity);
       this.units = units;
       this.price = Number(price);
+      this.controlNS = controlNS;
       this.subTotal = (Number(this.quantity) * Number(this.price)).toFixed(2);
     }
     id = Math.ceil(Math.random() * 10000);
   }
 
   function addNewProduct(expenseInfo, productObject, quantityToAdd) {
-    const newProduct = new ProductExpense(expenseInfo.id_producto, expenseInfo.id_alamcen, expenseInfo.nom_producto, quantityToAdd, productObject.abreviatura, expenseInfo.precio);
+    const newProduct = new ProductExpense(expenseInfo.id_producto, expenseInfo.id_alamcen, expenseInfo.nom_producto, quantityToAdd, productObject.abreviatura, expenseInfo.precio, productObject.controlNS);
     setRecordsData([...recordsData, newProduct])
   }
 
@@ -217,7 +216,7 @@ const Transfer = () => {
   }
 
   function editProduct(expenseInfo, productObject, quantityToAdd) {
-    const editedProduct = new ProductExpense(expenseInfo.id_producto, expenseInfo.id_alamcen, expenseInfo.nom_producto, quantityToAdd, productObject.abreviatura, expenseInfo.precio);
+    const editedProduct = new ProductExpense(expenseInfo.id_producto, expenseInfo.id_alamcen, expenseInfo.nom_producto, quantityToAdd, productObject.abreviatura, expenseInfo.precio, productObject.controlNS);
     const newState = recordsData.map(object => {
       if (Number(object.id) === Number(idSelected)) {
         return editedProduct
@@ -266,16 +265,17 @@ const Transfer = () => {
   }
 
   async function areSerialsComplete() {
-    const totalSerials = (await getSerials()).flat().map(item => item.sn);
-    const fkProducts = (await getSerials()).flat().map(item => item.id_producto)
-    const prods = recordsData.filter(item => fkProducts.includes(item.fk_producto)).reduce((a, b) => a.quantity + b.quantity, 0)
-    let areIncluded = true;
+    const serials = await getSerials();
+    const totalSerials = serials.flat().map(item => item.sn);
+    const fkProducts = serials.flat().map(item => item.id_producto)
+    const prods = recordsData.filter(item => fkProducts.includes(item.fk_producto)).reduce((a, b) => a + b.quantity, 0)
 
-    expenseSerials.forEach(item => {
-      areIncluded = areIncluded && totalSerials.includes(item.sn)
-    })
+    const totalControlProduct = recordsData.filter(record => record.controlNS === 1).length
+    const totalProdsWithNS = recordsData.filter(item => fkProducts.includes(item.fk_producto)).length
 
-    return areIncluded && prods === expenseSerials.length
+    let areIncluded = expenseSerials.every(item => totalSerials.includes(item.sn));
+
+    return areIncluded && (prods === expenseSerials.length) && totalControlProduct === totalProdsWithNS
   }
 
 
@@ -304,7 +304,7 @@ const Transfer = () => {
   }
 
   const generateTransfer = async () => {
-    if (areSerialsComplete()) {
+    if (await areSerialsComplete()) {
       if (sourceWarehouse.id !== destinationWarehouse && (!!comments.value || comments.error === false) && recordsData.length > 0) {
         insertNewTransfer(generateNewTransfer(), generateDetails(), generateSerials(), auth.token)
           .then(() => {
@@ -315,7 +315,7 @@ const Transfer = () => {
             setRecordsData([]);
             setExpenseSerials([])
           })
-          .catch(error => console.log(error.response.config.data)) //setBanner({ ...banner, value: errorBanner, error: true }))
+          .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
       } else {
         setBanner({ ...banner, value: { text: `Ups! Ocurrió un error o al menos un campo esta vacío.`, background: themeColors?.error }, error: true })
       }
