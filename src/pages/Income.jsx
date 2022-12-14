@@ -132,6 +132,7 @@ const Income = () => {
   }
 
   const addToCart = () => {
+    // eslint-disable-next-line
     const objectsCart = new function () {
       this.id = detailsProduct.id;
       this.product = detailsProduct.nombre;
@@ -186,7 +187,7 @@ const Income = () => {
 
   const updateCartRecord = () => {
     const objectToEdit = recordsData.find(object => Number(object.id) === Number(idSelected));
-
+    // eslint-disable-next-line
     const objectsCart = new function () {
       this.id = detailsProduct.id;
       this.product = detailsProduct.nombre;
@@ -267,7 +268,7 @@ const Income = () => {
     const productsWithSerials = recordsData.filter(record => idFromSerials.has(String(record.id)))
     const lengthOfSerials = aSerials.length
     const lengthOfProductsWithSeries = productsWithSerials.map(product => Number(product.quantity)).reduce((a, b) => a + b, 0)
-    
+
     return lengthOfProductsWithSeries === lengthOfSerials && controlProduct.length === productsWithSerials.length
   }
 

@@ -175,7 +175,7 @@ export const sidebar = [
             },
             {
                 name: 'Usuarios',
-                url: 'empleados',
+                url: 'usuarios',
                 icon: <BsPeople />,
             },
             {
