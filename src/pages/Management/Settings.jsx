@@ -7,9 +7,10 @@ import { useStateContext } from '../../contexts/ContextProvider';
 import { getDataByIdFrom } from '../../services/GdrService';
 import { URL_PROFILE, URL_COMPANY } from '../../services/Api';
 import { useAuthContext } from '../../contexts/ContextAuth';
-import { updatePassword, updateUserById } from '../../services/AuthService';
+import { updatePassword, updateUserById, forgotPassword } from '../../services/AuthService';
 
 const UpdatePassword = ({ email, token, setClose, setOpenBanner }) => {
+  const { auth } = useAuthContext();
   const { themeColors } = useStateContext();
   const [oldPassword, setOldPassword] = useState({ value: '', error: null });
   const [password, setPassword] = useState({ value: '', error: null });
@@ -23,6 +24,20 @@ const UpdatePassword = ({ email, token, setClose, setOpenBanner }) => {
       } else {
         setPasswordVerify((prevState) => { return { ...prevState, error: false } })
       }
+    }
+  }
+
+  const handleForgot = async () => {
+    if (!!auth.token) {
+      await forgotPassword(auth?.user?.email)
+        .then(() => {
+          setOpenBanner(true)
+          setClose(false)
+          setErrorForm({ ...errorForm, error: false })
+        })
+        .catch(() => setErrorForm({ ...errorForm, value: 'Ocurrió un error! Intenta de nuevo.', error: true }))
+    } else {
+      setErrorForm({ ...errorForm, value: 'No es un correo válido. Intenta de nuevo.', error: true })
     }
   }
 
@@ -62,6 +77,7 @@ const UpdatePassword = ({ email, token, setClose, setOpenBanner }) => {
             {!!password.value && <GroupValidator password={password.value} />}
             <Password id='passwordVerify' label='Confirmar Nueva Contraseña' color={themeColors?.secondary} state={passwordVerify} setState={setPasswordVerify} customFunction={handleValidatePassword} helperText='Las contraseñas no coinciden' css='w-full' />
             {!!errorForm.value && <ErrorLabel color={themeColors?.error}>{errorForm.value}</ErrorLabel>}
+            <Button customFunction={handleForgot} borderColor={themeColors?.primary} color={themeColors?.primary} text='Recuperar mi contraseña' width='1/2' height='small' />
             <div className='w-1/2 flex gap-1'>
               <Button customFunction={() => { setClose(false) }} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' text='Cerrar' width='1/2' tabindex='-1' />
               <Button type='submit' borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Actualizar contraseña' width='1/2' />
