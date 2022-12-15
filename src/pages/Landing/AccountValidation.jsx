@@ -5,9 +5,11 @@ import { BsCheckCircle, BsXCircle } from 'react-icons/bs';
 import { Form, Button, Modal, LoadingSpinner, SEO } from '../../components';
 import { validateAccount } from '../../services/AuthService';
 import { useStateContext } from '../../contexts/ContextProvider';
+import { useAuthContext } from '../../contexts/ContextAuth';
 
 const AccountValidation = () => {
-    const { setLoginNavbar, themeColors } = useStateContext();
+    const { setAuth } = useAuthContext();
+    const { setLoginNavbar, themeColors, setMode } = useStateContext();
     const { token } = useParams();
     const [modal, setModal] = useState({ success: null, error: null });
     const [loading, setLoading] = useState(null);
@@ -15,6 +17,12 @@ const AccountValidation = () => {
     useEffect(() => {
         setLoginNavbar(true);
     }, [setLoginNavbar]);
+
+    const handleLogout = () => {
+        setMode('light');
+        setAuth({});
+        localStorage.removeItem('_fDataUser');
+    }
 
     const handleValidation = async () => {
         setLoading(true);
@@ -26,6 +34,7 @@ const AccountValidation = () => {
                 setModal({ ...modal, error: true });
             })
             .finally(() => {
+                handleLogout()
                 setLoading(false);
             })
     }

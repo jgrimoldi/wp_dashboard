@@ -66,14 +66,13 @@ const Sidebar = () => {
     const getRecords = () => {
       const user = JSON.parse(localStorage.getItem('_fDataUser'))
 
-      getDataFrom(URL_PERMISSION, signal, user.token)
+      getDataFrom(URL_PERMISSION, signal, user?.token)
         .then(response => {
           Promise.all(response.data.map(permissionID =>
             getDataByIdFrom(URL_ROLE + user?.user?.fk_perfil + '/', permissionID.id, user.token)
               .then(response => setAllowedPages((prevState) => { return { ...prevState, [permissionID.nom_permiso]: response.data?.habilitado } }))
           ));
         })
-        .catch(error => console.log(error.response))
     }
 
     getRecords();

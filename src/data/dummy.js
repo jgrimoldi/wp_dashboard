@@ -122,7 +122,7 @@ export const sidebar = [
                 icon: <BsArrowLeftRight />,
             },
             {
-                name: 'Devolución RMA',
+                name: 'Devolución de Productos',
                 url: 'devolucion-productos',
                 icon: <BsArrowCounterclockwise />
             },
@@ -397,6 +397,14 @@ export const expenseGrid = [
     { name: 'Unidades', field: 'quantity', mobile: 'quantity', },
     { name: 'U.Med', field: 'units', mobile: 'units', },
     { name: 'Precio', field: 'price', mobile: 'price', },
+    { name: 'SubTotal', field: 'subTotal', mobile: 'subTotal', },
+];
+
+export const rmaGrid = [
+    { name: 'Producto', field: 'product', mobile: 'product', },
+    { name: 'Unidades', field: 'quantity', mobile: 'quantity', },
+    { name: 'U.Med', field: 'units', mobile: 'units', },
+    { name: 'Precio', field: 'unitPrice', mobile: 'unitPrice', },
     { name: 'SubTotal', field: 'subTotal', mobile: 'subTotal', },
 ];
 

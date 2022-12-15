@@ -31,7 +31,7 @@ const BarCode = ({ productID, setState }) => {
     const getProductName = async () => {
       await getDataByIdFrom(URL_PRODUCT, Number(productID), auth.token)
         .then(response => {
-          setProduct((prevState) => { return { ...prevState, name: response.data[0].nombre, quantity: response.data[0].cantidad } });
+          setProduct((prevState) => { return { ...prevState, name: response?.data[0]?.nombre, quantity: response?.data[0]?.cantidad } });
         })
         .catch(error => {
           if (error.response.data.error === 'NOT_PAYLOAD_DATA_JWT') {
@@ -62,7 +62,7 @@ const BarCode = ({ productID, setState }) => {
     if (barcodes.error === false) {
       await insertBarCode(Number(productID), barcodes.value, auth.token)
         .then(response => {
-          setBarcodesData(prevState => [...prevState, response.data]);
+          setBarcodesData(prevState => [...prevState, response?.data]);
           setBarcodes((prevState) => { return { ...prevState, value: '' } });
           setBanner({ ...banner, valid: true, error: false });
         })

@@ -108,12 +108,13 @@ const Transfer = () => {
 
   async function checkStockOn(aProduct) {
     if (aProduct.id_producto === detailsProduct.id) {
-      await getDataByIdFrom(URL_WAREHOUSEPRODUCT + destinationWarehouse.id + '/', aProduct.id_producto, auth.token)
+      getDataByIdFrom(URL_WAREHOUSEPRODUCT + destinationWarehouse.id + '/', aProduct.id_producto, auth.token)
         .then(async response => {
           const quantityOnProduct = Number(aProduct.cantidad) - Number(detailsQuantity.value);
           const stockMin = detailsProduct.stockmin >= quantityOnProduct;
           const newQuantity = Number(response.data[0].cantidad) + Number(detailsQuantity.value);
           const stockMax = detailsProduct.stockmax <= newQuantity;
+
 
           if (stockMin) {
             await new Promise(r => setTimeout(r, 2500));
@@ -175,7 +176,7 @@ const Transfer = () => {
           validateIfExists(response.data[0])
           validateAdd(response.data[0])
           clearInputs()
-          await new Promise(r => setTimeout(r, 500));
+          await new Promise(r => setTimeout(r, 1000));
           addNewProduct(response.data[0], detailsProduct, detailsQuantity.value)
           setBanner({ ...banner, value: { text: 'Item agregado correctamente!', background: themeColors?.confirm }, error: true })
         })
@@ -233,7 +234,7 @@ const Transfer = () => {
         .then(async response => {
           const objectToEdit = recordsData.find(object => Number(object.id) === Number(idSelected));
           validateAdd(response.data[0])
-          if (detailsQuantity.value < objectToEdit.quantity && expenseSerials.find(item => item.fk_producto === detailsProduct.id)) {
+          if (detailsQuantity.value < objectToEdit.quantity && expenseSerials.find(item => item.fk_producto === detailsProduct.id) && Number(detailsProduct.controlNS) === 1) {
             setBanner({ ...banner, value: { text: `Atención! Nueva cantidad menor a la anterior. Verifique los números de serie.`, background: '#FFC300' }, error: true })
           }
           clearInputs()
@@ -345,7 +346,7 @@ const Transfer = () => {
             {openSearcher === true && <ProductSearcher title={`Productos en ${sourceWarehouse.nombre}`} product={detailsProduct} setProduct={setDetailsProduct} warehouse={sourceWarehouse.id} setClose={setOpenSearcher} />}
             <div className='w-full flex justify-center pb-4'>
               {edit === true
-                ? <Button customFunction={updateCartRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Editar registro' />
+                ? <Button customFunction={updateCartRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Guardar registro' />
                 : <Button customFunction={addToExpense} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Agregar registro' />}
             </div>
           </>

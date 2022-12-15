@@ -5,7 +5,7 @@ import { BsXCircle, BsTrash, BsPencil, BsSearch } from 'react-icons/bs';
 import { SEO, Title, Table, Input, Button, Modal, Banner, SerialNumber, Select, ProductSearcher } from '../components';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { useStateContext } from '../contexts/ContextProvider';
-import { incomeGrid, regEx } from '../data/dummy';
+import { rmaGrid, regEx } from '../data/dummy';
 import { URL_PRODUCT, URL_STORAGE, URL_SUPPLIER, URL_WAREHOUSEPRODUCT } from '../services/Api';
 import { getDataByIdFrom } from '../services/GdrService';
 import { insertRMA } from '../services/MovsService';
@@ -60,10 +60,7 @@ const RMA = () => {
     const [purchaseDate, setPurchaseDate] = useState({ value: formatedDate, error: false });
     const [detailsProduct, setDetailsProduct] = useState('');
     const [detailsQuantity, setDetailsQuantity] = useState(initialState);
-    const [detailsPrice, setDetailsPrice] = useState(initialState);
     const [incomeSerialNumbers, setIncomeSerialNumbers] = useState([]);
-    const [subTotalPrice, setSubTotalPrice] = useState(0);
-    const [totalVATPrice, setTotalVATPrice] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [productID, setProductID] = useState('');
     const [openSerialNumber, setOpenSerialNumber] = useState(null);
@@ -80,7 +77,6 @@ const RMA = () => {
     const inputsDetails = [
         { getter: 'nombre', url: URL_PRODUCT, id: 'product', label: 'Producto', state: detailsProduct, setState: setDetailsProduct, expression: 'notEmpty', css: 'w-1/3', tooltip: 'Abrir buscador', customFunction: () => setOpenSearcher(!openSearcher) },
         { field: 'quantity', id: 'quantity', type: 'number', label: 'Unidades', state: detailsQuantity, setState: setDetailsQuantity, expression: 'digitsRegExp', css: 'w-1/12' },
-        { field: 'unitPrice', id: 'price', type: 'number', label: 'Precio', state: detailsPrice, setState: setDetailsPrice, expression: 'digitsRegExp', css: 'w-1/12' },
     ]
 
     useEffect(() => {
@@ -100,11 +96,8 @@ const RMA = () => {
         setOpenSearcher(false)
     }
 
-    const calculatePrice = (quantity, price) => Number(quantity) * Number(price);
-    const calculateSubTotal = (IVA, price) => (Number(IVA) + Number(price)).toFixed(2);
-    const calculateIVA = (price, alicuota) => (Number(price) * (Number(alicuota) / 100)).toFixed(2);
-
     function checkStockOn(aProduct) {
+        console.log(aProduct.id, detailsProduct.id)
         if (aProduct.id === detailsProduct.id) {
             getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', aProduct.id, auth.token)
                 .then(response => {
@@ -125,6 +118,16 @@ const RMA = () => {
             throw error;
         }
     }
+    class ObjectCart {
+        constructor(fk_producto, nombre, quantity, abreviatura, price) {
+            this.id = fk_producto;
+            this.product = nombre;
+            this.quantity = Number(quantity);
+            this.units = abreviatura;
+            this.unitPrice = Number(price);
+            this.subTotal = this.unitPrice * this.quantity;
+        }
+    }
 
     function validateIfExists(product) {
         const datos = recordsData.map(item => item.id);
@@ -132,24 +135,28 @@ const RMA = () => {
     }
 
     const addToCart = () => {
-        const objectsCart = new function () {
-            this.id = detailsProduct.id;
-            this.product = detailsProduct.nombre;
-            this.quantity = detailsQuantity.value;
-            this.units = detailsProduct.abreviatura;
-            this.unitPrice = detailsPrice.value;
-            this.price = calculatePrice(detailsQuantity.value, detailsPrice.value);
-            this.alicuota = detailsProduct.alicuota;
-            this.VAT = calculateIVA(this.price, detailsProduct.alicuota);
-            this.subTotal = calculateSubTotal(this.VAT, this.price);
-        };
-        if (!!detailsProduct && detailsQuantity.error === false && detailsPrice.error === false && Number(detailsQuantity.value) > 0 && !validateIfExists(detailsProduct)) {
-            setSubTotalPrice((prevState) => prevState += Number(objectsCart.price));
-            setTotalVATPrice((prevState) => prevState += Number(objectsCart.VAT));
-            setTotalPrice((prevState) => prevState += Number(objectsCart.subTotal));
-            setRecordsData((prevState) => [...prevState, objectsCart]);
-            checkStockOn(objectsCart)
-            clearInputs();
+        if (!!detailsProduct && detailsQuantity.error === false && Number(detailsQuantity.value) > 0 && !validateIfExists(detailsProduct)) {
+            getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', detailsProduct.id, auth.token)
+                .then(response => {
+                    const { id_producto, nom_producto, cantidad, precio } = response?.data[0];
+                    if (Number(detailsQuantity.value) > cantidad) {
+                        const error = { text: `La cantidad elegida para devolver es mayor a la cantidad en el almacén!`, background: themeColors?.error }
+                        throw error;
+                    }
+
+                    const newProduct = new ObjectCart(id_producto, nom_producto, detailsQuantity.value, detailsProduct.abreviatura, precio);
+                    setTotalPrice((prevState) => prevState += Number(newProduct.subTotal));
+                    setRecordsData((prevState) => [...prevState, newProduct]);
+                    checkStockOn(newProduct)
+                    clearInputs();
+                })
+                .catch(error => {
+                    if (!!error?.text) {
+                        setBanner({ ...banner, value: error, error: true })
+                    } else {
+                        setBanner({ ...banner, value: { text: 'Ocurrió un problema con el producto seleccionado!', background: themeColors?.error }, error: true })
+                    }
+                })
         } else {
             setBanner({ ...banner, value: errorBanner, error: true });
         }
@@ -157,8 +164,6 @@ const RMA = () => {
 
     const deleteDataById = () => {
         const objectDeleted = recordsData.find(object => object.id === Number(openModal.value));
-        setSubTotalPrice((prevState) => prevState -= Number(objectDeleted.price));
-        setTotalVATPrice((prevState) => prevState -= Number(objectDeleted.VAT));
         setTotalPrice((prevState) => prevState -= Number(objectDeleted.subTotal));
         setIncomeSerialNumbers(current => current.filter(record => record.fk_producto !== Number(openModal.value)));
         setRecordsData(current => current.filter(record => record.id !== Number(openModal.value)));
@@ -179,55 +184,60 @@ const RMA = () => {
             .then(res => setDetailsProduct(res.data[0]))
 
         setDetailsQuantity({ value: objectToEdit.quantity, error: false })
-        setDetailsPrice({ value: objectToEdit.unitPrice, error: false })
         setEdit(true);
     }
 
     const updateCartRecord = () => {
         const objectToEdit = recordsData.find(object => Number(object.id) === Number(idSelected));
 
-        const objectsCart = new function () {
-            this.id = detailsProduct.id;
-            this.product = detailsProduct.nombre;
-            this.quantity = detailsQuantity.value;
-            this.units = detailsProduct.abreviatura;
-            this.unitPrice = detailsPrice.value;
-            this.price = calculatePrice(detailsQuantity.value, detailsPrice.value);
-            this.alicuota = detailsProduct.alicuota;
-            this.VAT = calculateIVA(this.price, detailsProduct.alicuota);
-            this.subTotal = calculateSubTotal(this.VAT, this.price);
-        };
+        if (!!detailsProduct && detailsQuantity.error === false && Number(detailsQuantity.value) > 0) {
+            getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', detailsProduct.id, auth.token)
+                .then(response => {
+                    const { id_producto, nom_producto, cantidad, precio } = response?.data[0];
+                    if (Number(detailsQuantity.value) > cantidad) {
+                        const error = { text: `La cantidad elegida para devolver es mayor a la cantidad en el almacén!`, background: themeColors?.error }
+                        throw error;
+                    }
 
-        const newState = recordsData.map(object => {
-            if (Number(object.id) === Number(idSelected)) {
-                setBanner({ ...banner, value: updateBanner, error: false });
-                return objectsCart
-            }
-            return object
-        })
+                    if (Number(detailsQuantity.value) < cantidad && Number(detailsProduct.controlNS) === 1) {
+                        const error = { text: `La nueva cantidad es menor a la anterior. Verifique los números de serie!`, background: '#FFC300' }
+                        throw error;
+                    }
 
-        if (!!detailsProduct && detailsQuantity.error === false && detailsPrice.error === false && Number(detailsQuantity.value) > 0) {
-            setSubTotalPrice((prevState) => prevState -= Number(objectToEdit.price));
-            setTotalVATPrice((prevState) => prevState -= Number(objectToEdit.VAT));
-            setTotalPrice((prevState) => prevState -= Number(objectToEdit.subTotal));
-            setSubTotalPrice((prevState) => prevState += Number(objectsCart.price));
-            setTotalVATPrice((prevState) => prevState += Number(objectsCart.VAT));
-            setTotalPrice((prevState) => prevState += Number(objectsCart.subTotal));
-            setRecordsData(newState)
-            setBanner({ ...banner, value: updateBanner, error: false });
-            clearInputs();
+                    const newProduct = new ObjectCart(id_producto, nom_producto, detailsQuantity.value, detailsProduct.abreviatura, precio);
+
+                    const newState = recordsData.map(object => {
+                        if (Number(object.id) === Number(idSelected)) {
+                            setBanner({ ...banner, value: updateBanner, error: false });
+                            return newProduct
+                        }
+                        return object
+                    })
+
+                    setTotalPrice((prevState) => prevState -= Number(objectToEdit.subTotal));
+                    setTotalPrice((prevState) => prevState += Number(newProduct.subTotal));
+                    checkStockOn(newState[0])
+                    setRecordsData(newState)
+                    setBanner({ ...banner, value: updateBanner, error: false });
+                    clearInputs();
+                })
+                .catch(error => {
+                    if (!!error?.text) {
+                        setBanner({ ...banner, value: error, error: true })
+                    } else {
+                        setBanner({ ...banner, value: { text: 'Ocurrió un problema con el producto seleccionado!', background: themeColors?.error }, error: true })
+                    }
+                })
         } else {
             setBanner({ ...banner, value: errorBanner, error: true });
         }
     }
 
     const generatePurchase = () => {
-        if (!!supplier && purchaseDate.error === false && !!subTotalPrice && !!totalVATPrice && !!totalPrice) {
+        if (!!supplier && purchaseDate.error === false && !!totalPrice) {
             return {
                 fk_proveedor: supplier.id,
                 fechacompra: purchaseDate.value,
-                subtotal: subTotalPrice.toFixed(2),
-                totaliva: totalVATPrice.toFixed(2),
                 total: totalPrice.toFixed(2),
             }
         }
@@ -279,8 +289,6 @@ const RMA = () => {
                     clearInputs();
                     setRecordsData([]);
                     setIncomeSerialNumbers([])
-                    setSubTotalPrice(0);
-                    setTotalVATPrice(0);
                     setTotalPrice(0);
                 })
                 .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
@@ -310,13 +318,13 @@ const RMA = () => {
                         {openSearcher === true && <ProductSearcher title={`Productos en ${warehouse.nombre}`} product={detailsProduct} setProduct={setDetailsProduct} warehouse={warehouse.id} setClose={setOpenSearcher} />}
                         <div className='w-full flex justify-center pb-4'>
                             {edit === true
-                                ? <Button customFunction={updateCartRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Editar registro' />
+                                ? <Button customFunction={updateCartRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Guardar registro' />
                                 : <Button customFunction={addToCart} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Agregar registro' />}
                         </div>
                     </>
                 }
                 <Table
-                    header={incomeGrid} data={recordsData} filterTitle='Mis Items'
+                    header={rmaGrid} data={recordsData} filterTitle='Mis Items'
                     checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected}
                     barcode={true} setOpenBarcode={setOpenSerialNumber} setProductID={setProductID}
                 />
@@ -330,14 +338,6 @@ const RMA = () => {
                     </div>
                 }
                 <div style={{ color: themeColors?.highEmphasis }} className='w-full flex flex-col gap-2 pt-8'>
-                    <div className='flex justify-end items-center gap-2 text-2xl'>
-                        <span className='font-semibold tracking-wide uppercase'>SubTotal:</span>
-                        <span className='font-[monospace] text-3xl'>$ {subTotalPrice.toFixed(2)}</span>
-                    </div>
-                    <div className='flex justify-end items-center gap-2 text-2xl'>
-                        <span className='font-semibold tracking-wide uppercase'>Total IVA:</span>
-                        <span className='font-[monospace] text-3xl'>$ {totalVATPrice.toFixed(2)}</span>
-                    </div>
                     <div className='flex justify-end items-center gap-2 text-2xl'>
                         <span className='font-semibold tracking-wide uppercase'>Total:</span>
                         <span className='font-[monospace] text-3xl'>$ {totalPrice.toFixed(2)}</span>

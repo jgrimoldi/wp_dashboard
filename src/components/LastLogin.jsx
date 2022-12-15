@@ -3,7 +3,8 @@ import React from 'react'
 const LastLogin = ({ lastLogin }) => {
 
     const formatDate = (dateToFormat) => {
-        const fullDate = new Date(dateToFormat);
+        let fullDate = new Date(dateToFormat);
+        fullDate = new Date(fullDate.getTime() + 3 * 60 * 60 * 1000);
         const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         const formatDate = (date) => date < 10 ? `0${date}` : date
 

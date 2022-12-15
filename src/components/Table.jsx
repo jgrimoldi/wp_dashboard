@@ -81,7 +81,9 @@ const FormatDesktop = ({ data, property }) => {
     // }
 
     if (property.field === 'Fecha Creación' || property.field === 'lastlogin' || property.mobile === 'createdAt') {
-        return (<Dates date={data[property.field]} />);
+        let date = new Date(data[property.field]);
+        date = new Date(date.getTime() + 3 * 60 * 60 * 1000);
+        return (<Dates date={date} />);
     }
 
     if (property.field === 'alicuota') {
@@ -201,10 +203,11 @@ const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbo
     const [mobileData, setMobileData] = useState([]);
     const [isMounted, setIsMounted] = useState(false);
 
+
     const ifIncludes = (object) => {
         for (const key in object) {
             let newObject = object[key];
-            if (typeof newObject === 'string' && newObject.includes(filteredValue.value))
+            if (typeof newObject === 'string' && newObject.toLowerCase().includes((filteredValue.value).toLowerCase()))
                 return true;
             if (typeof newObject === 'number' && newObject === Number(filteredValue.value))
                 return true;

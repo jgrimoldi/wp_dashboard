@@ -16,6 +16,7 @@ export const URL_BARCODE = 'codigobarra/';
 export const URL_INCOME = 'compraproducto/';
 export const URL_EXPENSES = 'egresoproducto/';
 export const URL_TRANSFER = 'movimiento/';
+export const URL_RMA = 'devolucionproducto/';
 export const URL_COMPANY = 'empresa/';
 export const URL_COMPANYMODULE = 'empresaModulo/';
 export const URL_ESTABLISHMENT = 'establecimiento/';

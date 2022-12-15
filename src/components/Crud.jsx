@@ -162,7 +162,7 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
                     })}
                     {
                         edit === true
-                            ? <Button customFunction={updateRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Editar registro' />
+                            ? <Button customFunction={updateRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Guardar registro' />
                             : <Button customFunction={addRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Agregar registro' />
                     }
                 </div>

@@ -148,7 +148,7 @@ const Employees = () => {
                             </span>
                         )
                     })}
-                    {edit === true && <Button customFunction={updateRecord} borderColor='blue' color='white' backgroundColor='blue' width='full sm:w-1/3' text='Editar registro' />}
+                    {edit === true && <Button customFunction={updateRecord} borderColor='blue' color='white' backgroundColor='blue' width='full sm:w-1/3' text='Guardar registro' />}
                 </div>
                 <Table
                     header={employeesGrid} data={employeesData.filter(user => user.id !== auth.user.id && user.fk_perfil !== 3)}

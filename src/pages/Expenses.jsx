@@ -223,7 +223,7 @@ const Expenses = () => {
           const objectToEdit = recordsData.find(object => Number(object.id) === Number(idSelected));
           validateAdd(response.data[0])
           setTotalPrice((prevState) => prevState -= Number(objectToEdit.subTotal));
-          if (detailsQuantity.value < objectToEdit.quantity && expenseSerials.find(item => item.fk_producto === detailsProduct.id)) {
+          if (detailsQuantity.value < objectToEdit.quantity && expenseSerials.find(item => item.fk_producto === detailsProduct.id) && Number(detailsProduct.controlNS) === 1) {
             setBanner({ ...banner, value: { text: `Atención! Nueva cantidad menor a la anterior. Verifique los números de serie.`, background: '#FFC300' }, error: true })
           }
           clearInputs()
@@ -322,7 +322,7 @@ const Expenses = () => {
             {openSearcher === true && <ProductSearcher title={`Productos en ${warehouse.nombre}`} product={detailsProduct} setProduct={setDetailsProduct} warehouse={warehouse.id} setClose={setOpenSearcher} />}
             <div className='w-full flex justify-center pb-4'>
               {edit === true
-                ? <Button customFunction={updateCartRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Editar registro' />
+                ? <Button customFunction={updateCartRecord} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Guardar registro' />
                 : <Button customFunction={addToExpense} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='full sm:w-1/3' text='Agregar registro' />}
             </div>
           </>

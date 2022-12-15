@@ -1,4 +1,4 @@
-import API, { header, URL_INCOME, URL_EXPENSES, URL_TRANSFER } from './Api';
+import API, { header, URL_INCOME, URL_EXPENSES, URL_TRANSFER, URL_RMA } from './Api';
 
 export const insertNewIncome = (compra, detalle, detnumeroserie, token) => {
     return (
@@ -29,7 +29,7 @@ export const insertNewTransfer = (movalmacen, detalle, detnumeroserie, token) =>
 
 export const insertRMA = (devolucion, detalle, detnumeroserie, token) => {
     return (
-        API.post(URL_TRANSFER, { devolucion, detalle, detnumeroserie }, header(token))
+        API.post(URL_RMA, { devolucion, detalle, detnumeroserie }, header(token))
             .then(response => {
                 return response.data;
             })
