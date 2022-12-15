@@ -15,10 +15,10 @@ export const ContextPermissions = ({ children }) => {
         const signal = controller.signal;
 
         async function getAllowedPages(anArray) {
-            const allowedPages = [];
+            const allowedPages = {};
             await Promise.all(anArray.map(permissionID =>
                 getDataByIdFrom(URL_ROLE + auth?.user?.fk_perfil + '/', permissionID.id, auth.token)
-                    .then(response => allowedPages.push({ [permissionID.nom_permiso]: response.data?.habilitado }))
+                    .then(response => Object.assign(allowedPages, { [permissionID.nom_permiso]: response.data.habilitado }))
             ));
             return allowedPages;
         }

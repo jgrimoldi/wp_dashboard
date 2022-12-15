@@ -13,12 +13,9 @@ const App = () => {
   const { auth } = useAuthContext();
   const { allowedPages } = usePermissionsContext();
   const isAllowed = !!auth?.token && !!auth?.user;
-  const isPermitted = isAllowed && privateRoles.includes(auth.user.fk_perfil)
+  const isPermitted = isAllowed
 
   function havePermissions(aProperty) {
-    if (privateRoles.includes(auth.user?.fk_perfil))
-      return isPermitted
-
     return isPermitted && allowedPages[aProperty]
   }
 
@@ -43,21 +40,69 @@ const App = () => {
         <Route element={(<HomeNavigation />)}>
           <Route element={<ProtectedRoutes isAllowed={isAllowed} redirectTo='/inicio' />}>
             {/* dashboard */}
-            <Route path='/dashboard' element={<Dashboard />} />
-            <Route path='/almacen' element={<Storage />} />
-            <Route path='/clientes' element={<Clients />} />
+            <Route path='/dashboard' element={
+              <ProtectedRoutes isAllowed={havePermissions('/dashboard')} redirectTo='/401' >
+                <Dashboard />
+              </ProtectedRoutes>
+            } />
+            <Route path='/almacen' element={
+              <ProtectedRoutes isAllowed={havePermissions('/almacen')} redirectTo='/401' >
+                <Storage />
+              </ProtectedRoutes>
+            } />
+            <Route path='/clientes' element={
+              <ProtectedRoutes isAllowed={havePermissions('/clientes')} redirectTo='/401' >
+                <Clients />
+              </ProtectedRoutes>
+            } />
             {/* products */}
-            <Route path='/productos' element={<Products />} />
-            <Route path='/tipo-de-productos' element={<ProductType />} />
-            <Route path='/unidades-de-medida' element={<Units />} />
+            <Route path='/productos' element={
+              <ProtectedRoutes isAllowed={havePermissions('/productos')} redirectTo='/401' >
+                <Products />
+              </ProtectedRoutes>
+            } />
+            <Route path='/tipo-de-productos' element={
+              <ProtectedRoutes isAllowed={havePermissions('/tipo-de-productos')} redirectTo='/401' >
+                <ProductType />
+              </ProtectedRoutes>
+            } />
+            <Route path='/unidades-de-medida' element={
+              <ProtectedRoutes isAllowed={havePermissions('/unidades-de-medida')} redirectTo='/401' >
+                <Units />
+              </ProtectedRoutes>
+            } />
             {/* suppliers */}
-            <Route path='/proveedores' element={<Providers />} />
-            <Route path='/categoria-de-proveedores' element={<Category />} />
+            <Route path='/proveedores' element={
+              <ProtectedRoutes isAllowed={havePermissions('/proveedores')} redirectTo='/401' >
+                <Providers />
+              </ProtectedRoutes>
+            } />
+            <Route path='/categoria-de-proveedores' element={
+              <ProtectedRoutes isAllowed={havePermissions('/categoria-de-proveedores')} redirectTo='/401' >
+                <Category />
+              </ProtectedRoutes>
+            } />
             {/* moves */}
-            <Route path='/ingresos' element={<Income />} />
-            <Route path='/egresos' element={<Expenses />} />
-            <Route path='/transferencia-entre-almacenes' element={<Transfer />} />
-            <Route path='/devolucion-productos' element={<RMA />} />
+            <Route path='/ingresos' element={
+              <ProtectedRoutes isAllowed={havePermissions('/ingresos')} redirectTo='/401' >
+                <Income />
+              </ProtectedRoutes>
+            } />
+            <Route path='/egresos' element={
+              <ProtectedRoutes isAllowed={havePermissions('/egresos')} redirectTo='/401' >
+                <Expenses />
+              </ProtectedRoutes>
+            } />
+            <Route path='/transferencia-entre-almacenes' element={
+              <ProtectedRoutes isAllowed={havePermissions('/transferencia-entre-almacenes')} redirectTo='/401' >
+                <Transfer />
+              </ProtectedRoutes>
+            } />
+            <Route path='/devolucion-productos' element={
+              <ProtectedRoutes isAllowed={havePermissions('/devolucion-productos')} redirectTo='/401' >
+                <RMA />
+              </ProtectedRoutes>
+            } />
             {/* moves-list */}
             <Route path='/lista-de-ingresos' element={
               <ProtectedRoutes isAllowed={havePermissions('/lista-de-ingresos')} redirectTo='/401' >
@@ -102,8 +147,16 @@ const App = () => {
               </ProtectedRoutes>
             } />
             {/* users */}
-            <Route path='/perfil' element={<Settings />} />
-            <Route path='/ayuda' element={<Help />} />
+            <Route path='/perfil' element={
+              <ProtectedRoutes isAllowed={havePermissions('/perfil')} redirectTo='/401' >
+                <Settings />
+              </ProtectedRoutes>
+            } />
+            <Route path='/ayuda' element={
+              <ProtectedRoutes isAllowed={havePermissions('/ayuda')} redirectTo='/401' >
+                <Help />
+              </ProtectedRoutes>
+            } />
           </Route>
 
           <Route path='/401' element={<Unauthorized />} />
