@@ -8,7 +8,6 @@ import './App.css';
 import { useAuthContext } from './contexts/ContextAuth';
 
 const App = () => {
-  const privateRoles = [2, 3];
   const { auth } = useAuthContext();
   const isAllowed = !!auth?.token && !!auth?.user;
 
@@ -49,25 +48,21 @@ const App = () => {
             <Route path='/transferencia-entre-almacenes' element={<Transfer />} />
             <Route path='/devolucion-productos' element={<RMA />} />
             {/* moves-list */}
-            <Route element={<ProtectedRoutes isAllowed={isAllowed && privateRoles.includes(auth.user.fk_perfil)} redirectTo='/401' />}>
-              <Route path='/lista-de-ingresos' element={<IncomeList />} />
-              <Route path='/lista-de-egresos' element={<ExpensesList />} />
-              <Route path='/lista-de-movimientos' element={<TransferList />} />
-              {/* reports */}
-              <Route path='/estadisticas' element={<Stats />} />
-              <Route path='/reportes' element={<Reports />} />
-              {/* management */}
-              <Route path='/registro' element={<Register />} />
-              <Route path='/usuarios' element={<Employees />} />
-              <Route path='/restaurar' element={<Backup />} />
-            </Route>
-
+            <Route path='/lista-de-ingresos' element={<IncomeList />} />
+            <Route path='/lista-de-egresos' element={<ExpensesList />} />
+            <Route path='/lista-de-movimientos' element={<TransferList />} />
+            {/* reports */}
+            <Route path='/estadisticas' element={<Stats />} />
+            <Route path='/reportes' element={<Reports />} />
+            {/* management */}
+            <Route path='/registro' element={<Register />} />
+            <Route path='/usuarios' element={<Employees />} />
+            <Route path='/restaurar' element={<Backup />} />
+            {/* users */}
             <Route path='/perfil' element={<Settings />} />
             <Route path='/ayuda' element={<Help />} />
-
-            <Route path='/401' element={<Unauthorized />} />
-
           </Route>
+          <Route path='/401' element={<Unauthorized />} />
         </Route>
 
         <Route path='/404' element={<NotFound />} />
