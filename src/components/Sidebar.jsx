@@ -3,11 +3,11 @@ import { Link, NavLink } from 'react-router-dom';
 import { BsArrowLeftSquare, BsBoxArrowLeft } from 'react-icons/bs';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
-import { ThemeSettings } from '.';
+import { LoadingSpinner, ThemeSettings } from '.';
 import avatar from '../data/avatar.png';
 import { sidebar } from '../data/dummy.js';
-import { getDataByIdFrom } from '../services/GdrService';
-import { URL_PROFILE, URL_COMPANY } from '../services/Api';
+import { getDataByIdFrom, getDataFrom } from '../services/GdrService';
+import { URL_PROFILE, URL_COMPANY, URL_PERMISSION, URL_ROLE } from '../services/Api';
 import { useStateContext } from '../contexts/ContextProvider';
 import { useAuthContext } from '../contexts/ContextAuth';
 
@@ -19,6 +19,7 @@ const Sidebar = () => {
   const [company, setCompany] = useState({ data: {}, user: {} });
   const [isMounted, setIsMounted] = useState(false);
   const [themeOnScreen, setThemeOnScreen] = useState(null);
+  const [allowedPages, setAllowedPages] = useState({});
 
   useEffect(() => {
     const themes = { 1: 'light', 2: 'dark' };
@@ -58,6 +59,28 @@ const Sidebar = () => {
     }
   }, [auth, setAuth, isMounted, setMode])
 
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    const getRecords = () => {
+      const user = JSON.parse(localStorage.getItem('_fDataUser'))
+
+      getDataFrom(URL_PERMISSION, signal, user.token)
+        .then(response => {
+          Promise.all(response.data.map(permissionID =>
+            getDataByIdFrom(URL_ROLE + user?.user?.fk_perfil + '/', permissionID.id, user.token)
+              .then(response => setAllowedPages((prevState) => { return { ...prevState, [permissionID.nom_permiso]: response.data?.habilitado } }))
+          ));
+        })
+        .catch(error => console.log(error.response))
+    }
+
+    getRecords();
+    return () => { controller.abort(); };
+
+  }, [])
+
   const handleCloseSidebar = () => {
     if (activeMenu && screenSize <= 1000) {
       setActiveMenu(false);
@@ -76,6 +99,7 @@ const Sidebar = () => {
 
   return (
     <div className='ml-3 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10'>
+      {Object.keys(allowedPages).length === 0 && <LoadingSpinner color={themeColors?.primary} />}
       {activeMenu && (<>
         <div className='flex justify-between items-center'>
           <Link to='/perfil' onClick={handleCloseSidebar} className='items-center gap-3 ml-3 mt-4 flex text-14 tracking-tight dark:text-white text-slate-900'>
@@ -103,13 +127,13 @@ const Sidebar = () => {
               <p className="text-gray-400 dark:text-gray-400 m-3 mt-4 uppercase">
                 {item.title}
               </p>
-              {item.links.map((link) => (
+              {Object.keys(allowedPages).length !== 0 && item.links.map((link) => (
                 <NavLink
-                  to={`/${link.url}`}
+                  to={allowedPages[`/${link.url}`] ? `/${link.url}` : '/401'}
                   key={link.name} // link.url
                   onClick={handleCloseSidebar}
-                  style={({ isActive }) => ({ backgroundColor: link.url === '/' || !isActive ? '' : themeColors?.primary, })}
-                  className={({ isActive }) => (link.url === '/' ? disabledLink : isActive ? activeLink : normalLink)}
+                  style={({ isActive }) => ({ backgroundColor: link.url === '/' || !isActive || !allowedPages[`/${link.url}`] ? '' : themeColors?.primary, })}
+                  className={({ isActive }) => (link.url === '/' || !allowedPages[`/${link.url}`] ? disabledLink : isActive ? activeLink : normalLink)}
                 >
                   {link.icon}
                   <span className="capitalize ">{link.name}</span>
