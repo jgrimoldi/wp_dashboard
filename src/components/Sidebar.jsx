@@ -32,8 +32,8 @@ const Sidebar = () => {
   })
 
   useEffect(() => {
-    if (!auth.token && localStorage.getItem('_fUserData') !== null) {
-      setAuth(JSON.parse(localStorage.getItem('_fUserData')));
+    if (!auth.token && localStorage.getItem('_fDataUser') !== null) {
+      setAuth(JSON.parse(localStorage.getItem('_fDataUser')));
     }
 
     const getDataById = async (URL, ID, setState) => {
