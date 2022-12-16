@@ -5,7 +5,7 @@ import { BsXCircle, BsTrash, BsPencil, BsSearch } from 'react-icons/bs';
 import { SEO, Title, Table, Input, Button, Modal, Banner, SerialNumber, Select, ProductSearcher } from '../components';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { useStateContext } from '../contexts/ContextProvider';
-import { rmaGrid, regEx } from '../data/dummy';
+import { incomeGrid, regEx } from '../data/dummy';
 import { URL_PRODUCT, URL_STORAGE, URL_SUPPLIER, URL_WAREHOUSEPRODUCT } from '../services/Api';
 import { getDataByIdFrom } from '../services/GdrService';
 import { insertRMA } from '../services/MovsService';
@@ -61,6 +61,8 @@ const RMA = () => {
     const [detailsProduct, setDetailsProduct] = useState('');
     const [detailsQuantity, setDetailsQuantity] = useState(initialState);
     const [incomeSerialNumbers, setIncomeSerialNumbers] = useState([]);
+    const [subTotalPrice, setSubTotalPrice] = useState(0);
+    const [totalVATPrice, setTotalVATPrice] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [productID, setProductID] = useState('');
     const [openSerialNumber, setOpenSerialNumber] = useState(null);
@@ -97,16 +99,15 @@ const RMA = () => {
     }
 
     function checkStockOn(aProduct) {
-        console.log(aProduct.id, detailsProduct.id)
         if (aProduct.id === detailsProduct.id) {
             getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', aProduct.id, auth.token)
                 .then(response => {
                     const quantityOnWarehouse = response.data.length !== 0 ? response.data[0].cantidad : 0
-                    const quantityOnProduct = Number(quantityOnWarehouse) + Number(detailsQuantity.value);
-                    const stockMax = detailsProduct.stockmax <= quantityOnProduct;
+                    const quantityOnProduct = Number(quantityOnWarehouse) - Number(detailsQuantity.value);
+                    const stockMin = detailsProduct.stockmin >= quantityOnProduct;
 
-                    if (stockMax) {
-                        setBanner({ ...banner, value: { text: `Atención! Producto por encima del stock. Stock máximo: ${detailsProduct.stockmax}. Unidades en el almacén: ${quantityOnProduct}`, background: '#FFC300' }, error: false })
+                    if (stockMin) {
+                        setBanner({ ...banner, value: { text: `Atención! Producto por debajo del stock. Stock mínimo: ${detailsProduct.stockmin}. Unidades en el almacén: ${quantityOnProduct}`, background: '#FFC300' }, error: false })
                     }
                 })
                 .catch(() => {
@@ -119,14 +120,22 @@ const RMA = () => {
         }
     }
     class ObjectCart {
-        constructor(fk_producto, nombre, quantity, abreviatura, price) {
+        constructor(fk_producto, nombre, quantity, abreviatura, alicuota, controlNS, unitPrice) {
             this.id = fk_producto;
             this.product = nombre;
             this.quantity = Number(quantity);
             this.units = abreviatura;
-            this.unitPrice = Number(price);
-            this.subTotal = this.unitPrice * this.quantity;
+            this.unitPrice = Number(unitPrice);
+            this.price = this.calculatePrice(Number(quantity), Number(unitPrice));
+            this.alicuota = Number(alicuota);
+            this.VAT = this.calculateIVA(Number(this.price), Number(alicuota));
+            this.controlNS = Number(controlNS);
+            this.subTotal = this.calculateSubTotal(this.VAT, Number(this.price));
         }
+
+        calculatePrice = (quantity, price) => Number(quantity) * Number(price);
+        calculateIVA = (price, alicuota) => (Number(price) * (Number(alicuota) / 100)).toFixed(2);
+        calculateSubTotal = (IVA, price) => (Number(IVA) + Number(price)).toFixed(2);
     }
 
     function validateIfExists(product) {
@@ -137,16 +146,19 @@ const RMA = () => {
     const addToCart = () => {
         if (!!detailsProduct && detailsQuantity.error === false && Number(detailsQuantity.value) > 0 && !validateIfExists(detailsProduct)) {
             getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', detailsProduct.id, auth.token)
-                .then(response => {
+                .then(async response => {
                     const { id_producto, nom_producto, cantidad, precio } = response?.data[0];
                     if (Number(detailsQuantity.value) > cantidad) {
                         const error = { text: `La cantidad elegida para devolver es mayor a la cantidad en el almacén!`, background: themeColors?.error }
                         throw error;
                     }
-
-                    const newProduct = new ObjectCart(id_producto, nom_producto, detailsQuantity.value, detailsProduct.abreviatura, precio);
+                    const newProduct = new ObjectCart(id_producto, nom_producto, detailsQuantity.value, detailsProduct.abreviatura, detailsProduct.alicuota, detailsProduct.controlNS, precio);
+                    setSubTotalPrice((prevState) => prevState += Number(newProduct.price));
+                    setTotalVATPrice((prevState) => prevState += Number(newProduct.VAT));
                     setTotalPrice((prevState) => prevState += Number(newProduct.subTotal));
                     setRecordsData((prevState) => [...prevState, newProduct]);
+                    setBanner({ ...banner, value: { text: 'Item agregado correctamente!', background: themeColors?.confirm }, error: true })
+                    await new Promise(r => setTimeout(r, 1000));
                     checkStockOn(newProduct)
                     clearInputs();
                 })
@@ -164,6 +176,8 @@ const RMA = () => {
 
     const deleteDataById = () => {
         const objectDeleted = recordsData.find(object => object.id === Number(openModal.value));
+        setSubTotalPrice((prevState) => prevState -= Number(objectDeleted.price));
+        setTotalVATPrice((prevState) => prevState -= Number(objectDeleted.VAT));
         setTotalPrice((prevState) => prevState -= Number(objectDeleted.subTotal));
         setIncomeSerialNumbers(current => current.filter(record => record.fk_producto !== Number(openModal.value)));
         setRecordsData(current => current.filter(record => record.id !== Number(openModal.value)));
@@ -192,19 +206,13 @@ const RMA = () => {
 
         if (!!detailsProduct && detailsQuantity.error === false && Number(detailsQuantity.value) > 0) {
             getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', detailsProduct.id, auth.token)
-                .then(response => {
+                .then(async response => {
                     const { id_producto, nom_producto, cantidad, precio } = response?.data[0];
                     if (Number(detailsQuantity.value) > cantidad) {
                         const error = { text: `La cantidad elegida para devolver es mayor a la cantidad en el almacén!`, background: themeColors?.error }
                         throw error;
                     }
-
-                    if (Number(detailsQuantity.value) < cantidad && Number(detailsProduct.controlNS) === 1) {
-                        const error = { text: `La nueva cantidad es menor a la anterior. Verifique los números de serie!`, background: '#FFC300' }
-                        throw error;
-                    }
-
-                    const newProduct = new ObjectCart(id_producto, nom_producto, detailsQuantity.value, detailsProduct.abreviatura, precio);
+                    const newProduct = new ObjectCart(id_producto, nom_producto, detailsQuantity.value, detailsProduct.abreviatura, detailsProduct.alicuota, detailsProduct.controlNS, precio);
 
                     const newState = recordsData.map(object => {
                         if (Number(object.id) === Number(idSelected)) {
@@ -214,11 +222,20 @@ const RMA = () => {
                         return object
                     })
 
+                    setSubTotalPrice((prevState) => prevState -= Number(objectToEdit.price));
+                    setTotalVATPrice((prevState) => prevState -= Number(objectToEdit.VAT));
                     setTotalPrice((prevState) => prevState -= Number(objectToEdit.subTotal));
+                    setSubTotalPrice((prevState) => prevState += Number(newProduct.price));
+                    setTotalVATPrice((prevState) => prevState += Number(newProduct.VAT));
                     setTotalPrice((prevState) => prevState += Number(newProduct.subTotal));
+                    setBanner({ ...banner, value: updateBanner, error: false });
+                    await new Promise(r => setTimeout(r, 1000));
+                    if (Number(detailsQuantity.value) < objectToEdit.quantity && Number(detailsProduct.controlNS) === 1) {
+                        setBanner({ ...banner, value: { text: `La nueva cantidad es menor a la anterior. Verifique los números de serie!`, background: '#FFC300' }, error: false })
+                    }
+                    await new Promise(r => setTimeout(r, 1000));
                     checkStockOn(newState[0])
                     setRecordsData(newState)
-                    setBanner({ ...banner, value: updateBanner, error: false });
                     clearInputs();
                 })
                 .catch(error => {
@@ -234,10 +251,12 @@ const RMA = () => {
     }
 
     const generatePurchase = () => {
-        if (!!supplier && purchaseDate.error === false && !!totalPrice) {
+        if (!!supplier && purchaseDate.error === false && !!subTotalPrice && !!totalVATPrice && !!totalPrice) {
             return {
                 fk_proveedor: supplier.id,
                 fechacompra: purchaseDate.value,
+                subtotal: subTotalPrice.toFixed(2),
+                totaliva: totalVATPrice.toFixed(2),
                 total: totalPrice.toFixed(2),
             }
         }
@@ -271,11 +290,12 @@ const RMA = () => {
 
     const areSerialsComplete = (aSerials) => {
         const idFromSerials = new Set(aSerials.map(serial => serial.fk_producto))
+        const controlProduct = recordsData.filter(record => record.controlNS === 1)
         const productsWithSerials = recordsData.filter(record => idFromSerials.has(String(record.id)))
         const lengthOfSerials = aSerials.length
         const lengthOfProductsWithSeries = productsWithSerials.map(product => Number(product.quantity)).reduce((a, b) => a + b, 0)
 
-        return lengthOfProductsWithSeries === lengthOfSerials
+        return lengthOfProductsWithSeries === lengthOfSerials && controlProduct.length === productsWithSerials.length
     }
 
 
@@ -289,6 +309,8 @@ const RMA = () => {
                     clearInputs();
                     setRecordsData([]);
                     setIncomeSerialNumbers([])
+                    setSubTotalPrice(0);
+                    setTotalVATPrice(0);
                     setTotalPrice(0);
                 })
                 .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
@@ -324,7 +346,7 @@ const RMA = () => {
                     </>
                 }
                 <Table
-                    header={rmaGrid} data={recordsData} filterTitle='Mis Items'
+                    header={incomeGrid} data={recordsData} filterTitle='Mis Items'
                     checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected}
                     barcode={true} setOpenBarcode={setOpenSerialNumber} setProductID={setProductID}
                 />
@@ -338,6 +360,14 @@ const RMA = () => {
                     </div>
                 }
                 <div style={{ color: themeColors?.highEmphasis }} className='w-full flex flex-col gap-2 pt-8'>
+                    <div className='flex justify-end items-center gap-2 text-2xl'>
+                        <span className='font-semibold tracking-wide uppercase'>SubTotal:</span>
+                        <span className='font-[monospace] text-3xl'>$ {subTotalPrice.toFixed(2)}</span>
+                    </div>
+                    <div className='flex justify-end items-center gap-2 text-2xl'>
+                        <span className='font-semibold tracking-wide uppercase'>Total IVA:</span>
+                        <span className='font-[monospace] text-3xl'>$ {totalVATPrice.toFixed(2)}</span>
+                    </div>
                     <div className='flex justify-end items-center gap-2 text-2xl'>
                         <span className='font-semibold tracking-wide uppercase'>Total:</span>
                         <span className='font-[monospace] text-3xl'>$ {totalPrice.toFixed(2)}</span>

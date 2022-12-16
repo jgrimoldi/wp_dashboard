@@ -99,10 +99,24 @@ const Income = () => {
     setEdit(false);
     setOpenSearcher(false)
   }
+  class ObjectCart {
+    constructor(fk_producto, nombre, quantity, abreviatura, alicuota, controlNS, unitPrice) {
+      this.id = fk_producto;
+      this.product = nombre;
+      this.quantity = Number(quantity);
+      this.units = abreviatura;
+      this.unitPrice = Number(unitPrice);
+      this.price = this.calculatePrice(Number(quantity), Number(unitPrice));
+      this.alicuota = Number(alicuota);
+      this.VAT = this.calculateIVA(Number(this.price), Number(alicuota));
+      this.controlNS = Number(controlNS);
+      this.subTotal = this.calculateSubTotal(this.VAT, Number(this.price));
+    }
 
-  const calculatePrice = (quantity, price) => Number(quantity) * Number(price);
-  const calculateSubTotal = (IVA, price) => (Number(IVA) + Number(price)).toFixed(2);
-  const calculateIVA = (price, alicuota) => (Number(price) * (Number(alicuota) / 100)).toFixed(2);
+    calculatePrice = (quantity, price) => Number(quantity) * Number(price);
+    calculateIVA = (price, alicuota) => (Number(price) * (Number(alicuota) / 100)).toFixed(2);
+    calculateSubTotal = (IVA, price) => (Number(IVA) + Number(price)).toFixed(2);
+  }
 
   function checkStockOn(aProduct) {
     if (aProduct.id === detailsProduct.id) {
@@ -132,26 +146,27 @@ const Income = () => {
   }
 
   const addToCart = () => {
-    // eslint-disable-next-line
-    const objectsCart = new function () {
-      this.id = detailsProduct.id;
-      this.product = detailsProduct.nombre;
-      this.quantity = detailsQuantity.value;
-      this.units = detailsProduct.abreviatura;
-      this.unitPrice = detailsPrice.value;
-      this.price = calculatePrice(detailsQuantity.value, detailsPrice.value);
-      this.alicuota = detailsProduct.alicuota;
-      this.VAT = calculateIVA(this.price, detailsProduct.alicuota);
-      this.controlNS = detailsProduct.controlNS;
-      this.subTotal = calculateSubTotal(this.VAT, this.price);
-    };
-    if (!!detailsProduct && detailsQuantity.error === false && detailsPrice.error === false && Number(detailsQuantity.value) > 0 && !validateIfExists(detailsProduct)) {
-      setSubTotalPrice((prevState) => prevState += Number(objectsCart.price));
-      setTotalVATPrice((prevState) => prevState += Number(objectsCart.VAT));
-      setTotalPrice((prevState) => prevState += Number(objectsCart.subTotal));
-      setRecordsData((prevState) => [...prevState, objectsCart]);
-      checkStockOn(objectsCart)
-      clearInputs();
+    if (!!detailsProduct && detailsQuantity.error === false && Number(detailsQuantity.value) > 0 && !validateIfExists(detailsProduct)) {
+      getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', detailsProduct.id, auth.token)
+        .then(async response => {
+          const { id_producto, nom_producto, precio } = response?.data[0];
+          const newProduct = new ObjectCart(id_producto, nom_producto, detailsQuantity.value, detailsProduct.abreviatura, detailsProduct.alicuota, detailsProduct.controlNS, precio);
+          setSubTotalPrice((prevState) => prevState += Number(newProduct.price));
+          setTotalVATPrice((prevState) => prevState += Number(newProduct.VAT));
+          setTotalPrice((prevState) => prevState += Number(newProduct.subTotal));
+          setRecordsData((prevState) => [...prevState, newProduct]);
+          setBanner({ ...banner, value: { text: 'Item agregado correctamente!', background: themeColors?.confirm }, error: true })
+          await new Promise(r => setTimeout(r, 1000));
+          checkStockOn(newProduct)
+          clearInputs();
+        })
+        .catch(error => {
+          if (!!error?.text) {
+            setBanner({ ...banner, value: error, error: true })
+          } else {
+            setBanner({ ...banner, value: { text: 'Ocurrió un problema con el producto seleccionado!', background: themeColors?.error }, error: true })
+          }
+        })
     } else {
       setBanner({ ...banner, value: errorBanner, error: true });
     }
@@ -187,38 +202,46 @@ const Income = () => {
 
   const updateCartRecord = () => {
     const objectToEdit = recordsData.find(object => Number(object.id) === Number(idSelected));
-    // eslint-disable-next-line
-    const objectsCart = new function () {
-      this.id = detailsProduct.id;
-      this.product = detailsProduct.nombre;
-      this.quantity = detailsQuantity.value;
-      this.units = detailsProduct.abreviatura;
-      this.unitPrice = detailsPrice.value;
-      this.price = calculatePrice(detailsQuantity.value, detailsPrice.value);
-      this.alicuota = detailsProduct.alicuota;
-      this.VAT = calculateIVA(this.price, detailsProduct.alicuota);
-      this.controlNS = detailsProduct.controlNS;
-      this.subTotal = calculateSubTotal(this.VAT, this.price);
-    };
 
-    const newState = recordsData.map(object => {
-      if (Number(object.id) === Number(idSelected)) {
-        setBanner({ ...banner, value: updateBanner, error: false });
-        return objectsCart
-      }
-      return object
-    })
+    if (!!detailsProduct && detailsQuantity.error === false && Number(detailsQuantity.value) > 0) {
+      getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', detailsProduct.id, auth.token)
+        .then(async response => {
+          const { id_producto, nom_producto, precio } = response?.data[0];
+          const newProduct = new ObjectCart(id_producto, nom_producto, detailsQuantity.value, detailsProduct.abreviatura, detailsProduct.alicuota, detailsProduct.controlNS, precio);
 
-    if (!!detailsProduct && detailsQuantity.error === false && detailsPrice.error === false && Number(detailsQuantity.value) > 0) {
-      setSubTotalPrice((prevState) => prevState -= Number(objectToEdit.price));
-      setTotalVATPrice((prevState) => prevState -= Number(objectToEdit.VAT));
-      setTotalPrice((prevState) => prevState -= Number(objectToEdit.subTotal));
-      setSubTotalPrice((prevState) => prevState += Number(objectsCart.price));
-      setTotalVATPrice((prevState) => prevState += Number(objectsCart.VAT));
-      setTotalPrice((prevState) => prevState += Number(objectsCart.subTotal));
-      setRecordsData(newState)
-      setBanner({ ...banner, value: updateBanner, error: false });
-      clearInputs();
+          const newState = recordsData.map(object => {
+            if (Number(object.id) === Number(idSelected)) {
+              setBanner({ ...banner, value: updateBanner, error: false });
+              return newProduct
+            }
+            return object
+          })
+
+          setSubTotalPrice((prevState) => prevState -= Number(objectToEdit.price));
+          setTotalVATPrice((prevState) => prevState -= Number(objectToEdit.VAT));
+          setTotalPrice((prevState) => prevState -= Number(objectToEdit.subTotal));
+          setSubTotalPrice((prevState) => prevState += Number(newProduct.price));
+          setTotalVATPrice((prevState) => prevState += Number(newProduct.VAT));
+          setTotalPrice((prevState) => prevState += Number(newProduct.subTotal));
+          setBanner({ ...banner, value: updateBanner, error: false });
+          await new Promise(r => setTimeout(r, 1000));
+
+          if (Number(detailsQuantity.value) < objectToEdit.quantity && Number(detailsProduct.controlNS) === 1) {
+            setBanner({ ...banner, value: { text: `La nueva cantidad es menor a la anterior. Verifique los números de serie!`, background: '#FFC300' }, error: false })
+          }
+
+          await new Promise(r => setTimeout(r, 1000));
+          checkStockOn(newState[0])
+          setRecordsData(newState)
+          clearInputs();
+        })
+        .catch(error => {
+          if (!!error?.text) {
+            setBanner({ ...banner, value: error, error: true })
+          } else {
+            setBanner({ ...banner, value: { text: 'Ocurrió un problema con el producto seleccionado!', background: themeColors?.error }, error: true })
+          }
+        })
     } else {
       setBanner({ ...banner, value: errorBanner, error: true });
     }

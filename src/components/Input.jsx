@@ -3,9 +3,12 @@ import { TextField } from '@mui/material';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { useStateContext } from '../contexts/ContextProvider';
 
-const Input = ({ id, useRef = null, type, label, size, tooltip, customFunction, color, icon, css, required, disabled = false, state = { value: '', error: null }, setState, regEx = '', helperText }) => {
+const Input = ({ id, useRef = null, type, label, size, tooltip, customChange, customFunction, color, icon, css, required, disabled = false, state = { value: '', error: null }, setState, regEx = '', helperText }) => {
     const { themeColors } = useStateContext();
-    const handleChange = (event) => setState({ ...state, value: event.target.value });
+    const handleChange = (event) => {
+        setState({ ...state, value: event.target.value })
+        customChange && customChange(event.target.value)
+    };
 
     const handleValidation = () => {
         if (regEx) {
