@@ -33,6 +33,7 @@ export { default as Tiles } from './Tiles';
 export { default as LineChart } from './LineChart';
 export { default as BarCode } from './BarCode';
 export { default as SerialNumber } from './SerialNumber';
+export { default as RMASerialNumber } from './RMASerialNumber';
 export { default as ExpenseSerial } from './ExpenseSerial';
 export { default as ProductSearcher } from './ProductSearcher';
 export { default as SelectProduct } from './SelectProduct';

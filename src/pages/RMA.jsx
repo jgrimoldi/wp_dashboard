@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { BsXCircle, BsTrash, BsPencil, BsSearch } from 'react-icons/bs';
 
-import { SEO, Title, Table, Input, Button, Modal, Banner, SerialNumber, Select, ProductSearcher } from '../components';
+import { SEO, Title, Table, Input, Button, Modal, Banner, RMASerialNumber, Select, ProductSearcher } from '../components';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { useStateContext } from '../contexts/ContextProvider';
 import { incomeGrid, regEx } from '../data/dummy';
@@ -321,7 +321,7 @@ const RMA = () => {
 
     return (
         <>
-            {openSerialNumber === true && <SerialNumber warehouse={warehouse.id} product={recordsData.find(object => object.id === productID)} state={incomeSerialNumbers} setState={setIncomeSerialNumbers} setClose={setOpenSerialNumber} />}
+            {openSerialNumber === true && <RMASerialNumber warehouse={warehouse.id} product={recordsData.find(object => object.id === productID)} state={incomeSerialNumbers} setState={setIncomeSerialNumbers} setClose={setOpenSerialNumber} />}
             {openModal.error === false &&
                 <Modal
                     title='¿Está seguro que quiere eliminar este registro?'
