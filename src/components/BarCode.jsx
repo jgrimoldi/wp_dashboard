@@ -150,7 +150,7 @@ const BarCode = ({ productID, setState }) => {
             <Input id='barcode' type='number' useRef={refFocus} label='Ingrese código de barras' css='w-full' state={barcodes} setState={setBarcodes} regEx={regEx.notEmpty} helperText='El campo no puede estar vacío' />
             <div className='w-full flex gap-1'>
               <Button customFunction={handleClose} borderColor={themeColors?.highEmphasis} color={themeColors?.highEmphasis} backgroundColor='transparent' text='Cerrar' width='1/2' />
-              {edit === true ? <Button customFunction={editBarcode} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='12/6' text='Editar código' />
+              {edit === true ? <Button customFunction={editBarcode} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='12/6' text='Guardar código' />
                 : <Button customFunction={handleSubmit} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Guardar' width='1/2' />}
             </div>
           </form>
