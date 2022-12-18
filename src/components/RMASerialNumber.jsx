@@ -92,10 +92,10 @@ const RMASerialNumber = ({ warehouse, product, state, setState, setClose }) => {
         return state.filter(object => object.sn === aValue).length === 0
     }
 
-    const addSerialNumber = async (event) => {
+    const addSerialNumber = (event) => {
         event.preventDefault();
         if (!!newSerialNumber.value && notExistsInState(newSerialNumber.value) && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
-            await getDataByIdFrom(URL_SN, newSerialNumber.value, auth.token)
+            getDataByIdFrom(URL_SN, newSerialNumber.value, auth.token)
                 .then(response => {
                     if (response?.data !== null) {
                         if (response.data.fk_producto !== product.id) {
