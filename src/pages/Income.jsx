@@ -275,7 +275,7 @@ const Income = () => {
     return array;
   }
 
-  const GenerateSerials = () => {
+  const generateSerials = () => {
     const aux = [];
 
     incomeSerialNumbers.forEach(object => {
@@ -296,10 +296,10 @@ const Income = () => {
   }
 
 
-  const generateIncome = async () => {
+  const generateIncome = () => {
 
     if (areSerialsComplete(incomeSerialNumbers)) {
-      await insertNewIncome(generatePurchase(), generateDetails(), GenerateSerials(), auth.token)
+      insertNewIncome(generatePurchase(), generateDetails(), generateSerials(), auth.token)
         .then(() => {
           setBanner({ ...banner, value: createBanner, error: false });
           setSupplier({ id: '' });

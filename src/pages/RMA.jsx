@@ -278,7 +278,7 @@ const RMA = () => {
         return array;
     }
 
-    const GenerateSerials = () => {
+    const generateSerials = () => {
         const aux = [];
 
         incomeSerialNumbers.forEach(object => {
@@ -298,10 +298,9 @@ const RMA = () => {
         return lengthOfProductsWithSeries === lengthOfSerials && controlProduct.length === productsWithSerials.length
     }
 
-
-    const generateIncome = async () => {
+    const generateIncome = () => {
         if (areSerialsComplete(incomeSerialNumbers)) {
-            await insertRMA(generatePurchase(), generateDetails(), GenerateSerials(), auth.token)
+            insertRMA(generatePurchase(), generateDetails(), generateSerials(), auth.token)
                 .then(() => {
                     setBanner({ ...banner, value: createBanner, error: false });
                     setSupplier({ id: '' });

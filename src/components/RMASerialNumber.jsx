@@ -119,11 +119,14 @@ const RMASerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                     if (!!error?.text) {
                         setBanner({ ...banner, value: error, error: true })
                     } else {
-                        setBanner({ ...banner, value: { text: 'Ocurrió un problema con el número de serie seleccionado!', background: themeColors?.error }, error: true })
+                        if (error.response?.data?.error === 'ERROR_INSERT_DEVOLUCIONPRODUCTO_SN_DOES_NOT_MATCH_PRODUCT') {
+                            setBanner({ ...banner, value: { text: 'Número de serie existente en otro producto!', background: themeColors?.error }, error: true })
+                        } else {
+                            setBanner({ ...banner, value: { text: 'Ocurrió un problema con el número de serie seleccionado!', background: themeColors?.error }, error: true })
+                        }
                     }
                 })
         } else {
-            console.log("aca")
             setBanner({ ...banner, value: errorBanner, error: true });
         }
     }
@@ -153,20 +156,58 @@ const RMASerialNumber = ({ warehouse, product, state, setState, setClose }) => {
         setEdit(true);
     }
 
-    const updateSerialNumbers = async (event) => {
+    const updateSerialNumbers = (event) => {
         event.preventDefault();
+        if (!!newSerialNumber.value && notExistsInState(newSerialNumber.value) && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
+            getDataByIdFrom(URL_SN, newSerialNumber.value, auth.token)
+                .then(response => {
+                    if (response?.data !== null) {
+                        if (response?.data?.estado === 0) {
+                            const error = { text: `El producto se encuentra en stock! No puede realizarse el ingreso del mismo.`, background: themeColors?.error }
+                            throw error;
+                        }
+                        if (response?.data?.estado === 1) {
+                            const newState = state.map(object => {
+                                if (Number(object.id) === Number(idSelected)) {
+                                    setBanner({ ...banner, value: updateBanner, error: false });
+                                    return { ...object, sn: newSerialNumber.value, en: newEn.value, mac1: newMac1.value, mac2: newMac2.value, mac3: newMac3.value }
+                                }
+                                return object
+                            })
+                            setState(newState)
+                        }
+                    }
 
-        await getDataByIdFrom(URL_SN, newSerialNumber.value, auth.token)
+                    if (response?.data === null) {
+                        const newState = state.map(object => {
+                            if (Number(object.id) === Number(idSelected)) {
+                                setBanner({ ...banner, value: updateBanner, error: false });
+                                return { ...object, sn: newSerialNumber.value, en: newEn.value, mac1: newMac1.value, mac2: newMac2.value, mac3: newMac3.value }
+                            }
+                            return object
+                        })
+                        setState(newState)
+                    }
+
+                    clearInputs();
+                    setBanner({ ...banner, value: createBanner, error: false });
+                    refFocus.current.focus();
+                })
+                .catch(error => {
+                    if (!!error?.text) {
+                        setBanner({ ...banner, value: error, error: true })
+                    } else {
+                        setBanner({ ...banner, value: { text: 'Ocurrió un problema con el número de serie seleccionado!', background: themeColors?.error }, error: true })
+                    }
+                })
+        } else {
+            setBanner({ ...banner, value: errorBanner, error: true });
+        }
+
+        getDataByIdFrom(URL_SN, newSerialNumber.value, auth.token)
             .then(response => {
                 if (response.data === null && notExistsInState(newSerialNumber.value) && !!newSerialNumber.value && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
-                    const newState = state.map(object => {
-                        if (Number(object.id) === Number(idSelected)) {
-                            setBanner({ ...banner, value: updateBanner, error: false });
-                            return { ...object, sn: newSerialNumber.value, en: newEn.value, mac1: newMac1.value, mac2: newMac2.value, mac3: newMac3.value }
-                        }
-                        return object
-                    })
-                    setState(newState)
+
                     clearInputs();
                 } else {
                     setBanner({ ...banner, value: errorBanner, error: true });
