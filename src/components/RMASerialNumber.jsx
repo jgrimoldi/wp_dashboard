@@ -98,6 +98,10 @@ const RMASerialNumber = ({ warehouse, product, state, setState, setClose }) => {
             await getDataByIdFrom(URL_SN, newSerialNumber.value, auth.token)
                 .then(response => {
                     if (response?.data !== null) {
+                        if (response.data.fk_producto !== product.id) {
+                            const error = { text: 'Número de serie existente en otro producto!', background: themeColors?.error }
+                            throw error;
+                        }
                         if (response?.data?.estado === 0) {
                             const error = { text: `El producto se encuentra en stock! No puede realizarse el ingreso del mismo.`, background: themeColors?.error }
                             throw error;
@@ -119,11 +123,7 @@ const RMASerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                     if (!!error?.text) {
                         setBanner({ ...banner, value: error, error: true })
                     } else {
-                        if (error.response?.data?.error === 'ERROR_INSERT_DEVOLUCIONPRODUCTO_SN_DOES_NOT_MATCH_PRODUCT') {
-                            setBanner({ ...banner, value: { text: 'Número de serie existente en otro producto!', background: themeColors?.error }, error: true })
-                        } else {
-                            setBanner({ ...banner, value: { text: 'Ocurrió un problema con el número de serie seleccionado!', background: themeColors?.error }, error: true })
-                        }
+                        setBanner({ ...banner, value: { text: 'Ocurrió un problema con el número de serie seleccionado!', background: themeColors?.error }, error: true })
                     }
                 })
         } else {
@@ -162,6 +162,10 @@ const RMASerialNumber = ({ warehouse, product, state, setState, setClose }) => {
             getDataByIdFrom(URL_SN, newSerialNumber.value, auth.token)
                 .then(response => {
                     if (response?.data !== null) {
+                        if (response.data.fk_producto !== product.id) {
+                            const error = { text: 'Número de serie existente en otro producto!', background: themeColors?.error }
+                            throw error;
+                        }
                         if (response?.data?.estado === 0) {
                             const error = { text: `El producto se encuentra en stock! No puede realizarse el ingreso del mismo.`, background: themeColors?.error }
                             throw error;
@@ -203,19 +207,6 @@ const RMASerialNumber = ({ warehouse, product, state, setState, setClose }) => {
         } else {
             setBanner({ ...banner, value: errorBanner, error: true });
         }
-
-        getDataByIdFrom(URL_SN, newSerialNumber.value, auth.token)
-            .then(response => {
-                if (response.data === null && notExistsInState(newSerialNumber.value) && !!newSerialNumber.value && newSerialNumber.error === false && newMac1.error === false && newMac2.error === false && newMac3.error === false && newEn.error === false) {
-
-                    clearInputs();
-                } else {
-                    setBanner({ ...banner, value: errorBanner, error: true });
-                }
-            })
-            .catch(() => {
-                setBanner({ ...banner, value: errorBanner, error: true })
-            })
     }
 
     return (
