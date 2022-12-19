@@ -149,8 +149,15 @@ const Income = () => {
     if (!!detailsProduct && detailsQuantity.error === false && Number(detailsQuantity.value) > 0 && !validateIfExists(detailsProduct)) {
       getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', detailsProduct.id, auth.token)
         .then(async response => {
-          const { id_producto, nom_producto, precio } = response?.data[0];
-          const newProduct = new ObjectCart(id_producto, nom_producto, detailsQuantity.value, detailsProduct.abreviatura, detailsProduct.alicuota, detailsProduct.controlNS, precio);
+          let newProduct;
+          if (response.data.length === 0) {
+            newProduct = new ObjectCart(detailsProduct.id, detailsProduct.nombre, detailsQuantity.value, detailsProduct.abreviatura, detailsProduct.alicuota, detailsProduct.controlNS, detailsPrice.value);
+            setBanner({ ...banner, value: { text: 'Nuevo producto agregado al almacen!', background: themeColors?.confirm }, error: true })
+            await new Promise(r => setTimeout(r, 500));
+          } else {
+            const { id_producto, nom_producto } = response?.data[0];
+            newProduct = new ObjectCart(id_producto, nom_producto, detailsQuantity.value, detailsProduct.abreviatura, detailsProduct.alicuota, detailsProduct.controlNS, detailsPrice.value);
+          }
           setSubTotalPrice((prevState) => prevState += Number(newProduct.price));
           setTotalVATPrice((prevState) => prevState += Number(newProduct.VAT));
           setTotalPrice((prevState) => prevState += Number(newProduct.subTotal));
@@ -206,8 +213,15 @@ const Income = () => {
     if (!!detailsProduct && detailsQuantity.error === false && Number(detailsQuantity.value) > 0) {
       getDataByIdFrom(URL_WAREHOUSEPRODUCT + warehouse.id + '/', detailsProduct.id, auth.token)
         .then(async response => {
-          const { id_producto, nom_producto, precio } = response?.data[0];
-          const newProduct = new ObjectCart(id_producto, nom_producto, detailsQuantity.value, detailsProduct.abreviatura, detailsProduct.alicuota, detailsProduct.controlNS, precio);
+          let newProduct;
+          if (response.data.length === 0) {
+            newProduct = new ObjectCart(detailsProduct.id, detailsProduct.nombre, detailsQuantity.value, detailsProduct.abreviatura, detailsProduct.alicuota, detailsProduct.controlNS, detailsPrice.value);
+            setBanner({ ...banner, value: { text: 'Nuevo producto agregado al almacen!', background: themeColors?.confirm }, error: true })
+            await new Promise(r => setTimeout(r, 500));
+          } else {
+            const { id_producto, nom_producto } = response?.data[0];
+            newProduct = new ObjectCart(id_producto, nom_producto, detailsQuantity.value, detailsProduct.abreviatura, detailsProduct.alicuota, detailsProduct.controlNS, detailsPrice.value);
+          }
 
           const newState = recordsData.map(object => {
             if (Number(object.id) === Number(idSelected)) {
