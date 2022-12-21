@@ -197,7 +197,7 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
             </div>
             <div className='flex gap-2 float-right mr-2 mb-2 md:mr-10 md:mb-10'>
                 <Button customFunction={() => { }} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='' text='Descargar PDF' />
-                <CSVLink data={handleCSV()} filename={`${AAAAMMDD}_Reporte-${title}-CSV.csv`}>
+                <CSVLink data={handleCSV()} filename={`${AAAAMMDD}_Reporte-${title}-CSV.csv`} separator=', ' enclosingCharacter={`'`} target='_blank'>
                     <Button customFunction={() => { }} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='' text='Exportar a CSV' />
                 </CSVLink>
             </div>
