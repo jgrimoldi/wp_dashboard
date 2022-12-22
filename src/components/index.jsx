@@ -24,6 +24,7 @@ export { default as HomeNavigation } from './HomeNavigation';
 export { default as Sidebar } from './Sidebar';
 export { default as TableHead } from './TableHead';
 export { default as Table } from './Table';
+export { default as TablePDF } from './TablePDF';
 export { default as Pagination } from './Pagination';
 export { default as Crud } from './Crud';
 export { default as Notifications } from './Notifications';

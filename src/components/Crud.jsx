@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { BsXCircle, BsTrash, BsPencil } from 'react-icons/bs';
-import { CSVLink } from 'react-csv';
 
 import { Banner, Title, Table, Input, Button, Modal, Select } from '../components';
 import { regEx } from '../data/dummy';
@@ -8,7 +7,7 @@ import { useAuthContext } from '../contexts/ContextAuth';
 import { deleteDataByIdFrom, getDataFrom, getDataByIdFrom } from '../services/GdrService';
 import { useStateContext } from '../contexts/ContextProvider';
 
-const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, setOpen, setProductID }) => {
+const Crud = ({ sufix = 'Mis', title, config, URL, grid, gridPDF, add, update, barcode, setOpen, setProductID }) => {
     const { themeColors } = useStateContext();
     const { auth, handleErrors } = useAuthContext();
     const ref = config.find(input => input.useRef && input.useRef !== undefined);
@@ -22,8 +21,6 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
     const [recordsData, setRecordsData] = useState([]);
     const [idSelected, setIdSelected] = useState('');
     const [edit, setEdit] = useState(null);
-    const date = new Date();
-    const AAAAMMDD = `${date.getFullYear()}${(date.getMonth()).toString().padStart(2, '0')}${(date.getDate()).toString().padStart(2, '0')}`
 
     useEffect(() => {
         let shadowBanner = setTimeout(() => setBanner({ error: null }), 2000);
@@ -130,16 +127,6 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
             .catch(() => setBanner({ ...banner, value: errorBanner, error: true }))
     }
 
-    const handleCSV = () => {
-        const aux = recordsData.map(record => {
-            const data = {};
-            grid.forEach(column => {
-                data[column.field] = record[column.field];
-            });
-            return data;
-        });
-        return aux;
-    }
     return (
         <>
             {openModal.error === false &&
@@ -180,9 +167,10 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
                     }
                 </div>
                 <Table
-                    header={grid} data={recordsData} filterTitle={`Mis ${title}`}
+                    header={grid} headerPDF={gridPDF} data={recordsData} filterTitle={`Mis ${title}`}
                     checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected}
                     barcode={barcode} setOpenBarcode={setOpen} setProductID={setProductID} fieldName='Códigos de Barra'
+                    report={true}
                 />
                 {
                     !!idSelected &&
@@ -194,12 +182,6 @@ const Crud = ({ sufix = 'Mis', title, config, URL, grid, add, update, barcode, s
                         </div>
                     </div>
                 }
-            </div>
-            <div className='flex gap-2 float-right mr-2 mb-2 md:mr-10 md:mb-10'>
-                <Button customFunction={() => { }} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='' text='Descargar PDF' />
-                <CSVLink data={handleCSV()} filename={`${AAAAMMDD}_Reporte-${title}-CSV.csv`} separator=', ' enclosingCharacter={`'`} target='_blank'>
-                    <Button customFunction={() => { }} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='' text='Exportar a CSV' />
-                </CSVLink>
             </div>
         </>
     )

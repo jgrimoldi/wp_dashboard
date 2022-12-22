@@ -1,8 +1,11 @@
-import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import React, { useState, useEffect, useCallback } from 'react';
-import { BsCloudArrowDown, BsPlus, BsSearch } from 'react-icons/bs';
+import { GrDocumentCsv } from 'react-icons/gr';
+import { BsCloudArrowDown, BsPlus, BsSearch, BsFilePdf } from 'react-icons/bs';
+import { TooltipComponent } from '@syncfusion/ej2-react-popups';
+import { CSVLink } from 'react-csv';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
-import { Input, TableHead, Pagination } from '.';
+import { Input, TableHead, Pagination, TablePDF, Button } from '.';
 import { useAuthContext } from '../contexts/ContextAuth';
 import { useStateContext } from '../contexts/ContextProvider';
 import useTable from '../hooks/useTable';
@@ -194,7 +197,7 @@ const FormatMobile = ({ data, property }) => {
     return (<>{data[property.mobile]}</>);
 }
 
-const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbox, setStateCheckbox, barcode, setOpenBarcode, fieldName = 'Agregar', setProductID }) => {
+const Table = ({ header, headerPDF = header, data, filterTitle, sortFunction, checkbox, stateCheckbox, setStateCheckbox, barcode, setOpenBarcode, fieldName = 'Agregar', setProductID, report = false }) => {
     const { themeColors } = useStateContext();
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -202,7 +205,14 @@ const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbo
     const [filteredValue, setFilteredValue] = useState({ value: '', error: null });
     const [mobileData, setMobileData] = useState([]);
     const [isMounted, setIsMounted] = useState(false);
+    const date = new Date();
+    const aaaammdd = `${date.getFullYear()}${(date.getMonth()).toString().padStart(2, '0')}${(date.getDate()).toString().padStart(2, '0')}`
+    const hhmmss = date.toTimeString().substring(0, 2) + date.toTimeString().substring(3, 5) + date.toTimeString().substring(6, 8);
+    const ddmmaaaa = `${aaaammdd.slice(6, 8).padStart(2, '0')}/${aaaammdd.slice(4, 6).padStart(2, '0')}/${aaaammdd.slice(0, 4)}`;
+    const hh_mm_ss = `${hhmmss.slice(0, 2)}:${hhmmss.slice(2, 4)}:${hhmmss.slice(4, 6)}`
+    const title = filterTitle.split(" ").slice(1).join(" ");
 
+    console.log()
 
     const ifIncludes = (object) => {
         for (const key in object) {
@@ -238,15 +248,42 @@ const Table = ({ header, data, filterTitle, sortFunction, checkbox, stateCheckbo
         }
     }, [header, sliceData, isMounted]);
 
+    const handleCSV = () => {
+        const aux = data.map(info => {
+            const record = {};
+            headerPDF.forEach(column => {
+                record[column.field] = info[column.field];
+            });
+            return record;
+        });
+        return aux;
+    }
+
     return (
         <>
-            <div className='shadow flex justify-end p-2 bg-gray-50  dark:bg-secondary-dark-bg'>
+            <div className='shadow flex justify-end gap-1 p-2 bg-gray-50 dark:bg-secondary-dark-bg'>
                 <Input id='filter' label={`Buscar en ${filterTitle}`} size='small' css='w-full sm:w-1/2'
                     state={filteredValue} setState={setFilteredValue}
                     tooltip={`Filtrar ${filterTitle}`} color={themeColors?.primary} icon={<BsSearch />}
                 />
+                {report &&
+                    <>
+                        <PDFDownloadLink
+                            document={<TablePDF header={headerPDF} data={data} info={{ title, ddmmaaaa, hh_mm_ss, receipt: `${aaaammdd}${hhmmss}` }} />}
+                            fileName={`${aaaammdd}${hhmmss}_Reporte-${title}-PDF.pdf`}>
+                            <TooltipComponent content='Exportar tabla a PDF' position="TopCenter">
+                                <Button customFunction={() => { }} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='' icon={<BsFilePdf />} />
+                            </TooltipComponent>
+                        </PDFDownloadLink>
+                        <CSVLink data={handleCSV()} filename={`${aaaammdd}${hhmmss}_Reporte-${title}-CSV.csv`} separator=', ' enclosingCharacter={`'`} target='_blank'>
+                            <TooltipComponent content='Exportar tabla a CSV' position="TopCenter">
+                                <Button customFunction={() => { }} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} width='' icon={<GrDocumentCsv />} />
+                            </TooltipComponent>
+                        </CSVLink>
+                    </>
+                }
             </div>
-            <div className='overflow-auto rounded-lg shadow hidden md:block'>
+            <div style={{ width: 'calc(100 / 7% - 20px)' }} className='overflow-auto rounded-lg shadow hidden md:block'>
                 <table className='w-full table-auto'>
                     <TableHead headSource={header} checkbox={checkbox} barcode={barcode} field={fieldName} />
                     <tbody>

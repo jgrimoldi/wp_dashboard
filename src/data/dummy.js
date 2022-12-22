@@ -320,6 +320,16 @@ export const productsGrid = [
     { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
 ];
 
+export const productsGridPDF = [
+    { name: 'Nombre de Producto', field: 'nombre', },
+    { name: 'Tipo de Producto', field: 'tipoproducto', },
+    { name: 'Unidad', field: 'cantidad', },
+    { name: 'U. Medida', field: 'abreviatura', },
+    { name: 'S. Mín.', field: 'stockmin', },
+    { name: 'S. Máx.', field: 'stockmax', },
+    { name: 'Alicuota', field: 'alicuota', },
+];
+
 export const productsTypeGrid = [
     { name: 'Nombre Insumo', field: 'nombre', mobile: 'nombre', },
     { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 
 import { SEO, Crud, BarCode } from '../../components';
-import { productsGrid } from '../../data/dummy';
+import { productsGrid, productsGridPDF } from '../../data/dummy';
 import { URL_PRODUCT, URL_PRODUCTTYPE, URL_UNIT, URL_VAT } from '../../services/Api';
 import { useAuthContext } from '../../contexts/ContextAuth';
 import { insertProduct, updateProductById } from '../../services/ProductService';
@@ -47,7 +47,7 @@ const Products = () => {
     <>
       <SEO title='Productos' />
       {openBarcode === true && <BarCode productID={productID} setState={setOpenBarcode} />}
-      <Crud title='Productos' config={inputConfig} URL={URL_PRODUCT} grid={productsGrid} add={addProduct} update={updateProduct} barcode={true} setOpen={setOpenBarcode} setProductID={setProductID} />
+      <Crud title='Productos' config={inputConfig} URL={URL_PRODUCT} grid={productsGrid} gridPDF={productsGridPDF} add={addProduct} update={updateProduct} barcode={true} setOpen={setOpenBarcode} setProductID={setProductID} />
     </>
   )
 }

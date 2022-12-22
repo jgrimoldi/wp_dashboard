@@ -14,7 +14,7 @@ const Units = () => {
   const [abbreviation, setAbbreviation] = useState(initialState);
   const inputConfig = [
     { field: 'magnitud', id: 'unit', useRef: refFocus, label: 'Nueva unidad de medida', state: newUnit, setState: setNewUnit, expression: 'notEmpty', css: 'w-full sm:w-[30%] md:w-1/4' },
-    { field: 'abreviatura', id: 'details', label: 'Detalles de la unidad', state: abbreviation, setState: setAbbreviation, expression: 'notEmpty', css: 'w-full sm:w-[30%] md:w-1/4' },
+    { field: 'abreviatura', id: 'details', label: 'Abreviatura de la unidad', state: abbreviation, setState: setAbbreviation, expression: 'notEmpty', css: 'w-full sm:w-[30%] md:w-1/4' },
   ];
 
   const addUnits = async () => {
