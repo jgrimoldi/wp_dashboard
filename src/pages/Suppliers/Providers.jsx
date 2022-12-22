@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 
 import { SEO, Crud } from '../../components';
 import { useAuthContext } from '../../contexts/ContextAuth';
-import { providersGrid } from '../../data/dummy';
+import { providersGrid, providersGridPDF } from '../../data/dummy';
 import { URL_SUPPLIER, URL_CATEGORY } from '../../services/Api';
 import { insertSupplier, updateSupplierById } from '../../services/SupplierService';
 
@@ -44,7 +44,7 @@ const Products = () => {
   return (
     <>
       <SEO title='Proveedores' />
-      <Crud title='Proveedores' config={inputConfig} URL={URL_SUPPLIER} grid={providersGrid} add={addSupplier} update={updateClient} />
+      <Crud title='Proveedores' config={inputConfig} URL={URL_SUPPLIER} grid={providersGrid} gridPDF={providersGridPDF} add={addSupplier} update={updateClient} />
     </>
   )
 }

@@ -206,7 +206,7 @@ const Table = ({ header, headerPDF = header, data, filterTitle, sortFunction, ch
     const [mobileData, setMobileData] = useState([]);
     const [isMounted, setIsMounted] = useState(false);
     const date = new Date();
-    const aaaammdd = `${date.getFullYear()}${(date.getMonth()).toString().padStart(2, '0')}${(date.getDate()).toString().padStart(2, '0')}`
+    const aaaammdd = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${(date.getDate()).toString().padStart(2, '0')}`
     const hhmmss = date.toTimeString().substring(0, 2) + date.toTimeString().substring(3, 5) + date.toTimeString().substring(6, 8);
     const ddmmaaaa = `${aaaammdd.slice(6, 8).padStart(2, '0')}/${aaaammdd.slice(4, 6).padStart(2, '0')}/${aaaammdd.slice(0, 4)}`;
     const hh_mm_ss = `${hhmmss.slice(0, 2)}:${hhmmss.slice(2, 4)}:${hhmmss.slice(4, 6)}`

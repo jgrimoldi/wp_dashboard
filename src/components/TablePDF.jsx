@@ -97,7 +97,7 @@ const FormatDesktop = ({ data, property }) => {
 }
 
 const TablePDF = ({ header, data, info }) => {
-    const ancho = (100 - 30) / header.length
+    const ancho = 100 / header.length
 
     Font.register({
         family: 'Roboto', format: 'truetype', fonts: [
@@ -125,7 +125,7 @@ const TablePDF = ({ header, data, info }) => {
             fontSize: 12,
         },
         table: {
-            display: 'table',
+            display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
@@ -147,7 +147,6 @@ const TablePDF = ({ header, data, info }) => {
             // maxWidth: `calc((100% / ${header.length}) - 30px)`,
             // maxHeight: '50px',
             paddingLeft: '10px',
-            border: '1px solid #000',
             textAlign: 'left',
             maxLines: 2,
         },
@@ -155,11 +154,10 @@ const TablePDF = ({ header, data, info }) => {
             // flex: `0 0 calc((100% / ${header.length + 1}) - 30)`,
 
             width: `${ancho}%`,
-            backgroundColor: '#91c5ff',
+            backgroundColor: '#deedf0',
             // maxWidth: `calc((100% / ${header.length}) - 30px)`,
             // maxHeight: '50px',
             paddingLeft: '10px',
-            border: '1px solid #000',
             textAlign: 'left',
             maxLines: 2,
         },
@@ -170,7 +168,7 @@ const TablePDF = ({ header, data, info }) => {
             padding: 10,
             marginVertical: 10,
             marginHorizontal: 35,
-            borderTopWidth: '1px',
+            borderTopWidth: '2px',
             borderStyle: 'solid',
             borderColor: '#000',
             fontSize: 10,
@@ -180,8 +178,10 @@ const TablePDF = ({ header, data, info }) => {
     return (
         <Document fileName={info.title} >
             <Page size='A4' orientation='landscape' style={styles.body}>
-                <View style={styles.header} fixed>
+                <View style={{ ...styles.header, paddingBottom: 20, borderBottomWidth: '2px', borderStyle: 'solid', borderColor: '#000', }} fixed>
                     <Image src={agLogo} alt='Logo AgSistemas' style={{ maxWidth: "90px", maxHeight: "90px" }} />
+
+                    <Text style={{ alignSelf: 'flex-end', fontSize: 35, }} fixed>{info.title}</Text>
 
                     <View style={styles.info}>
                         <Text style={{ textTransform: 'uppercase', marginBottom: 1 }}>Reporte</Text>
@@ -191,16 +191,12 @@ const TablePDF = ({ header, data, info }) => {
                     </View>
                 </View>
 
-                <Text style={{
-                    paddingVertical: 5, fontSize: 35, textAlign: 'center', borderBottomWidth: '1px', borderStyle: 'solid', borderColor: '#000',
-                }} fixed>{info.title}</Text>
 
                 <View style={styles.table} wrap>
-                    <View style={{ ...styles.row, paddingTop: 20, fontWeight: 500 }} fixed>
-                        {header.map((item, index) => (
-                            <Text style={{ ...styles.column, fontWeight: 500 }} key={index}>{item.name}</Text>
-                        ))
-                        }
+                    <View style={{ ...styles.row, paddingTop: 20, fontWeight: 500, borderBottom: '2px solid #000' }} fixed>
+                        {header.map((item, index) => {
+                            return (<Text style={{ ...styles.column, ...item.style, fontWeight: 500 }} key={index}>{item.name}</Text>)
+                        })}
                     </View>
 
                     {data.length !== 0
@@ -208,7 +204,7 @@ const TablePDF = ({ header, data, info }) => {
                             const columnStyle = index % 2 === 0 ? styles.columnEven : styles.column
                             return (
                                 <View style={styles.row} key={index}>
-                                    {header.map((property, key) => <Text style={columnStyle} key={key}><FormatDesktop data={data} property={property} /></Text>)}
+                                    {header.map((property, key) => <Text style={{ ...columnStyle, ...property.style }} key={key}><FormatDesktop data={data} property={property} /></Text>)}
                                 </View>
                             )
                         }
@@ -220,7 +216,7 @@ const TablePDF = ({ header, data, info }) => {
                 </View>
                 <View style={{ ...styles.footer }} fixed>
                     <Text style={{ textAlign: 'right' }} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} />
-                    <Text style={{ position: 'absolute', bottom: 5, fontSize: 10, textAlign: 'center', left: '50%', transform: 'translateX(-50%)' }}>{info.receipt}</Text>
+                    <Text style={{ position: 'absolute', bottom: 5, fontSize: 10, textAlign: 'center', left: '50%', transform: 'translateX(-50%)' }}>{`${info.receipt}_Reporte-${info.title}-PDF.pdf`}</Text>
                 </View>
             </Page>
         </Document>

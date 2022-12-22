@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 
 import { Crud, SEO } from '../components';
 import { useAuthContext } from '../contexts/ContextAuth';
-import { clientsGrid } from '../data/dummy';
+import { clientsGrid, clientsGridPDF } from '../data/dummy';
 import { URL_CLIENT } from '../services/Api';
 import { insertClient, updateClientById } from '../services/ClientService';
 
@@ -41,7 +41,7 @@ const Clients = () => {
   return (
     <>
       <SEO title='Clientes' />
-      <Crud title='Clientes' config={inputConfig} URL={URL_CLIENT} grid={clientsGrid} add={addClient} update={updateClient} />
+      <Crud title='Clientes' config={inputConfig} URL={URL_CLIENT} grid={clientsGrid} gridPDF={clientsGridPDF} add={addClient} update={updateClient} />
     </>
   )
 }

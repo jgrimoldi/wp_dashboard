@@ -320,14 +320,15 @@ export const productsGrid = [
     { name: 'Descripción', field: 'descripcion', mobile: 'descripcion', },
 ];
 
+// !760 max width pdf horizontal
 export const productsGridPDF = [
-    { name: 'Nombre de Producto', field: 'nombre', },
-    { name: 'Tipo de Producto', field: 'tipoproducto', },
-    { name: 'Unidad', field: 'cantidad', },
-    { name: 'U. Medida', field: 'abreviatura', },
-    { name: 'S. Mín.', field: 'stockmin', },
-    { name: 'S. Máx.', field: 'stockmax', },
-    { name: 'Alicuota', field: 'alicuota', },
+    { name: 'Nombre de Producto', field: 'nombre', style: { width: '330px' } },
+    { name: 'Tipo de Producto', field: 'tipoproducto', style: { width: '200px' } },
+    { name: 'U.', field: 'cantidad', style: { width: '50px', textAlign: 'center' }, },
+    { name: 'U.Med.', field: 'abreviatura', style: { width: '20px', textAlign: 'center' } },
+    { name: 'S.Mín.', field: 'stockmin', style: { width: '60px', textAlign: 'center' } },
+    { name: 'S.Máx.', field: 'stockmax', style: { width: '60px', textAlign: 'center' } },
+    { name: 'Alic', field: 'alicuota', style: { width: '50px', textAlign: 'center' } },
 ];
 
 export const productsTypeGrid = [
@@ -356,6 +357,16 @@ export const providersGrid = [
     { name: 'Observaciones', field: 'observaciones', mobile: 'observaciones', },
 ];
 
+export const providersGridPDF = [
+    { name: 'CUIT/CUIL', field: 'id', style: { width: '80px', } },
+    { name: 'Categoria', field: 'categoria', style: { width: '75px', } },
+    { name: 'Proveedor', field: 'nombre', style: { width: '190px', } },
+    { name: 'Dirección', field: 'direccion', style: { width: '155px', } },
+    { name: 'CP', field: 'cp', style: { width: '30px', paddingLeft: 0, textAlign: 'center' } },
+    { name: 'Teléfono', field: 'tel', style: { width: '80px', } },
+    { name: 'Correo', field: 'email', style: { width: '160px', } },
+];
+
 export const warehousesGrid = [
     { name: 'Almacén', field: 'nombre', mobile: 'nombre' },
     { name: 'Detalles', field: 'detalle', mobile: 'detalle' },
@@ -369,6 +380,16 @@ export const clientsGrid = [
     { name: 'Teléfono', field: 'tel', mobile: 'tel', },
     { name: 'Correo', field: 'email', mobile: 'email', },
     { name: 'Observaciones', field: 'observaciones', mobile: 'observaciones', },
+];
+
+
+export const clientsGridPDF = [
+    { name: 'CUIT/CUIL', field: 'id', style: { width: '80px', } },
+    { name: 'Proveedor', field: 'nombre', style: { width: '205px', } },
+    { name: 'Dirección', field: 'direccion', style: { width: '180px', } },
+    { name: 'CP', field: 'cp', style: { width: '30px', paddingLeft: 0, textAlign: 'center' } },
+    { name: 'Teléfono', field: 'tel', style: { width: '80px', } },
+    { name: 'Correo', field: 'email', style: { width: '195px', } },
 ];
 
 export const usersGrid = [
