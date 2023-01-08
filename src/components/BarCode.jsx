@@ -154,7 +154,7 @@ const BarCode = ({ productID, setState }) => {
                 : <Button customFunction={handleSubmit} borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Guardar' width='1/2' />}
             </div>
           </form>
-          <div className='w-full flex flex-wrap justify-evenly md:gap-2 m-auto items-center m:overflow-hidden overflow-auto sm:hover:overflow-auto'>
+          <div className='w-full max-h-[50vh] flex flex-wrap justify-evenly md:gap-2 m-auto items-center m:overflow-hidden overflow-auto sm:hover:overflow-auto'>
             {barcodesData.map(barcode => (
               barcodeGrid.map((grid, index) =>
                 <div key={index} className='w-full flex items-center gap-2 sm:w-1/2 md:w-72 p-4 border rounded-full shadow dark:text-slate-100'>

@@ -264,7 +264,7 @@ const RMASerialNumber = ({ warehouse, product, state, setState, setClose }) => {
                                 : <Button type='submit' borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} text='Cargar número de serie' width='1/2' />}
                         </div>
                     </form>
-                    <div className='w-full'>
+                    <div className='w-full max-h-[50vh] overflow-auto'>
                         <Table header={serialNumberGrid} data={state.filter(object => Number(object.fk_producto) === Number(product.id))} filterTitle='Mis Números de Serie'
                             checkbox={true} stateCheckbox={idSelected} setStateCheckbox={setIdSelected} />
                     </div>

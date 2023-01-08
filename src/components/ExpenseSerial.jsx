@@ -77,7 +77,7 @@ const ExpenseSerial = ({ warehouse, product, state, setState, setClose }) => {
                         <Input id='serials' useRef={refFocus} label='Ingrese los números de serie' css='w-full' state={serial} setState={setSerial} regEx={regEx.alphanumeric} disabled={disabled} helperText='El campo no puede estar vacío' />
                         <Button type='submit' borderColor={themeColors?.primary} color={themeColors?.background} backgroundColor={themeColors?.primary} height='normal' text='Cargar número de serie' width='1/2' />
                     </form>
-                    <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
+                    <div className='w-full max-h-[50vh] overflow-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
                         {records.map((serial, index) => (
                             <div key={index} className='w-full flex items-center gap-2 p-4 border rounded-full shadow dark:text-slate-100'>
                                 <input type='checkbox' id={`serial-${index}`} name={serial.sn} value={serial.sn} checked={state.some(item => item.sn === serial.sn)} onChange={handleCheck} disabled={!state.find(item => item.sn === serial.sn) && disabled} />
